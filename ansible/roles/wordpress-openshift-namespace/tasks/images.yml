@@ -36,3 +36,18 @@
   with_items:
     - name: "{{ httpd_image_name }}"
     - name: "{{ mgmt_image_name }}"
+
+- name: "Minishift mirror ImageStreams"
+  when: is_minishift
+  openshift_imagestream:
+    # Almost the same as above
+
+- name: "Resync images"
+  shell:
+    cmd: |
+      set -e -x
+      oc import-image httpd
+      oc import-image mgmtt
+  tags:
+    - never
+    - resync
