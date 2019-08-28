@@ -1,4 +1,5 @@
 ---
+- include_vars: ../../../vars/persistent-ressources.yml
 
 - name: DeploymentConfigs
   connection: local
@@ -35,7 +36,7 @@
           volumes:
             - name: "nfsvol-{{env}}"
               persistentVolumeClaim:
-                claimName: 'nfs-pvc-mgmt'
+                claimName: '{{openshift_pvc_name}}'
       triggers:
         - type: ImageChange
           imageChangeParams:
