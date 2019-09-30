@@ -176,4 +176,5 @@ def generate_inventory(sorted= True, limit=0, max_depth=-1):
     return inventory
     
 
-generate_inventory()
+#generate_inventory()
+generate_inventory(limit=5, max_depth=1)
