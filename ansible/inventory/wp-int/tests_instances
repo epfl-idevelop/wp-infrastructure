@@ -1,16 +1,23 @@
-gutunberg_0:
+gutenberg_00:
     hosts:
         _srv_www_www.epfl.ch_htdocs_campus_services_camipro:
 
-gutunberg_01:
+gutenberg_01:
     hosts:
-        _srv_www_www.epfl.ch_htdocs_campus_services_camipro:
         _srv_www_www.epfl.ch_htdocs_campus_services_audiovisual:
+        _srv_www_www.epfl.ch_htdocs_campus_services_camipro:
         _srv_www_www.epfl.ch_htdocs_campus_services_communication:
 
-gutunberg_1:
+gutenberg_02:
     hosts:
-        _srv_www_www.epfl.ch_htdocs:
+        _srv_www_www.epfl.ch_htdocs_campus_services:
+
+gutenberg_1:
+    hosts:
+        _srv_labs_www.epfl.ch_htdocs_labs_cvlab:
+        _srv_labs_www.epfl.ch_htdocs_labs_emc:
+        _srv_labs_www.epfl.ch_htdocs_labs_la:
+        _srv_labs_www.epfl.ch_htdocs_labs_last:
         _srv_www_www.epfl.ch_htdocs_campus_services_audiovisual:
         _srv_www_www.epfl.ch_htdocs_campus_services_camipro:
         _srv_www_www.epfl.ch_htdocs_campus_services_communication:
@@ -26,7 +33,4 @@ gutunberg_1:
         _srv_www_www.epfl.ch_htdocs_campus_services_repro:
         _srv_www_www.epfl.ch_htdocs_campus_services_ressources:
         _srv_www_www.epfl.ch_htdocs_campus_services_travel:
-        _srv_labs_www.epfl.ch_htdocs_labs_cvlab:
-        _srv_labs_www.epfl.ch_htdocs_labs_emc:
-        _srv_labs_www.epfl.ch_htdocs_labs_la:
-        _srv_labs_www.epfl.ch_htdocs_labs_last:
+        _srv_www_www.epfl.ch_htdocs:
