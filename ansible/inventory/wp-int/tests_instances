@@ -12,6 +12,10 @@ gutenberg_02:
     hosts:
         _srv_www_www.epfl.ch_htdocs_campus_services:
 
+gutenberg_03:
+    hosts:
+        _srv_www_www.epfl.ch_htdocs_campus_services_internal-trainings:
+
 gutenberg_1:
     hosts:
         _srv_labs_www.epfl.ch_htdocs_labs_cvlab:
@@ -34,3 +38,30 @@ gutenberg_1:
         _srv_www_www.epfl.ch_htdocs_campus_services_ressources:
         _srv_www_www.epfl.ch_htdocs_campus_services_travel:
         _srv_www_www.epfl.ch_htdocs:
+
+gutenberg_lot1:
+    hosts:
+      _srv_labs_www.epfl.ch_htdocs_labs_cvlab:
+      _srv_labs_www.epfl.ch_htdocs_labs_emc:
+      _srv_labs_www.epfl.ch_htdocs_labs_la:
+      _srv_labs_www.epfl.ch_htdocs_labs_last:
+      _srv_www_www.epfl.ch_htdocs_campus_services:
+      _srv_www_www.epfl.ch_htdocs_campus_services_audiovisual:
+      _srv_www_www.epfl.ch_htdocs_campus_services_camipro:
+      _srv_www_www.epfl.ch_htdocs_campus_services_communication:
+      _srv_www_www.epfl.ch_htdocs_campus_services_finance:
+      _srv_www_www.epfl.ch_htdocs_campus_services_housing:
+      _srv_www_www.epfl.ch_htdocs_campus_services_human-resources:
+
+gutenberg_lot2:
+    hosts:
+      _srv_www_www.epfl.ch_htdocs_campus_services_internal-trainings:
+      _srv_www_www.epfl.ch_htdocs_campus_services_inventory:
+      _srv_www_www.epfl.ch_htdocs_campus_services_organize-an-event:
+      _srv_www_www.epfl.ch_htdocs_campus_services_parking:
+      _srv_www_www.epfl.ch_htdocs_campus_services_purchasing:
+      _srv_www_www.epfl.ch_htdocs_campus_services_real-estate-and-logistic:
+      _srv_www_www.epfl.ch_htdocs_campus_services_repro:
+      _srv_www_www.epfl.ch_htdocs_campus_services_ressources:
+      _srv_www_www.epfl.ch_htdocs_campus_services_travel:
+      _srv_www_www.epfl.ch_htdocs:
