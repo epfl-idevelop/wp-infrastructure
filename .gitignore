@@ -1,6 +1,8 @@
 t1
 t2
 t3
+.DS_Store
+._.DS_Store
 
 ansible/*.json
 ansible/**/*.retry
