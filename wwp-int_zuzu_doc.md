@@ -41,6 +41,7 @@ Vous devez vous trouver dans le team de Keybase suivant:
 ```
 
 
+
 ### Utilisation de wpsible
 
 #### Connexion et choix du bon projet sur Openshift
@@ -56,6 +57,7 @@ oc projects
 ```
 
 ![Image](https://raw.githubusercontent.com/epfl-idevelop/wp-ops/feature/wp-int/img/oc_project_wwp-int.gif)
+
 
 
 #### Récupération du bon dépôt github pour les tests ;-)
@@ -82,6 +84,8 @@ cd wp-ops/ansible
 oc rollout latest dc/mgmt
 ```
 
+
+
 #### Déploiement des pods serveur Wordpress
 Après il faut déployer les pods *serveurs* pour Wordpress. Actuellement nous en n'utilisons que deux:<br>
 
@@ -94,6 +98,8 @@ ceci pour *httpd-labs*:
 ```
 ./wpsible -l httpd-labs
 ```
+
+
 
 #### Déploiement d'une instance Wordpress
 Après nous pouvons déployer les différentes instance de Wordpress à partir des sauvegardes de la prod:
@@ -134,6 +140,14 @@ Temps passé pour *certains* groupes d'instances Wordpress (21x instances)
 
 
 
+#### Comment trouver l'url des instances déployées ?
+Il faut aller depuis l'interface WEB *OKD* de Openshift pour *rechercher* les URL en fonction des *pods*.<br>
+ATTENTION: chaque *pods* a son URL, et pour le pod *labs*, il faut compléter à la main l'url avec le laboratoire souhaité:
+
+![Image](https://raw.githubusercontent.com/epfl-idevelop/wp-ops/feature/wp-int/img/oc_get_url.gif)
+
+
+
 #### Comment consulter l'inventaire des instances ?
 ATTENTION, il faut que le *pod mgmt* tourne pour que l'inventaire fonctionne !
 ```
@@ -141,6 +155,7 @@ cd wp-ops/ansible
 ansible-inventory -i inventory/wp-int/wordpress-instances --graph
 ansible-inventory -i inventory/wp-int/wordpress-instances --list
 ```
+
 On peut aussi faire:
 ```
 ./inventory/wp-int/wordpress-instances
