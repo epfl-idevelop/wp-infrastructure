@@ -1,11 +1,20 @@
 # ATTENTION, ceci est ma documentation provisoire, c'est ce qui se trouve dans ma tête en ce moment !
 
-zf191002.1541
+zf191002.1639
 
 ## Buts
-wp-ops sert à restaurer ou déployer une infra Wordpress de l'EPFL sur Openshift via les commandes oc. Puis en vérifiant l'état via OKD, l'interface WEB de Openshift.
+*wp-ops* sert à restaurer ou déployer une infra Wordpress de l'EPFL sur Openshift via les commandes oc. Puis en vérifiant l'état via OKD, l'interface WEB de Openshift.
 
 ## Problématiques
+Si on déploie une *infra* à la main, on ne sera jamais certain de ce que l'on a dû *faire* pour que cela fonctionne et il sera alors impossible de la *restaurer* en cas de problèmes.
+Il est préférable de la déployer à partir d'un *code de déploiement*, c'est une *Infrastructure as Code*:
+
+https://fr.wikipedia.org/wiki/Infrastructure_as_Code
+
+### Pourquoi utiliser Ansible plutôt qu'un script en bash ?
+Ansible nous permet à tout moment de *vérifier* si ce que l'on a en *prod correspond* à ce que l'on a en *code*. Il *connait* en tout temps l'état et le *maintient* par rapport au code !
+Il permet aussi de hautement paralléliser les taches.
+
 
 
 ## Moyens
@@ -102,7 +111,7 @@ ceci pour *httpd-labs*:
 
 
 #### Déploiement d'une instance Wordpress
-Après nous pouvons déployer les différentes instance de Wordpress à partir des sauvegardes de la prod:
+Après nous pouvons déployer les différentes instances de Wordpress à partir des sauvegardes de la prod:
 
 Juste pour le site *www*:
 ```
@@ -169,15 +178,15 @@ ATTENTION, sûrement plus valable au 2 octobre 2019 !
 ```
 
 
-#### Comment prendre les dernières images docker sur le dépôt de l'EPFL
-On ne prend qu'une fois les images de Docker de prod. Si on veut la mettre à jour, il faut *tagger* les images de wwp-int avec les dernières images de l'infra de prod avec:
+#### Comment prendre les dernières images Docker sur le dépôt de l'EPFL
+On ne prend qu'une fois les images de Docker de *prod* pour la mettre dans notre infra *wwp-int*. Si on veut la mettre à jour, il faut *tagger* les images de *wwp-int* avec les dernières images de l'infra de *prod* avec:
 ```
 oc tag wwp-test/mgmt:latest wwp-int/mgmt:prod
 oc tag wwp-test/httpd:latest wwp-int/httpd:prod
 ```
 
 
-#### Comment remettre à zéro totalement l'infra oc wwp-int ?
+#### Comment remettre à zéro totalement l'infra wwp-int ?
 **ATTENTION c'est dangereux car cela efface VRAIMENT tout !**
 Il faut **VRAIMENT** bien vérifier à chaque fois où on se trouve !
 
@@ -191,7 +200,7 @@ Et bien vérifier que nous sommes dans wwp-int avec:
 oc projects
 ```
 
-Puis se connecter dans le pod mgmt
+Puis se connecter dans le pod *mgmt*
 ```
 oc get pod
 oc exec podname -it /bin/bash
