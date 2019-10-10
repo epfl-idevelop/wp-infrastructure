@@ -13,7 +13,7 @@
 
 # Create folder structure if needed, and only during a restore procedure from backup folders
 - name: directories
-  file:  
+  file:
     path: "{{wp_dir}}"
     owner: www-data
     state: directory
@@ -22,6 +22,7 @@
 - name: wp evaluation
   shell:
     cmd: |
+      echo -e "zuzu: "$(date)
       echo $({{wp_cli_command }} eval '1;')
   register: out
   changed_when: false
@@ -46,7 +47,7 @@
       ln -sf wp/wp-cron.php wp-cron.php
       ln -sf wp/wp-load.php wp-load.php
       ln -sf wp/wp-settings.php wp-settings.php
-      ln -sf wp/wp-includes wp-includes 
+      ln -sf wp/wp-includes wp-includes
       ln -sf wp/wp-login.php wp-login.php
   when: "'This does not seem to be a WordPress install.' in out.stderr and restore_backup_folder is defined"
 
@@ -94,7 +95,7 @@
        define('ALLOW_UNFILTERED_UPLOADS', true);
        PHP
        mysql --user=$DB_USER --password=$DB_PASS --host=$DB_HOST {{db_name}} < /backups/{{restore_backup_folder}}/{{restore_sql_name}}
-       
+
   when: "(('wp-config.php' in out.stderr and 'not found' in out.stderr) or 'Error establishing a database connection' in out.stderr) and restore_backup_folder is defined "
 
 # Always extract .htaccess file when we are restoring from backups
@@ -123,4 +124,3 @@
       {{wp_cli_command}} plugin deactivate epfl epfl-menus polylang
       {{wp_cli_command}} plugin activate polylang epfl-menus epfl ||true
   when: restore_backup_folder is defined
-
