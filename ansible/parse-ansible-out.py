@@ -2,6 +2,13 @@
 # Petit script pour parser les logs de Ansible dans ce project
 # zf191010.1625
 
+# génération du fichier logs
+    ./wpsible -vvv -l _srv_www_www.epfl.ch_htdocs_about 2>&1 |tee ansible.log
+
+# usage: 
+#   python parse-ansible-out.py
+
+
 import re, json
 
 def tasks(infile):

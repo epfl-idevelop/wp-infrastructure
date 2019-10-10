@@ -220,6 +220,21 @@ Et enfin sortir du *pod* avec un **ctrl+d** et faire:
 
 
 
+## Trucs à zuzu pour mémoire après les vacances ;-)
+
+virtualenv
+sudo apt install virtualenv
+virtualenv
+virtualenv parser
+. parser/bin/activate
+pip install ipdb
+python --version
+python parse-ansible-out.py python parse-ansible-out.pyc
+python parse-ansible-out.py
+pip install ipython
+ipython
+python parse-ansible-out.py
+
 
 
 
