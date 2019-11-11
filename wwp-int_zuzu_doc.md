@@ -1,6 +1,6 @@
 # ATTENTION, ceci est ma documentation provisoire, c'est ce qui se trouve dans ma tête en ce moment !
 
-zf191002.1639
+zf191111.1749
 
 ## Buts
 *wp-ops* sert à restaurer ou déployer une infra Wordpress de l'EPFL sur Openshift via les commandes oc. Puis en vérifiant l'état via OKD, l'interface WEB de Openshift.
@@ -54,6 +54,7 @@ Vous devez vous trouver dans le team de Keybase suivant:
 ### Utilisation de wpsible
 
 #### Connexion et choix du bon projet sur Openshift
+https://pub-os-exopge.epfl.ch/console/project/wwp-int/overview
 
 Il faut en premier se connecter sur OC:
 
@@ -220,8 +221,9 @@ Et enfin sortir du *pod* avec un **ctrl+d** et faire:
 
 
 
-## Trucs à zuzu pour mémoire après les vacances ;-)
+## Trucs à zuzu pour mémoire après les vacances 191010.1633 ;-)
 
+```
 virtualenv
 sudo apt install virtualenv
 virtualenv
@@ -234,6 +236,29 @@ python parse-ansible-out.py
 pip install ipython
 ipython
 python parse-ansible-out.py
+
+
+A faire pour commencer à travailler ;-)
+ssh-add -l
+ssh-add
+ssh-add -l
+source /Keybase/team/epfl_wwp_blue/influxdb_secrets.sh
+
+Dans console 1:
+mkdir ~/mnt/virtualbox1
+zuzu$ sshfs -p 52222 ubuntu@localhost:/home/ubuntu ~/mnt/virtualbox1/
+atom ~/mnt/virtualbox1/
+ssh -A -o SendEnv="GIT*, dbflux*" ubuntu@localhost -p 52222
+cd wp-ops/ansible
+
+Dans console 2
+mkdir ~/mnt/noc-tst.idev-fsd.ml/
+sshfs -p 22 czufferey@noc-tst.idev-fsd.ml:/home/czufferey ~/mnt/noc-tst.idev-fsd.ml/
+atom  ~/mnt/noc-tst.idev-fsd.ml/
+ssh -A -o SendEnv="GIT*, dbflux*" czufferey@noc-tst.idev-fsd.ml
+```
+
+
 
 
 
