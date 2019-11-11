@@ -1,6 +1,6 @@
 # ATTENTION, ceci est ma documentation provisoire, c'est ce qui se trouve dans ma tête en ce moment !
 
-zf191111.1749
+zf191111.1823
 
 ## Buts
 *wp-ops* sert à restaurer ou déployer une infra Wordpress de l'EPFL sur Openshift via les commandes oc. Puis en vérifiant l'état via OKD, l'interface WEB de Openshift.
@@ -238,7 +238,7 @@ ipython
 python parse-ansible-out.py
 
 
-A faire pour commencer à travailler ;-)
+A faire pour commencer à travailler dans CHAQUE console !  ;-)
 ssh-add -l
 ssh-add
 ssh-add -l
@@ -256,6 +256,18 @@ mkdir ~/mnt/noc-tst.idev-fsd.ml/
 sshfs -p 22 czufferey@noc-tst.idev-fsd.ml:/home/czufferey ~/mnt/noc-tst.idev-fsd.ml/
 atom  ~/mnt/noc-tst.idev-fsd.ml/
 ssh -A -o SendEnv="GIT*, dbflux*" czufferey@noc-tst.idev-fsd.ml
+cd docker-influxdb-grafana/
+./start.sh
+Ne pas oublier après d'arrêter le binz avec:
+./stop.sh
+
+Dans un browser
+http://noc-tst.idev-fsd.ml:9092/
+
+
+
+
+
 ```
 
 
