@@ -34,7 +34,9 @@
 - name: wp symlink
   file:
     state: link
-    src: /wp/4
+    #zzz 191113.1555
+    #src: /wp/4
+    src: /wp/5
     dest: "{{wp_dir}}/wp"
 
 
