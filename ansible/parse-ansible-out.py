@@ -1,12 +1,16 @@
+# coding: utf-8
 #
 # Petit script pour parser les logs de Ansible dans ce project
-# zf191010.1625
+# zf191202.1453
 
-# génération du fichier logs
+"""
+ génération du fichier logs
     ./wpsible -vvv -l _srv_www_www.epfl.ch_htdocs_about 2>&1 |tee ansible.log
 
-# usage: 
-#   python parse-ansible-out.py
+ usage:
+    . parser/bin/activate
+    python parse-ansible-out.py
+"""
 
 
 import re, json
@@ -41,14 +45,12 @@ def reports_from_json(task):
 ################################################################################
 
 if (__name__ == "__main__"):
-    for task in tasks(open("ansible.log")):
+    for task in tasks(open("ansible.log.191010")):
         for report in reports_from_json(task):
             print "$$$$$$$$$$$$$$$$$\n"
             #print report
             if "start" in report:
-                print("Start at: "+report["start"])
-                print("End at: "+report["end"])
+                print("zStart at: "+report["start"])
+                print("zEnd at: "+report["end"])
                 #import ipdb; ipdb.set_trace()
             print "$$$$$$$$$$$$$$$$$\n"
-
-
