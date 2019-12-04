@@ -1,3 +1,24 @@
+about_00:
+    hosts:
+        _srv_www_www.epfl.ch_htdocs_about:
+        _srv_www_www.epfl.ch_htdocs_about_alumni:
+        _srv_www_www.epfl.ch_htdocs_about_campus:
+
+about_01:
+    hosts:
+        _srv_www_www.epfl.ch_htdocs_about_cooperation:
+        _srv_www_www.epfl.ch_htdocs_about_equality:
+        _srv_www_www.epfl.ch_htdocs_about_governance:
+        _srv_www_www.epfl.ch_htdocs_about_news-and-media:
+        _srv_www_www.epfl.ch_htdocs_about_overview:
+        _srv_www_www.epfl.ch_htdocs_about_philanthropy:
+        _srv_www_www.epfl.ch_htdocs_about_presidency:
+        _srv_www_www.epfl.ch_htdocs_about_recruiting:
+        _srv_www_www.epfl.ch_htdocs_about_respect:
+        _srv_www_www.epfl.ch_htdocs_about_sustainability:
+        _srv_www_www.epfl.ch_htdocs_about_vice-presidencies:
+        _srv_www_www.epfl.ch_htdocs_about_working:
+
 gutenberg_00:
     hosts:
         _srv_www_www.epfl.ch_htdocs_campus_services_camipro:
