@@ -4,7 +4,7 @@
 # Petit script pour parser les logs de Ansible dans ce project
 # version conventionnelle plus simple que la version parse-ansible-out.py
 
-version = "parse-ansible-out2.py  zf191204.1417 "
+version = "parse-ansible-out2.py  zf191204.1620 "
 
 """
 génération du fichier logs
@@ -40,12 +40,6 @@ if (__name__ == "__main__"):
         zline = zfile.readline()
         i = i + 1
 
-        a = 'TASK ['
-        if zline[0:len(a)] == a :
-            #print(i, zline)
-            ztask = zline[zline.find(": ")+2:zline.find("]")]
-            task_num_line = i
-
         a = '"start": "'
         if zline.find(a) != -1 :
             #print(i, zline)
@@ -61,17 +55,33 @@ if (__name__ == "__main__"):
 
 
 
+        a = 'TASK ['
+        if zline[0:len(a)] == a :
+            #print(i, zline)
+            if zline.find(" : ") != -1 :
+                ztask = zline[zline.find(" : ")+3:zline.find("] *")]
+            else:
+                ztask = zline[len(a):zline.find("]")]
+            task_num_line = i
+            print(str(i) + " task [" + ztask + "]")
+
         a = 'ok: ['
         if zline[0:len(a)] == a :
             #print(i, zline)
             zinstance = zline[len(a):zline.find("]")]
-            print(str(i) + " ok " + zinstance)
+            print(str(i) + " ok [" + zinstance + "]")
+
+        a = 'changed: ['
+        if zline[0:len(a)] == a :
+            #print(i, zline)
+            zinstance = zline[len(a):zline.find("]")]
+            print(str(i) + " changed [" + zinstance + "]")
 
         a = 'fatal: ['
         if zline[0:len(a)] == a :
             #print(i, zline[0:len(a)])
             zinstance = zline[len(a):zline.find("]")]
-            print(str(i) + " fatal " + zinstance)
+            print(str(i) + " fatal [" + zinstance + "]")
 
 
 
@@ -82,7 +92,7 @@ if (__name__ == "__main__"):
                 #print(i, zline)
                 #print(".......................end task...")
                 time_delta = (time_end - time_start)/1000000000
-                print(str(start_num_line) + " task [" +ztask + "] start à " + "%0.0f" % (time_start) + ", durée: " + str(time_delta))
+                print(str(start_num_line) + " la tâche [" +ztask + "] démarre à " + "%0.0f" % (time_start) + ", durée: " + str(time_delta))
                 time_start = 0
 
         if zline == "":
