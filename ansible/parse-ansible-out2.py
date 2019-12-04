@@ -4,7 +4,7 @@
 # Petit script pour parser les logs de Ansible dans ce project
 # version conventionnelle plus simple que la version parse-ansible-out.py
 
-version = "parse-ansible-out2.py  zf191204.0927 "
+version = "parse-ansible-out2.py  zf191204.1145 "
 
 """
 génération du fichier logs
@@ -42,15 +42,21 @@ if (__name__ == "__main__"):
         if zline.find(a) != -1 :
             print i, zline
 
+        a = '}'
+        if zline[0:1] == a :
+            print i, zline, ".......................end task..."
+
         a = '"start": "'
         if zline.find(a) != -1 :
             print i, zline
-            print "%18.0f\n" % (zget_time(a))
+            time_start = zget_time(a)
+            print "%18.0f\n" % (time_start)
 
         a = '"end": "'
         if zline.find(a) != -1 :
             print i, zline
-            print "%18.0f\n" % (zget_time(a))
+            time_end = zget_time(a)
+            print "%18.0f\n" % (time_end)
 
         a = '"delta": "'
         if zline.find(a) != -1 :
