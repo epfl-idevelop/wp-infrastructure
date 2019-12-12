@@ -6,7 +6,7 @@
 #
 # sources: https://janakiev.com/blog/python-shell-commands/
 
-version = "parse-ansible-out2.py  zf191212.1017 "
+version = "parse-ansible-out2.py  zf191212.1145 "
 
 """
 génération du fichier logs
@@ -112,6 +112,28 @@ if (__name__ == "__main__"):
 
 """
 debug zone
+
+rm t1
+./parse-ansible-out2.py
+ls -alrt
+cat t1
+
+export ztest="toto"
+
+export ztable="ansible_logs"
+export ztask="toto"
+export zaction="tutu"
+export t1=$(date +%s%N)
+echo $t1
+export t2=$(date +%s%N)
+echo $t2
+export t21=$(echo "($t2 - $t1)/1000000000" | bc -l)
+echo $t21
+
+curl -XPOST "$dbflux_srv_host:$dbflux_srv_port/write?db=$dbflux_db&u=$dbflux_u_user&p=$dbflux_p_user"  --data-binary "$ztable, task=$ztask, action=$zaction, time_duration=$t21 $t1"
+
+
+
 
 python
 import os

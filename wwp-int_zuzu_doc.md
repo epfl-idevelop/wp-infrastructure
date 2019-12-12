@@ -248,7 +248,7 @@ mkdir ~/mnt/virtualbox1
 sshfs -p 52222 ubuntu@localhost:/home/ubuntu ~/mnt/virtualbox1/
 atom ~/mnt/virtualbox1/
 ssh -A -o SendEnv="GIT*, dbflux*" ubuntu@localhost -p 52222
-cd wp-ops/ansible
+cd wp-ops/ansible/
 
 
 Dans console 2
