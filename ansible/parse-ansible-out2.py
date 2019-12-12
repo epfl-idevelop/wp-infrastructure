@@ -6,10 +6,11 @@
 #
 # sources: https://janakiev.com/blog/python-shell-commands/
 
-version = "parse-ansible-out2.py  zf191212.1145 "
+version = "parse-ansible-out2.py  zf191212.1648 "
 
 """
 génération du fichier logs
+oc login https://xxx.yyy.zzz (à prendre dans l'interface WEB d'OKD)
 ./wpsible -vvv -l about_00 2>&1 |tee ansible.log
 
 usage:
@@ -31,6 +32,7 @@ def zget_time(zdate):
 
 if (__name__ == "__main__"):
     print("\n" + version + "\n")
+    zdebug = False
     #zfile = open("ansible.log.191010", "r")
     zfile = open("ansible.log", "r")
     i = 0
@@ -65,21 +67,21 @@ if (__name__ == "__main__"):
             else:
                 ztask = zline[len(a):zline.find("]")]
             task_num_line = i
-            print(str(i) + " task: [" + ztask + "]")
+            if zdebug : print(str(i) + " task: [" + ztask + "]")
 
         a = 'ok: ['
         if zline[0:len(a)] == a :
             #print(i, zline)
             zaction = zline[0:len(a)-3]
             zinstance = zline[len(a):zline.find("]")]
-            print(str(i) + " action: " + zaction + ", instance" + zinstance)
+            if zdebug : print(str(i) + " action: " + zaction + ", instance" + zinstance)
 
         a = 'changed: ['
         if zline[0:len(a)] == a :
             #print(i, zline)
             zaction = zline[0:len(a)-3]
             zinstance = zline[len(a):zline.find("]")]
-            print(str(i) + " action: " + zaction + ", instance" + zinstance)
+            if zdebug : print(str(i) + " action: " + zaction + ", instance" + zinstance)
 
 
         a = 'fatal: ['
@@ -87,7 +89,7 @@ if (__name__ == "__main__"):
             #print(i, zline[0:len(a)])
             zaction = zline[0:len(a)-3]
             zinstance = zline[len(a):zline.find("]")]
-            print(str(i) + " action: " + zaction + ", instance" + zinstance)
+            if zdebug : print(str(i) + " action: " + zaction + ", instance" + zinstance)
 
 
 
@@ -107,14 +109,15 @@ if (__name__ == "__main__"):
                 ztask = ztask.replace(" ","_")
 
                 zcmd = 'curl -i -XPOST "$dbflux_srv_host:$dbflux_srv_port/write?db=$dbflux_db&u=$dbflux_u_user&p=$dbflux_p_user"  --data-binary "' + ztable + ',instance=' + zinstance + ',action=' + zaction + ',task=' + ztask + ' time_duration=' + str(time_delta) + ' ' + '%0.0f' % (time_start) + '"'
-                print(zcmd)
+                if zdebug :print(zcmd)
 
-                zerr = os.system(zcmd)
-                if zerr != 0 :
-                    print(zerr)
+                if zdebug == False  :
+                    zerr = os.system(zcmd)
+                    if zerr != 0 :
+                        print(zerr)
 
                 time_start = 0
-        if zline == "":
+        if zline == "" :
             break
 
     zfile.close()
