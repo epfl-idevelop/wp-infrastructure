@@ -3,8 +3,10 @@
 #
 # Petit script pour parser les logs de Ansible dans ce project
 # version conventionnelle plus simple que la version parse-ansible-out.py
+#
+# sources: https://janakiev.com/blog/python-shell-commands/
 
-version = "parse-ansible-out2.py  zf191204.1620 "
+version = "parse-ansible-out2.py  zf191212.1017 "
 
 """
 génération du fichier logs
@@ -17,7 +19,7 @@ cd ./wp-ops/ansible
 """
 
 
-import datetime
+import datetime, os
 
 def zget_time(zdate):
     #print("xxxxxxxxxxx" + zdate + "yyyyyyyyyy")
@@ -97,9 +99,24 @@ if (__name__ == "__main__"):
                 #print(".......................end task...")
                 time_delta = (time_end - time_start)/1000000000
                 print(str(start_num_line) + " la tâche: [" +ztask + "] avec l'action: " + zaction + " démarre à " + date_start + " (%0.0f" % (time_start) + "), durée: " + str(time_delta))
+                zerr = os.system('echo "' + str(i) + '" >> t1')
+                if zerr != 0 :
+                    print(zerr)
                 time_start = 0
-
         if zline == "":
             break
 
     zfile.close()
+
+
+
+"""
+debug zone
+
+python
+import os
+i=12
+zcmd = 'echo "' + str(i) + '" >> toto.txt'
+print(zcmd)
+os.system(zcmd)
+"""

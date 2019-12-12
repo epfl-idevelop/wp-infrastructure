@@ -1,6 +1,6 @@
 # ATTENTION, ceci est ma documentation provisoire, c'est ce qui se trouve dans ma tête en ce moment !
 
-zf191202.1430
+zf191212.1052
 
 ## Buts
 *wp-ops* sert à restaurer ou déployer une infra Wordpress de l'EPFL sur Openshift via les commandes oc. Puis en vérifiant l'état via OKD, l'interface WEB de Openshift.
@@ -239,22 +239,23 @@ python parse-ansible-out.py
 
 
 
-
-
-A faire pour commencer à travailler dans CHAQUE console !  ;-)
+Dans console 1:
 ssh-add -l
 ssh-add
 ssh-add -l
 source /Keybase/team/epfl_wwp_blue/influxdb_secrets.sh
-
-Dans console 1:
 mkdir ~/mnt/virtualbox1
 sshfs -p 52222 ubuntu@localhost:/home/ubuntu ~/mnt/virtualbox1/
 atom ~/mnt/virtualbox1/
 ssh -A -o SendEnv="GIT*, dbflux*" ubuntu@localhost -p 52222
 cd wp-ops/ansible
 
+
 Dans console 2
+ssh-add -l
+ssh-add
+ssh-add -l
+source /Keybase/team/epfl_wwp_blue/influxdb_secrets.sh
 mkdir ~/mnt/noc-tst.idev-fsd.ml/
 sshfs -p 22 czufferey@noc-tst.idev-fsd.ml:/home/czufferey ~/mnt/noc-tst.idev-fsd.ml/
 atom  ~/mnt/noc-tst.idev-fsd.ml/
