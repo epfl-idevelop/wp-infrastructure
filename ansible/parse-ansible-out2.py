@@ -70,24 +70,24 @@ if (__name__ == "__main__"):
         a = 'ok: ['
         if zline[0:len(a)] == a :
             #print(i, zline)
+            zaction = zline[0:len(a)-3]
             zinstance = zline[len(a):zline.find("]")]
-            zaction = a + zinstance + "]"
-            print(str(i) + " action: " + zaction)
+            print(str(i) + " action: " + zaction + ", instance" + zinstance)
 
         a = 'changed: ['
         if zline[0:len(a)] == a :
             #print(i, zline)
+            zaction = zline[0:len(a)-3]
             zinstance = zline[len(a):zline.find("]")]
-            zaction = a + zinstance + "]"
-            print(str(i) + " action: " + zaction)
+            print(str(i) + " action: " + zaction + ", instance" + zinstance)
 
 
         a = 'fatal: ['
         if zline[0:len(a)] == a :
             #print(i, zline[0:len(a)])
+            zaction = zline[0:len(a)-3]
             zinstance = zline[len(a):zline.find("]")]
-            zaction = a + zinstance + "]"
-            print(str(i) + " action: " + zaction)
+            print(str(i) + " action: " + zaction + ", instance" + zinstance)
 
 
 
@@ -98,10 +98,21 @@ if (__name__ == "__main__"):
                 #print(i, zline)
                 #print(".......................end task...")
                 time_delta = (time_end - time_start)/1000000000
-                print(str(start_num_line) + " la tâche: [" +ztask + "] avec l'action: " + zaction + " démarre à " + date_start + " (%0.0f" % (time_start) + "), durée: " + str(time_delta))
-                zerr = os.system('echo "' + str(i) + '" >> t1')
+                print(str(start_num_line) + " la tâche: [" +ztask + "] avec l'action: [" + zaction + "] sur l'instance [" + zinstance + "] démarre à " + date_start + " (%0.0f" % (time_start) + "), durée: " + str(time_delta))
+#                zerr = os.system('echo "' + str(i) + '" >> t1')
+
+                ztable = "ansible_logs"
+                zaction = zaction.replace(" ","_")
+                zinstance = zinstance.replace(" ","_")
+                ztask = ztask.replace(" ","_")
+
+                zcmd = 'curl -i -XPOST "$dbflux_srv_host:$dbflux_srv_port/write?db=$dbflux_db&u=$dbflux_u_user&p=$dbflux_p_user"  --data-binary "' + ztable + ',instance=' + zinstance + ',action=' + zaction + ',task=' + ztask + ' time_duration=' + str(time_delta) + ' ' + '%0.0f' % (time_start) + '"'
+                print(zcmd)
+
+                zerr = os.system(zcmd)
                 if zerr != 0 :
                     print(zerr)
+
                 time_start = 0
         if zline == "":
             break
@@ -111,18 +122,17 @@ if (__name__ == "__main__"):
 
 
 """
-debug zone
+ATOM IDE terminal debug zone
 
 rm t1
 ./parse-ansible-out2.py
 ls -alrt
 cat t1
 
-export ztest="toto"
-
 export ztable="ansible_logs"
-export ztask="toto"
-export zaction="tutu"
+export zinstance="bobo_bubu"
+export ztask="titi_tata"
+export ztask="zozo_zuzu"
 export t1=$(date +%s%N)
 echo $t1
 export t2=$(date +%s%N)
@@ -130,7 +140,7 @@ echo $t2
 export t21=$(echo "($t2 - $t1)/1000000000" | bc -l)
 echo $t21
 
-curl -XPOST "$dbflux_srv_host:$dbflux_srv_port/write?db=$dbflux_db&u=$dbflux_u_user&p=$dbflux_p_user"  --data-binary "$ztable, task=$ztask, action=$zaction, time_duration=$t21 $t1"
+curl -i -XPOST "$dbflux_srv_host:$dbflux_srv_port/write?db=$dbflux_db&u=$dbflux_u_user&p=$dbflux_p_user"  --data-binary "$ztable,instance=$zinstance,task=$ztask time_duration=$t21 $t1"
 
 
 
