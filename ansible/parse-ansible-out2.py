@@ -6,12 +6,15 @@
 #
 # sources: https://janakiev.com/blog/python-shell-commands/
 
-version = "parse-ansible-out2.py  zf191212.1648 "
+version = "parse-ansible-out2.py  zf191217.1315 "
 
 """
 génération du fichier logs
 oc login https://xxx.yyy.zzz (à prendre dans l'interface WEB d'OKD)
+# le test cours
 ./wpsible -vvv -l about_00 2>&1 |tee ansible.log
+# le test long
+./wpsible -vvv -l about_03 2>&1 |tee ansible.log
 
 usage:
 cd ./wp-ops/ansible
@@ -32,9 +35,11 @@ def zget_time(zdate):
 
 if (__name__ == "__main__"):
     print("\n" + version + "\n")
-    zdebug = False
+    zdebug = True
+    zprint_curl = True
+
     #zfile = open("ansible.log.191010", "r")
-    zfile = open("ansible.log", "r")
+    zfile = open("ansible_about_first.191217.log", "r")
     i = 0
     time_start = 0
     while True:
@@ -103,13 +108,13 @@ if (__name__ == "__main__"):
                 print(str(start_num_line) + " la tâche: [" +ztask + "] avec l'action: [" + zaction + "] sur l'instance [" + zinstance + "] démarre à " + date_start + " (%0.0f" % (time_start) + "), durée: " + str(time_delta))
 #                zerr = os.system('echo "' + str(i) + '" >> t1')
 
-                ztable = "ansible_logs"
+                ztable = "ansible_logs2"
                 zaction = zaction.replace(" ","_")
                 zinstance = zinstance.replace(" ","_")
                 ztask = ztask.replace(" ","_")
 
                 zcmd = 'curl -i -XPOST "$dbflux_srv_host:$dbflux_srv_port/write?db=$dbflux_db&u=$dbflux_u_user&p=$dbflux_p_user"  --data-binary "' + ztable + ',instance=' + zinstance + ',action=' + zaction + ',task=' + ztask + ' time_duration=' + str(time_delta) + ' ' + '%0.0f' % (time_start) + '"'
-                if zdebug :print(zcmd)
+                if zprint_curl :print(zcmd)
 
                 if zdebug == False  :
                     zerr = os.system(zcmd)
