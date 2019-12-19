@@ -6,7 +6,7 @@
 #
 # sources: https://janakiev.com/blog/python-shell-commands/
 
-version = "parse-ansible-out2.py  zf191217.1315 "
+version = "parse-ansible-out2.py  zf191219.1054 "
 
 """
 génération du fichier logs
@@ -19,7 +19,17 @@ oc login https://xxx.yyy.zzz (à prendre dans l'interface WEB d'OKD)
 usage:
 cd ./wp-ops/ansible
 . parser/bin/activate
+reset
 ./parse-ansible-out2.py
+
+Dans un browser
+http://noc-tst.idev-fsd.ml:9092/
+
+Pour mettre à zéro la 'table' dans InfluxDB
+curl -i -XPOST "$dbflux_srv_host:$dbflux_srv_port/query?u=$dbflux_u_admin&p=$dbflux_p_admin&db=$dbflux_db"  --data-urlencode "q=SHOW MEASUREMENTS"
+curl -i -XPOST "$dbflux_srv_host:$dbflux_srv_port/query?u=$dbflux_u_admin&p=$dbflux_p_admin&db=$dbflux_db"  --data-urlencode "q=DROP MEASUREMENT \"ansible_logs2\""
+curl -i -XPOST "$dbflux_srv_host:$dbflux_srv_port/query?u=$dbflux_u_admin&p=$dbflux_p_admin&db=$dbflux_db"  --data-urlencode "q=SHOW MEASUREMENTS"
+
 """
 
 
@@ -33,13 +43,15 @@ def zget_time(zdate):
     #print("%18.0f\n" % (date_time_nano_sec))
     return date_time_nano_sec
 
+
 if (__name__ == "__main__"):
     print("\n" + version + "\n")
     zdebug = True
-    zprint_curl = True
+    zprint_curl = False
 
-    #zfile = open("ansible.log.191010", "r")
-    zfile = open("ansible_about_first.191217.log", "r")
+    zfile = open("ansible_second.191219.1449.log", "r")
+    #zfile = open("ansible_about_first.191217.1652.log", "r")
+    #zfile = open("ansible_about_second.191217.1703.log", "r")
     i = 0
     time_start = 0
     while True:
@@ -61,8 +73,6 @@ if (__name__ == "__main__"):
             zdate = zline[zline.find('": "')+4:zline.find('",')]
             time_end = zget_time(zdate)
             #print("%18.0f\n" % (time_end))
-
-
 
         a = 'TASK ['
         if zline[0:len(a)] == a :
@@ -88,7 +98,6 @@ if (__name__ == "__main__"):
             zinstance = zline[len(a):zline.find("]")]
             if zdebug : print(str(i) + " action: " + zaction + ", instance" + zinstance)
 
-
         a = 'fatal: ['
         if zline[0:len(a)] == a :
             #print(i, zline[0:len(a)])
@@ -96,16 +105,13 @@ if (__name__ == "__main__"):
             zinstance = zline[len(a):zline.find("]")]
             if zdebug : print(str(i) + " action: " + zaction + ", instance" + zinstance)
 
-
-
-
         a = '}'
         if zline[0:len(a)] == a :
             if time_start > 0 :
                 #print(i, zline)
                 #print(".......................end task...")
                 time_delta = (time_end - time_start)/1000000000
-                print(str(start_num_line) + " la tâche: [" +ztask + "] avec l'action: [" + zaction + "] sur l'instance [" + zinstance + "] démarre à " + date_start + " (%0.0f" % (time_start) + "), durée: " + str(time_delta))
+                print(str(start_num_line) + " la tâche: //" +ztask + "// avec l'action: //" + zaction + "// sur l'instance //" + zinstance + "// démarre à " + date_start + " (%0.0f" % (time_start) + "), durée: " + str(time_delta))
 #                zerr = os.system('echo "' + str(i) + '" >> t1')
 
                 ztable = "ansible_logs2"

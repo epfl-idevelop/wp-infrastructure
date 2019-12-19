@@ -1,6 +1,6 @@
 # ATTENTION, ceci est ma documentation provisoire, c'est ce qui se trouve dans ma tête en ce moment !
 
-zf191212.1052
+zf191219.1421
 
 ## Buts
 *wp-ops* sert à restaurer ou déployer une infra Wordpress de l'EPFL sur Openshift via les commandes oc. Puis en vérifiant l'état via OKD, l'interface WEB de Openshift.
@@ -216,6 +216,18 @@ Et enfin sortir du *pod* avec un **ctrl+d** et faire:
 ```
 
 
+## Avoir des information sur les latences de ansible
+Ansible fait beaucoup de choses et prend un certain temps. On aimerait bien savoir *se qu'il fait* pendant tout ce temps !
+Quelques pistes à creuser:
+
+Giovanni Cangiani, [19.12.19 11:43]
+https://docs.ansible.com/ansible/latest/plugins/callback/profile_tasks.html
+
+Giovanni Cangiani, [19.12.19 11:45]
+https://janikvonrotz.ch/2018/03/07/profiling-ansible-roles-and-tasks/
+
+Giovanni Cangiani, [19.12.19 11:46]
+https://sketchingdev.co.uk/blog/profiling-ansible-playbooks-to-csv.html
 
 
 
@@ -267,10 +279,6 @@ Ne pas oublier après d'arrêter le binz avec:
 
 Dans un browser
 http://noc-tst.idev-fsd.ml:9092/
-
-
-
-
 
 ```
 

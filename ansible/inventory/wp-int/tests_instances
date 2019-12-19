@@ -1,3 +1,7 @@
+about_000:
+    hosts:
+        _srv_www_www.epfl.ch_htdocs_about:
+
 about_00:
     hosts:
         _srv_www_www.epfl.ch_htdocs_about:
