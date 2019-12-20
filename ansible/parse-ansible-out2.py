@@ -6,15 +6,22 @@
 #
 # sources: https://janakiev.com/blog/python-shell-commands/
 
-version = "parse-ansible-out2.py  zf191219.1054 "
+version = "parse-ansible-out2.py  zf191220.0849 "
 
 """
+ATTENTION: il faut installer les plugins pour le profilage de Ansible AVANT:
+https://janikvonrotz.ch/2018/03/07/profiling-ansible-roles-and-tasks/
+https://docs.ansible.com/ansible/latest/plugins/callback/profile_tasks.html
+
 génération du fichier logs
 oc login https://xxx.yyy.zzz (à prendre dans l'interface WEB d'OKD)
 # le test cours
 ./wpsible -vvv -l about_00 2>&1 |tee ansible.log
 # le test long
 ./wpsible -vvv -l about_03 2>&1 |tee ansible.log
+# le test plus court
+./wpsible -vvv -l about_001 2>&1 |tee ansible_first.191220.0847.log
+./wpsible -vvv -l about_001 2>&1 |tee ansible_second.191220.0847.log
 
 usage:
 cd ./wp-ops/ansible
@@ -49,7 +56,7 @@ if (__name__ == "__main__"):
     zdebug = True
     zprint_curl = False
 
-    zfile = open("ansible_second.191219.1449.log", "r")
+    zfile = open("ansible_first.191220.0847.log", "r")
     #zfile = open("ansible_about_first.191217.1652.log", "r")
     #zfile = open("ansible_about_second.191217.1703.log", "r")
     i = 0

@@ -283,8 +283,22 @@ http://noc-tst.idev-fsd.ml:9092/
 ```
 
 
+## Trucs à zuzu pour mémoire au retour des vacances de fin d'année 191220.1631 ;-)
+Pour avoir plus de détails dans les logs d'Ansible, j'ai installé le plugin https://docs.ansible.com/ansible/latest/plugins/callback/profile_tasks.html selon:
+https://janikvonrotz.ch/2018/03/07/profiling-ansible-roles-and-tasks/
+mais en fait il tourne le plugin qui se trouve dans:
+/usr/local/lib/python3.6/dist-packages/ansible/plugins/callback/profile_tasks.py
+au lieu de:
+/home/ubuntu/wp-ops/ansible/callback_plugins/profile_tasks.py
+et... il a une erreur quand on demande de ne pas trier le résultat final, j'ai donc commenté la ligne 187 de
+/usr/local/lib/python3.6/dist-packages/ansible/plugins/callback/profile_tasks.py
+pour ne plus avoir l'erreur !
+Mais finalement, ce plugin n'ajoute pas plus de détails dans les logs, je suis toujours aveugle entre les tâches
+[Delete fact directory] et [wp evaluation 1]
+Bien que j'ai ajouté dans le fichier ansible.cfg la ligne
+enable_task_debugger = True
 
-
+Au retour de vacances je dois comprendre pourquoi dans certaines tâches je n'ai pas les timestamps start et end après chaque tâche sur les instances ?
 
 
 

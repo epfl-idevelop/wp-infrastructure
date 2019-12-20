@@ -100,6 +100,10 @@
     for script in {{ _facts_dir.stdout }}/*.fact; do sh -x $script; done
   register: _run_fact_scripts_directly
   changed_when: false
+#zzz 191220.1348
+- debug:
+      var: out.stderr
+#zzz
 
 - name: Result of above (_run_fact_scripts_directly)
   when: '"_debug2_facts" in ansible_run_tags'

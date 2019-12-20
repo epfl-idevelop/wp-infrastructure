@@ -2,6 +2,12 @@ about_000:
     hosts:
         _srv_www_www.epfl.ch_htdocs_about:
 
+about_001:
+    hosts:
+        _srv_www_www.epfl.ch_htdocs_about:
+        _srv_www_www.epfl.ch_htdocs_about_governance:
+        _srv_www_www.epfl.ch_htdocs_about_recruiting:
+
 about_00:
     hosts:
         _srv_www_www.epfl.ch_htdocs_about:
