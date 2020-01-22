@@ -1,6 +1,6 @@
 # ATTENTION, ceci est ma documentation provisoire, c'est ce qui se trouve dans ma tête en ce moment !
 
-zf191219.1421
+zf200122.1718
 
 ## Buts
 *wp-ops* sert à restaurer ou déployer une infra Wordpress de l'EPFL sur Openshift via les commandes oc. Puis en vérifiant l'état via OKD, l'interface WEB de Openshift.
@@ -300,7 +300,22 @@ enable_task_debugger = True
 
 Au retour de vacances je dois comprendre pourquoi dans certaines tâches je n'ai pas les timestamps start et end après chaque tâche sur les instances ?
 
+C'est sur ~/wp-ops/ansible/parse-ansible-out2.py que je travaille en ce moment ;-)
 
+
+
+
+## Où en suis-je au 22 janvier 2020 à 17h10 ?
+Il faut que je fasse un 3e parser qui ne prendrait que les dates de *start* des *Task* d'Ansible et qui les *pousserait* dans InfluxDB/Grafana.
+
+Avantages:
+On ne sera plus *aveugle* à pleins endroit où le *verbose* d'Ansible n'indique PAS d'information de temps et de de durée. On pourra donc savoir tout de suite quelles sont les *Task* qu'il faudra optimiser.
+
+Désavantages:
+On ne pourra plus avoir le *détail* de chaque *instance* car on n'a plus ce genre d'info en travaillant sur les Task
+
+WIN/WIN:
+On pourra utiliser le parser2 pour avoir le détail des *instances* et le parser3 pour le détails des *Task* !
 
 
 .

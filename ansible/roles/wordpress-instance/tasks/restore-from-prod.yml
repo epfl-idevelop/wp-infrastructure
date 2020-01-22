@@ -1,5 +1,6 @@
 ---
 # zf191219.1427
+# zf200121.1614
 
 - include_vars: restore-vars.yml
 
@@ -20,11 +21,15 @@
     state: directory
   when: restore_backup_folder is defined
 
+#zzz zf200121.1614
 - name: wp evaluation 1
   shell:
     cmd: |
+      echo "toto0"
       echo "zuzu1: "$(date --iso-8601=seconds)
+      echo "toto1"
       echo $({{wp_cli_command }} eval '1;')
+      echo "toto2"
   register: out
   changed_when: false
 - debug:

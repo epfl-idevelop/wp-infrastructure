@@ -1,3 +1,5 @@
+# zf200122.1639
+
 # Collect WordPress-specific Ansible facts
 
 # The TL;DR of this charade is that Ansible's set_fact, well, doesn't.
@@ -78,6 +80,14 @@
   register: _facts_dir
   changed_when: false
 
+
+
+#zzz zf200122.1659
+- name: start setup
+  debug:
+      msg: "hello zuzu1"
+#zzz
+
 - setup:
     gather_subset:
       # "Standard" facts are just noise to us.
@@ -88,6 +98,16 @@
       - "!min"
       - local
     fact_path: "{{ _facts_dir.stdout }}"
+
+
+#zzz zf200122.1659
+- name: stop setup
+  debug:
+      msg: "hello zuzu2"
+#zzz
+
+
+
 
 ############# Debugging support #############################
 # Pass `-t facts,_debug_facts` or `-t facts,_debug2_facts` on the
@@ -100,10 +120,6 @@
     for script in {{ _facts_dir.stdout }}/*.fact; do sh -x $script; done
   register: _run_fact_scripts_directly
   changed_when: false
-#zzz 191220.1348
-- debug:
-      var: out.stderr
-#zzz
 
 - name: Result of above (_run_fact_scripts_directly)
   when: '"_debug2_facts" in ansible_run_tags'

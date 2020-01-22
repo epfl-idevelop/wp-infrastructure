@@ -6,7 +6,7 @@
 #
 # sources: https://janakiev.com/blog/python-shell-commands/
 
-version = "parse-ansible-out2.py  zf191220.0849 "
+version = "parse-ansible-out2.py  zf200122.1703 "
 
 """
 ATTENTION: il faut installer les plugins pour le profilage de Ansible AVANT:
@@ -56,7 +56,8 @@ if (__name__ == "__main__"):
     zdebug = True
     zprint_curl = False
 
-    zfile = open("ansible_first.191220.0847.log", "r")
+    zfile = open("ansible_xfois3.log", "r")
+    #zfile = open("ansible_first.191220.0847.log", "r")
     #zfile = open("ansible_about_first.191217.1652.log", "r")
     #zfile = open("ansible_about_second.191217.1703.log", "r")
     i = 0
@@ -144,6 +145,34 @@ if (__name__ == "__main__"):
 
 """
 ATOM IDE terminal debug zone
+ssh-add -l
+ssh-add
+ssh-add -l
+source /Keybase/team/epfl_wwp_blue/influxdb_secrets.sh
+ssh -A -o SendEnv="GIT*, dbflux*" ubuntu@localhost -p 52222
+cd wp-ops/ansible/
+
+sur la console terminal de OKD de mgmt(ATTENTION bien vérifier être dans wwp-int):
+cd /srv/www/www-wwp-int.128.178.222.83.nip.io/htdocs/
+rm -rf about
+
+rm ansible_xfois1.log ansible_xfois2.log ansible_xfois3.log
+./wpsible -vvv -l about_000 2>&1 |tee ansible_xfois1.log
+./wpsible -vvv -l about_000 2>&1 |tee ansible_xfois2.log
+./wpsible -vvvv -l about_000 2>&1 |tee ansible_xfois3.log
+ls -alrt
+
+rm ansible_xfois1.log ansible_xfois2.log ansible_xfois3.log
+./wpsible -vvv -l about_001 2>&1 |tee ansible_xfois1.log
+./wpsible -vvv -l about_001 2>&1 |tee ansible_xfois2.log
+./wpsible -vvvv -l about_001 2>&1 |tee ansible_xfois3.log
+ls -alrt
+
+rm ansible_xfois1.log ansible_xfois2.log ansible_xfois3.log
+./wpsible -vvv -l about_03 2>&1 |tee ansible_xfois1.log
+./wpsible -vvv -l about_03 2>&1 |tee ansible_xfois2.log
+./wpsible -vvvv -l about_03 2>&1 |tee ansible_xfois3.log
+ls -alrt
 
 rm t1
 ./parse-ansible-out2.py
