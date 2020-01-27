@@ -6,7 +6,7 @@
 # nouvelle version par rapport à parse-ansible-out2.py où ici je ne tiens compte que des *Task* !
 # sources: https://janakiev.com/blog/python-shell-commands/
 
-version = "parse-ansible-out3.py  zf200127.1456 "
+version = "parse-ansible-out3.py  zf200127.1909 "
 
 """
 ATTENTION: il faut installer les plugins pour le profilage de Ansible AVANT:
@@ -56,6 +56,7 @@ def zget_time(zdate):
 if (__name__ == "__main__"):
     print("\n" + version + "\n")
     zdebug = True
+    zdebug2 = False
     zprint_curl = False
 
     zfile = open("ansible_xfois3.log", "r")
@@ -64,6 +65,15 @@ if (__name__ == "__main__"):
     #zfile = open("ansible_about_second.191217.1703.log", "r")
     i = 0
     time_start = 0
+    ztask_t1 = ""
+    ztask_path_t1 = ""
+    ztask_time_t1 = ""
+    ztask_time_duration_t1 =""
+    ztask_t2 = ""
+    ztask_path_t2 = ""
+    ztask_time_t2 = ""
+    ztask_time_duration_t2 =""
+
     while True:
         zline = zfile.readline()
         i = i + 1
@@ -71,31 +81,43 @@ if (__name__ == "__main__"):
 
         a = 'TASK ['
         if zline[0:len(a)] == a :
+            ztask_t1 = ztask_t2
+            ztask_path_t1 = ztask_path_t2
+            ztask_time_t1 = ztask_time_t2
+
             #print(i, zline)
             if zline.find(" : ") != -1 :
-                ztask = zline[zline.find(" : ")+3:zline.find("] *")]
+                ztask_t2 = zline[zline.find(" : ")+3:zline.find("] *")]
             else:
-                ztask = zline[len(a):zline.find("]")]
+                ztask_t2 = zline[len(a):zline.find("]")]
             task_num_line = i
-            if zdebug : print(str(i) + " task: [" + ztask + "]")
+            if zdebug2 : print(str(i) + " ztask_t2: [" + ztask_t2 + "]")
 
             zline = zfile.readline()
             i = i + 1
-
-            ztask_path = zline[zline.find(": ")+2:zline.find(":",12)]
-            if zdebug : print(str(i) + " task_path: [" + ztask_path + "]")
+            ztask_path_t2 = zline[zline.find(": ")+2:zline.find(":",12)]
+            if zdebug2 : print(str(i) + " ztask_path_t2: [" + ztask_path_t2 + "]")
 
             zline = zfile.readline()
             i = i + 1
+            ztask_time_t2 = zline[zline.find(" ")+1:zline.find(" +")]
+            if zdebug2 : print(str(i) + " ztask_time_t2: [" + ztask_time_t2 + "]")
+            ztask_time_duration_t2 = zline[zline.find(" (")+2:zline.find(") ")]
+            if zdebug2 : print(str(i) + " ztask_time_duration_t2: [" + ztask_time_duration_t2 + "]")
 
-            ztask_time = zline[zline.find(" ")+1:zline.find(" +")]
-            if zdebug : print(str(i) + " task_time: [" + ztask_time + "]")
+            ztask_time_duration_t1 = ztask_time_duration_t2
 
-            ztask_time_t2t1 = zline[zline.find(" (")+2:zline.find(") ")]
-            if zdebug : print(str(i) + " task_time_t2t1: [" + ztask_time_t2t1 + "]")
+            if zdebug : print(str(i) + " ztask_t1: [" + ztask_t1 + "]")
+            if zdebug : print(str(i) + " ztask_path_t1: [" + ztask_path_t1 + "]")
+            if zdebug : print(str(i) + " ztask_time_t1: [" + ztask_time_t1 + "]")
 
+            if ztask_time_t1 != "" :
+                ztask_time_t1_obj = datetime.datetime.strptime(ztask_time_t1, '%d %B %Y %H:%M:%S')
+            else:
+                ztask_time_t1_obj = ""
 
-
+            if zdebug : print(str(i) + " ztask_time_t1_obj: [" + str(ztask_time_t1_obj) + "]")
+            if zdebug : print(str(i) + " ztask_time_duration_t1: [" + ztask_time_duration_t1 + "]")
 
 
 
