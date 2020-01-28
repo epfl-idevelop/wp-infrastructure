@@ -6,7 +6,7 @@
 # nouvelle version par rapport à parse-ansible-out2.py où ici je ne tiens compte que des *Task* !
 # sources: https://janakiev.com/blog/python-shell-commands/
 
-version = "parse-ansible-out3.py  zf200128.0836 "
+version = "parse-ansible-out3.py  zf200128.1358 "
 
 """
 ATTENTION: il faut installer les plugins pour le profilage de Ansible AVANT:
@@ -74,7 +74,7 @@ if (__name__ == "__main__"):
     ztask_time_duration_1_obj = 0
     ztask_name_2 = ""
     ztask_path_2 = ""
-    ztask_time_2 = ""
+    ztask_time_2_obj = 0
     ztask_time_duration_2_obj = 0
 
     while True:
@@ -111,7 +111,6 @@ if (__name__ == "__main__"):
             p1 = zline.find("   ")
             while zline[p1:p1+1] == " "    :
                 p1 = p1 + 1
-
             time_line = zline[p1:zline.find(" **")]
             if zdebug2 : print(str(i) + " time_line: [" + time_line + "]")
             time_line_obj = datetime.datetime.strptime(time_line, '%H:%M:%S.%f')
@@ -122,7 +121,6 @@ if (__name__ == "__main__"):
             if zdebug2 : print(str(i) + " ztime_line_0_obj: [" + str(ztime_line_0_obj) + "]")
 
 # récupération de l'heure précise de la Task
-
             ztask_time = zline[zline.find(" ")+1:zline.find(" +")]
             if zdebug2 : print(str(i) + " ztask_time: [" + ztask_time + "]")
             ztask_time_obj = datetime.datetime.strptime(ztask_time, '%d %B %Y %H:%M:%S')
