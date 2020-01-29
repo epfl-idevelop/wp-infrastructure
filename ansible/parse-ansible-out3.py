@@ -6,7 +6,7 @@
 # nouvelle version par rapport à parse-ansible-out2.py où ici je ne tiens compte que des *Task* !
 # sources: https://janakiev.com/blog/python-shell-commands/
 
-version = "parse-ansible-out3.py  zf200129.1515 "
+version = "parse-ansible-out3.py  zf200129.1603 "
 
 """
 ATTENTION: il faut installer les plugins pour le profilage de Ansible AVANT:
@@ -42,17 +42,18 @@ curl -i -XPOST "$dbflux_srv_host:$dbflux_srv_port/query?u=$dbflux_u_admin&p=$dbf
 import datetime, os
 
 def zget_unix_time(zdate):
-    date_time_obj = datetime.datetime.strptime(zdate, '%Y-%m-%d %H:%M:%S.%f')
-    date_time_obj_1970 = datetime.datetime.strptime("1970-01-01 00:00:00", '%Y-%m-%d %H:%M:%S')
-    date_time_nano_sec = ((date_time_obj - date_time_obj_1970).total_seconds())*1000000000
-    return date_time_nano_sec
+#    date_time_obj = datetime.datetime.strptime(zdate, '%Y-%m-%d %H:%M:%S.%f')
+    zdate_time_obj = zdate
+    zdate_time_obj_1970 = datetime.datetime.strptime("1970-01-01 00:00:00", '%Y-%m-%d %H:%M:%S')
+    zdate_time_nano_sec = ((zdate_time_obj - zdate_time_obj_1970).total_seconds())*1000000000
+    return zdate_time_nano_sec
 
 
 if (__name__ == "__main__"):
     print("\n" + version + "\n")
-    zdebug = True
+    zdebug = False
     zdebug2 = False
-    zprint_curl = False
+    zprint_curl = True
 
     zfile = open("ansible_xfois3.log", "r")
     i = 0
@@ -140,28 +141,19 @@ if (__name__ == "__main__"):
             if zdebug : print(str(ztask_line_1) + " ztask_time_1_obj: [" + str(ztask_time_1_obj) + "]")
             if zdebug : print(str(ztask_line_1) + " ztask_duration_1_obj: [" + str(ztask_duration_1_obj) + "]")
 
-# On tourne le 'barillet' de la Task !
-            ztask_name_1 = ztask_name_2
-            ztask_path_1 = ztask_path_2
-            ztask_time_1_obj = ztask_time_2_obj
-            ztask_line_1 = ztask_line_2
+            if ztask_name_1 != "" :
+                print(str(ztask_line_1) + " la tâche: //" + ztask_name_1 + "// avec l'action: //" + ztask_path_1 + "// démarre à " + str(ztask_time_1_obj) + ", durée: " + str(ztask_duration_1_obj))
 
+                ztable = "ansible_logs3"
+                ztask_name = ztask_name_1.replace(" ","_")
+                ztask_path = ztask_path_1.replace(" ","_")
 
-        a = '}zz donc ne le trouve JAMAIS !'
-        if zline[0:len(a)] == a :
-            if time_start > 0 :
-                #print(i, zline)
-                #print(".......................end task...")
-                time_delta = (time_end - time_start)/1000000000
-                print(str(start_num_line) + " la tâche: //" +ztask + "// avec l'action: //" + zaction + "// sur l'instance //" + zinstance + "// démarre à " + date_start + " (%0.0f" % (time_start) + "), durée: " + str(time_delta))
-#                zerr = os.system('echo "' + str(i) + '" >> t1')
+                ztask_unxi_time = zget_unix_time(ztask_time_1_obj)
 
-                ztable = "ansible_logs2"
-                zaction = zaction.replace(" ","_")
-                zinstance = zinstance.replace(" ","_")
-                ztask = ztask.replace(" ","_")
+                zdate_time_obj_1900 = datetime.datetime.strptime("1900-01-01 00:00:00", '%Y-%m-%d %H:%M:%S')
+                ztask_duration = (ztask_duration_1_obj - zdate_time_obj_1900).total_seconds()
 
-                zcmd = 'curl -i -XPOST "$dbflux_srv_host:$dbflux_srv_port/write?db=$dbflux_db&u=$dbflux_u_user&p=$dbflux_p_user"  --data-binary "' + ztable + ',instance=' + zinstance + ',action=' + zaction + ',task=' + ztask + ' duration=' + str(time_delta) + ' ' + '%0.0f' % (time_start) + '"'
+                zcmd = 'curl -i -XPOST "$dbflux_srv_host:$dbflux_srv_port/write?db=$dbflux_db&u=$dbflux_u_user&p=$dbflux_p_user"  --data-binary "' + ztable + ',action=' + ztask_path + ',task=' + ztask_name + ' duration=' + str(ztask_duration) + ' ' + '%0.0f' % (ztask_unxi_time) + '"'
                 if zprint_curl :print(zcmd)
 
                 if zdebug == False  :
@@ -169,7 +161,20 @@ if (__name__ == "__main__"):
                     if zerr != 0 :
                         print(zerr)
 
-                time_start = 0
+
+
+
+# On tourne le 'barillet' de la Task !
+            ztask_name_1 = ztask_name_2
+            ztask_path_1 = ztask_path_2
+            ztask_time_1_obj = ztask_time_2_obj
+            ztask_line_1 = ztask_line_2
+
+
+
+
+
+
         if zline == "" :
             break
 
