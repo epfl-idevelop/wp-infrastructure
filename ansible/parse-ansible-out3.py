@@ -6,7 +6,7 @@
 # nouvelle version par rapport à parse-ansible-out2.py où ici je ne tiens compte que des *Task* !
 # sources: https://janakiev.com/blog/python-shell-commands/
 
-version = "parse-ansible-out3.py  zf200129.1603 "
+version = "parse-ansible-out3.py  zf200129.1659 "
 
 """
 ATTENTION: il faut installer les plugins pour le profilage de Ansible AVANT:
@@ -34,7 +34,7 @@ http://noc-tst.idev-fsd.ml:9092/
 
 Pour mettre à zéro la 'table' dans InfluxDB
 curl -i -XPOST "$dbflux_srv_host:$dbflux_srv_port/query?u=$dbflux_u_admin&p=$dbflux_p_admin&db=$dbflux_db"  --data-urlencode "q=SHOW MEASUREMENTS"
-curl -i -XPOST "$dbflux_srv_host:$dbflux_srv_port/query?u=$dbflux_u_admin&p=$dbflux_p_admin&db=$dbflux_db"  --data-urlencode "q=DROP MEASUREMENT \"ansible_logs2\""
+curl -i -XPOST "$dbflux_srv_host:$dbflux_srv_port/query?u=$dbflux_u_admin&p=$dbflux_p_admin&db=$dbflux_db"  --data-urlencode "q=DROP MEASUREMENT \"ansible_logs3\""
 curl -i -XPOST "$dbflux_srv_host:$dbflux_srv_port/query?u=$dbflux_u_admin&p=$dbflux_p_admin&db=$dbflux_db"  --data-urlencode "q=SHOW MEASUREMENTS"
 """
 
@@ -54,6 +54,7 @@ if (__name__ == "__main__"):
     zdebug = False
     zdebug2 = False
     zprint_curl = True
+    zsend_grafana = True
 
     zfile = open("ansible_xfois3.log", "r")
     i = 0
@@ -93,10 +94,13 @@ if (__name__ == "__main__"):
             ztask_line_2 = i
             if zdebug2 : print(str(i) + " ztask_name_2: [" + ztask_name_2 + "]")
 
-# Récupération du path de la Task
+# On passe à la ligne suivante
             zline = zfile.readline()
             i = i + 1
-            ztask_path_2 = zline[zline.find(": ")+2:zline.find(":",12)]
+
+# Récupération du path de la Task
+            zpath = "/home/ubuntu/wp-ops/ansible/roles/wordpress-instance/tasks/"
+            ztask_path_2 = zline[zline.find(zpath)+len(zpath):]
             if zdebug2 : print(str(i) + " ztask_path_2: [" + ztask_path_2 + "]")
 
 # On passe à la ligne suivante
@@ -147,6 +151,8 @@ if (__name__ == "__main__"):
                 ztable = "ansible_logs3"
                 ztask_name = ztask_name_1.replace(" ","_")
                 ztask_path = ztask_path_1.replace(" ","_")
+                ztask_path = ztask_path.replace(":","_")
+                ztask_path = ztask_path.replace(".","_")
 
                 ztask_unxi_time = zget_unix_time(ztask_time_1_obj)
 
@@ -156,7 +162,7 @@ if (__name__ == "__main__"):
                 zcmd = 'curl -i -XPOST "$dbflux_srv_host:$dbflux_srv_port/write?db=$dbflux_db&u=$dbflux_u_user&p=$dbflux_p_user"  --data-binary "' + ztable + ',action=' + ztask_path + ',task=' + ztask_name + ' duration=' + str(ztask_duration) + ' ' + '%0.0f' % (ztask_unxi_time) + '"'
                 if zprint_curl :print(zcmd)
 
-                if zdebug == False  :
+                if zsend_grafana == True  :
                     zerr = os.system(zcmd)
                     if zerr != 0 :
                         print(zerr)
@@ -218,10 +224,10 @@ rm t1
 ls -alrt
 cat t1
 
-export ztable="ansible_logs"
-export zinstance="bobo_bubu"
+reset
+export ztable="ansible_logs3"
+export zaction="bobo_bubu"
 export ztask="titi_tata"
-export ztask="zozo_zuzu"
 export t1=$(date +%s%N)
 echo $t1
 export t2=$(date +%s%N)
@@ -229,7 +235,9 @@ echo $t2
 export t21=$(echo "($t2 - $t1)/1000000000" | bc -l)
 echo $t21
 
-curl -i -XPOST "$dbflux_srv_host:$dbflux_srv_port/write?db=$dbflux_db&u=$dbflux_u_user&p=$dbflux_p_user"  --data-binary "$ztable,instance=$zinstance,task=$ztask duration=$t21 $t1"
+echo "curl -i -XPOST \"$dbflux_srv_host:$dbflux_srv_port/write?db=$dbflux_db&u=$dbflux_u_user&p=$dbflux_p_user\"  --data-binary \"$ztable,action=$zaction,task=$ztask duration=$t21 $t1\""
+
+curl -i -XPOST "$dbflux_srv_host:$dbflux_srv_port/write?db=$dbflux_db&u=$dbflux_u_user&p=$dbflux_p_user"  --data-binary "$ztable,action=$zaction,task=$ztask duration=$t21 $t1"
 
 
 
