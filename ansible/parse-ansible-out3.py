@@ -6,7 +6,7 @@
 # nouvelle version par rapport à parse-ansible-out2.py où ici je ne tiens compte que des *Task* !
 # sources: https://janakiev.com/blog/python-shell-commands/
 
-version = "parse-ansible-out3.py  zf200128.1358 "
+version = "parse-ansible-out3.py  zf200129.1515 "
 
 """
 ATTENTION: il faut installer les plugins pour le profilage de Ansible AVANT:
@@ -36,46 +36,46 @@ Pour mettre à zéro la 'table' dans InfluxDB
 curl -i -XPOST "$dbflux_srv_host:$dbflux_srv_port/query?u=$dbflux_u_admin&p=$dbflux_p_admin&db=$dbflux_db"  --data-urlencode "q=SHOW MEASUREMENTS"
 curl -i -XPOST "$dbflux_srv_host:$dbflux_srv_port/query?u=$dbflux_u_admin&p=$dbflux_p_admin&db=$dbflux_db"  --data-urlencode "q=DROP MEASUREMENT \"ansible_logs2\""
 curl -i -XPOST "$dbflux_srv_host:$dbflux_srv_port/query?u=$dbflux_u_admin&p=$dbflux_p_admin&db=$dbflux_db"  --data-urlencode "q=SHOW MEASUREMENTS"
-
-
-
 """
 
 
 import datetime, os
 
-def zget_time(zdate):
-    #print("xxxxxxxxxxx" + zdate + "yyyyyyyyyy")
+def zget_unix_time(zdate):
     date_time_obj = datetime.datetime.strptime(zdate, '%Y-%m-%d %H:%M:%S.%f')
     date_time_obj_1970 = datetime.datetime.strptime("1970-01-01 00:00:00", '%Y-%m-%d %H:%M:%S')
     date_time_nano_sec = ((date_time_obj - date_time_obj_1970).total_seconds())*1000000000
-    #print("%18.0f\n" % (date_time_nano_sec))
     return date_time_nano_sec
 
 
 if (__name__ == "__main__"):
     print("\n" + version + "\n")
-    zdebug = False
-    zdebug2 = True
+    zdebug = True
+    zdebug2 = False
     zprint_curl = False
 
     zfile = open("ansible_xfois3.log", "r")
-    #zfile = open("ansible_first.191220.0847.log", "r")
-    #zfile = open("ansible_about_first.191217.1652.log", "r")
-    #zfile = open("ansible_about_second.191217.1703.log", "r")
     i = 0
-    ztime_start_0_obj = 0
-    ztime_line_0_obj = 0
-    zduration_start = 0
 
+    ztask_time = ""
+    ztask_time_obj = 0
+    ztask_time_0_obj = 0
+    zclock = ""
+    zclock_obj = 0
+    zclock_0_obj = 0
+    zduration = ""
+
+    ztask_line_1 = 0
     ztask_name_1 = ""
     ztask_path_1 = ""
     ztask_time_1_obj = 0
-    ztask_time_duration_1_obj = 0
+    ztask_duration_1_obj = 0
+
+    ztask_line_2 = 0
     ztask_name_2 = ""
     ztask_path_2 = ""
     ztask_time_2_obj = 0
-    ztask_time_duration_2_obj = 0
+#    ztask_duration_2_obj = 0      pas besoin !
 
     while True:
         zline = zfile.readline()
@@ -84,17 +84,12 @@ if (__name__ == "__main__"):
         a = 'TASK ['
         if zline[0:len(a)] == a :
 
-# On change de Task !
-            ztask_name_1 = ztask_name_2
-            ztask_path_1 = ztask_path_2
-            ztask_time_1_obj = ztask_time_2_obj
-
 # Récupération du nom de la Task
             if zline.find(" : ") != -1 :
                 ztask_name_2 = zline[zline.find(" : ")+3:zline.find("] *")]
             else:
                 ztask_name_2 = zline[len(a):zline.find("]")]
-            task_num_line = i
+            ztask_line_2 = i
             if zdebug2 : print(str(i) + " ztask_name_2: [" + ztask_name_2 + "]")
 
 # Récupération du path de la Task
@@ -107,18 +102,18 @@ if (__name__ == "__main__"):
             zline = zfile.readline()
             i = i + 1
 
-# récupération de la base de temps (durée totale)
+# récupération de la base de temps (clock, durée totale)
             p1 = zline.find("   ")
             while zline[p1:p1+1] == " "    :
                 p1 = p1 + 1
-            time_line = zline[p1:zline.find(" **")]
-            if zdebug2 : print(str(i) + " time_line: [" + time_line + "]")
-            time_line_obj = datetime.datetime.strptime(time_line, '%H:%M:%S.%f')
-            if zdebug2 : print(str(i) + " time_line_obj: [" + str(time_line_obj) + "]")
+            zclock = zline[p1:zline.find(" **")]
+            if zdebug2 : print(str(i) + " zclock: [" + zclock + "]")
+            zclock_obj = datetime.datetime.strptime(zclock, '%H:%M:%S.%f')
+            if zdebug2 : print(str(i) + " zclock_obj: [" + str(zclock_obj) + "]")
 
-            if ztime_line_0_obj == 0 :
-                ztime_line_0_obj = time_line_obj
-            if zdebug2 : print(str(i) + " ztime_line_0_obj: [" + str(ztime_line_0_obj) + "]")
+            if zclock_0_obj == 0 :
+                zclock_0_obj = zclock_obj
+            if zdebug2 : print(str(i) + " zclock_0_obj: [" + str(zclock_0_obj) + "]")
 
 # récupération de l'heure précise de la Task
             ztask_time = zline[zline.find(" ")+1:zline.find(" +")]
@@ -126,38 +121,30 @@ if (__name__ == "__main__"):
             ztask_time_obj = datetime.datetime.strptime(ztask_time, '%d %B %Y %H:%M:%S')
             if zdebug2 : print(str(i) + " ztask_time_obj: [" + str(ztask_time_obj) + "]")
 
-            if ztime_start_0_obj == 0 :
-                ztime_start_0_obj = ztask_time_obj
-            if zdebug2 : print(str(i) + " ztime_start_0_obj: [" + str(ztime_start_0_obj) + "]")
+            if ztask_time_0_obj == 0 :
+                ztask_time_0_obj = ztask_time_obj
+            if zdebug2 : print(str(i) + " ztask_time_0_obj: [" + str(ztask_time_0_obj) + "]")
 
-            ztask_time_2_obj = ztime_start_0_obj + (time_line_obj - ztime_line_0_obj)
+            ztask_time_2_obj = ztask_time_0_obj + (zclock_obj - zclock_0_obj)
             if zdebug2 : print(str(i) + " ztask_time_2_obj: [" + str(ztask_time_2_obj) + "]")
 
+# récupération de la durée de la Task
+            zduration = zline[zline.find(" (")+2:zline.find(") ")]
+            if zdebug2 : print(str(i) + " zduration: [" + zduration + "]")
+            ztask_duration_1_obj = datetime.datetime.strptime(zduration, '%H:%M:%S.%f')
+            if zdebug2 : print(str(i) + " ztask_duration_1_obj: [" + str(ztask_duration_1_obj) + "]")
 
+# On affiche le résultat de la Task
+            if zdebug : print(str(ztask_line_1) + " ztask_name_1: [" + ztask_name_1 + "]")
+            if zdebug : print(str(ztask_line_1) + " ztask_path_1: [" + ztask_path_1 + "]")
+            if zdebug : print(str(ztask_line_1) + " ztask_time_1_obj: [" + str(ztask_time_1_obj) + "]")
+            if zdebug : print(str(ztask_line_1) + " ztask_duration_1_obj: [" + str(ztask_duration_1_obj) + "]")
 
-            ztask_time_2 = zline[zline.find(" ")+1:zline.find(" +")]
-            if zdebug2 : print(str(i) + " ztask_time_2: [" + ztask_time_2 + "]")
-            ztask_time_duration_2 = zline[zline.find(" (")+2:zline.find(") ")]
-            if zdebug2 : print(str(i) + " ztask_time_duration_2: [" + ztask_time_duration_2 + "]")
-
-
-
-
-
-            ztask_time_duration_1 = ztask_time_duration_2
-
-            if zdebug : print(str(i) + " ztask_name_1: [" + ztask_name_1 + "]")
-            if zdebug : print(str(i) + " ztask_path_1: [" + ztask_path_1 + "]")
-            if zdebug : print(str(i) + " ztask_time_1: [" + ztask_time_1 + "]")
-
-            if ztask_time_1 != "" :
-                ztask_time_1_obj = datetime.datetime.strptime(ztask_time_1, '%d %B %Y %H:%M:%S')
-            else:
-                ztask_time_1_obj = ""
-
-            if zdebug : print(str(i) + " ztask_time_1_obj: [" + str(ztask_time_1_obj) + "]")
-            if zdebug : print(str(i) + " ztask_time_duration_1: [" + ztask_time_duration_1 + "]")
-
+# On tourne le 'barillet' de la Task !
+            ztask_name_1 = ztask_name_2
+            ztask_path_1 = ztask_path_2
+            ztask_time_1_obj = ztask_time_2_obj
+            ztask_line_1 = ztask_line_2
 
 
         a = '}zz donc ne le trouve JAMAIS !'
@@ -174,7 +161,7 @@ if (__name__ == "__main__"):
                 zinstance = zinstance.replace(" ","_")
                 ztask = ztask.replace(" ","_")
 
-                zcmd = 'curl -i -XPOST "$dbflux_srv_host:$dbflux_srv_port/write?db=$dbflux_db&u=$dbflux_u_user&p=$dbflux_p_user"  --data-binary "' + ztable + ',instance=' + zinstance + ',action=' + zaction + ',task=' + ztask + ' time_duration=' + str(time_delta) + ' ' + '%0.0f' % (time_start) + '"'
+                zcmd = 'curl -i -XPOST "$dbflux_srv_host:$dbflux_srv_port/write?db=$dbflux_db&u=$dbflux_u_user&p=$dbflux_p_user"  --data-binary "' + ztable + ',instance=' + zinstance + ',action=' + zaction + ',task=' + ztask + ' duration=' + str(time_delta) + ' ' + '%0.0f' % (time_start) + '"'
                 if zprint_curl :print(zcmd)
 
                 if zdebug == False  :
@@ -237,7 +224,7 @@ echo $t2
 export t21=$(echo "($t2 - $t1)/1000000000" | bc -l)
 echo $t21
 
-curl -i -XPOST "$dbflux_srv_host:$dbflux_srv_port/write?db=$dbflux_db&u=$dbflux_u_user&p=$dbflux_p_user"  --data-binary "$ztable,instance=$zinstance,task=$ztask time_duration=$t21 $t1"
+curl -i -XPOST "$dbflux_srv_host:$dbflux_srv_port/write?db=$dbflux_db&u=$dbflux_u_user&p=$dbflux_p_user"  --data-binary "$ztable,instance=$zinstance,task=$ztask duration=$t21 $t1"
 
 
 
