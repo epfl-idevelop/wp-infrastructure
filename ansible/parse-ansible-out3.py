@@ -6,7 +6,7 @@
 # nouvelle version par rapport à parse-ansible-out2.py où ici je ne tiens compte que des *Task* !
 # sources: https://janakiev.com/blog/python-shell-commands/
 
-version = "parse-ansible-out3.py  zf200129.1659 "
+version = "parse-ansible-out3.py  zf200130.1112 "
 
 """
 ATTENTION: il faut installer les plugins pour le profilage de Ansible AVANT:
@@ -53,7 +53,7 @@ if (__name__ == "__main__"):
     print("\n" + version + "\n")
     zdebug = False
     zdebug2 = False
-    zprint_curl = True
+    zprint_curl = False
     zsend_grafana = True
 
     zfile = open("ansible_xfois3.log", "r")
@@ -100,7 +100,7 @@ if (__name__ == "__main__"):
 
 # Récupération du path de la Task
             zpath = "/home/ubuntu/wp-ops/ansible/roles/wordpress-instance/tasks/"
-            ztask_path_2 = zline[zline.find(zpath)+len(zpath):]
+            ztask_path_2 = zline[zline.find(zpath)+len(zpath):-1]
             if zdebug2 : print(str(i) + " ztask_path_2: [" + ztask_path_2 + "]")
 
 # On passe à la ligne suivante
@@ -149,7 +149,7 @@ if (__name__ == "__main__"):
                 print(str(ztask_line_1) + " la tâche: //" + ztask_name_1 + "// avec l'action: //" + ztask_path_1 + "// démarre à " + str(ztask_time_1_obj) + ", durée: " + str(ztask_duration_1_obj))
 
                 ztable = "ansible_logs3"
-                ztask_name = ztask_name_1.replace(" ","_")
+                ztask_name = ztask_name_1.replace(" ","_") + "_" +str(ztask_line_1)
                 ztask_path = ztask_path_1.replace(" ","_")
                 ztask_path = ztask_path.replace(":","_")
                 ztask_path = ztask_path.replace(".","_")
