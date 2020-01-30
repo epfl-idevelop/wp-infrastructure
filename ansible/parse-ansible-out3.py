@@ -6,7 +6,7 @@
 # nouvelle version par rapport à parse-ansible-out2.py où ici je ne tiens compte que des *Task* !
 # sources: https://janakiev.com/blog/python-shell-commands/
 
-version = "parse-ansible-out3.py  zf200130.1112 "
+version = "parse-ansible-out3.py  zf200130.1734 "
 
 """
 ATTENTION: il faut installer les plugins pour le profilage de Ansible AVANT:
@@ -33,8 +33,9 @@ Dans un browser
 http://noc-tst.idev-fsd.ml:9092/
 
 Pour mettre à zéro la 'table' dans InfluxDB
+export ztable="ansible_logs3"
 curl -i -XPOST "$dbflux_srv_host:$dbflux_srv_port/query?u=$dbflux_u_admin&p=$dbflux_p_admin&db=$dbflux_db"  --data-urlencode "q=SHOW MEASUREMENTS"
-curl -i -XPOST "$dbflux_srv_host:$dbflux_srv_port/query?u=$dbflux_u_admin&p=$dbflux_p_admin&db=$dbflux_db"  --data-urlencode "q=DROP MEASUREMENT \"ansible_logs3\""
+curl -i -XPOST "$dbflux_srv_host:$dbflux_srv_port/query?u=$dbflux_u_admin&p=$dbflux_p_admin&db=$dbflux_db"  --data-urlencode "q=DROP MEASUREMENT $ztable"
 curl -i -XPOST "$dbflux_srv_host:$dbflux_srv_port/query?u=$dbflux_u_admin&p=$dbflux_p_admin&db=$dbflux_db"  --data-urlencode "q=SHOW MEASUREMENTS"
 """
 
@@ -44,9 +45,12 @@ import datetime, os
 def zget_unix_time(zdate):
 #    date_time_obj = datetime.datetime.strptime(zdate, '%Y-%m-%d %H:%M:%S.%f')
     zdate_time_obj = zdate
-    zdate_time_obj_1970 = datetime.datetime.strptime("1970-01-01 00:00:00", '%Y-%m-%d %H:%M:%S')
-    zdate_time_nano_sec = ((zdate_time_obj - zdate_time_obj_1970).total_seconds())*1000000000
-    return zdate_time_nano_sec
+    if zdebug2 : print(" zdate_time_obj: [" + str(zdate_time_obj) + "]")
+    zdate_time_1970_obj = datetime.datetime.strptime("1970-01-01 01:00:00", '%Y-%m-%d %H:%M:%S')        #Astuce pour faire UTC-1 à cause de Grafana !
+    if zdebug2 : print(" zdate_time_1970_obj: [" + str(zdate_time_1970_obj) + "]")
+    zdate_time_unix_obj = (zdate_time_obj - zdate_time_1970_obj)
+    if zdebug2 : print(" zdate_time_unix_obj: [" + str(zdate_time_unix_obj) + "]")
+    return zdate_time_unix_obj
 
 
 if (__name__ == "__main__"):
@@ -56,7 +60,7 @@ if (__name__ == "__main__"):
     zprint_curl = False
     zsend_grafana = True
 
-    zfile = open("ansible_xfois3.log", "r")
+    zfile = open("ansible_xfois4.log", "r")
     i = 0
 
     ztask_time = ""
@@ -154,12 +158,12 @@ if (__name__ == "__main__"):
                 ztask_path = ztask_path.replace(":","_")
                 ztask_path = ztask_path.replace(".","_")
 
-                ztask_unxi_time = zget_unix_time(ztask_time_1_obj)
+                ztask_unix_time_nano = zget_unix_time(ztask_time_1_obj).total_seconds()*1000000000
 
                 zdate_time_obj_1900 = datetime.datetime.strptime("1900-01-01 00:00:00", '%Y-%m-%d %H:%M:%S')
                 ztask_duration = (ztask_duration_1_obj - zdate_time_obj_1900).total_seconds()
 
-                zcmd = 'curl -i -XPOST "$dbflux_srv_host:$dbflux_srv_port/write?db=$dbflux_db&u=$dbflux_u_user&p=$dbflux_p_user"  --data-binary "' + ztable + ',action=' + ztask_path + ',task=' + ztask_name + ' duration=' + str(ztask_duration) + ' ' + '%0.0f' % (ztask_unxi_time) + '"'
+                zcmd = 'curl -i -XPOST "$dbflux_srv_host:$dbflux_srv_port/write?db=$dbflux_db&u=$dbflux_u_user&p=$dbflux_p_user"  --data-binary "' + ztable + ',action=' + ztask_path + ',task=' + ztask_name + ' duration=' + str(ztask_duration) + ' ' + '%0.0f' % (ztask_unix_time_nano) + '"'
                 if zprint_curl :print(zcmd)
 
                 if zsend_grafana == True  :
@@ -211,6 +215,7 @@ rm ansible_xfois1.log ansible_xfois2.log ansible_xfois3.log
 ./wpsible -vvv -l about_001 2>&1 |tee ansible_xfois1.log
 ./wpsible -vvv -l about_001 2>&1 |tee ansible_xfois2.log
 ./wpsible -vvvv -l about_001 2>&1 |tee ansible_xfois3.log
+./wpsible -vvvv -l about_001 2>&1 |tee ansible_xfois4.log
 ls -alrt
 
 rm ansible_xfois1.log ansible_xfois2.log ansible_xfois3.log

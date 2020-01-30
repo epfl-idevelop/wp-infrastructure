@@ -1,6 +1,6 @@
 # ATTENTION, ceci est ma documentation provisoire, c'est ce qui se trouve dans ma tête en ce moment !
 
-zf200122.1718
+zf200130.1734
 
 ## Buts
 *wp-ops* sert à restaurer ou déployer une infra Wordpress de l'EPFL sur Openshift via les commandes oc. Puis en vérifiant l'état via OKD, l'interface WEB de Openshift.
@@ -279,6 +279,37 @@ Ne pas oublier après d'arrêter le binz avec:
 
 Dans un browser
 http://noc-tst.idev-fsd.ml:9092/
+
+
+Dans console 3, si on veut entrer en ssh dans un container OKD où il n'y a pas d'export ssh
+# Dans le container, via la console terminal web OKD, il faut en premier copier sa clef dans le container:
+echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDksDVJZQ3GaCkD4N1etyJ8yWpaSXrLnynG7jHqhqEmQQKAwWpauyp2mIUYKFyv9JnAlf91XCwGzE1azSJokkfCMo4AEpgj4SgNuucJEzMy4Zjrl3VSyBPzGvpN40XR/ITOf9Dd8VCTss6z28Kbvj+GBENRNIxGIc0FUgaTVqkjrof24TentxSPbEEpfvsCTh7ANVRrwGZMr4PzX5M+yen+MfQeNTBmSRBUpjWe0BZfTcGpOxYKlohsPbd1If5tnQPURWHhMZChNo4ASqtRRnHm5grlZqZP+jUQ0jrkU3Q+1LzSyN3J9KWSTVGVUonc8pI9JARLf1N+2aWKgq/L9eM3 zuzu@siipc6.epfl.ch" > /root/.ssh/authorized_keys
+chmod 600 /root/.ssh/authorized_keys
+# puis creuser un tunnel SSH reverse
+ssh -N -t -R 53222:localhost:22 zuzu@siipc6.epfl.ch
+# on bascule sur sa machine
+source /Keybase/team/epfl_wwp_blue/influxdb_secrets.sh
+# on copie les secrets pour les coller après dans la console SSH du container ;-)
+ssh -A root@localhost -p 53222
+
+
+Installation de TELEGRAPH (capture des métriques) dans le pod mgmt (ATTENTION à chaque démarrage du pod il faudra réinstaller TELEPGRAPH ! )
+# dans terminal WEB OKD du container mgmt
+bash
+cd
+apt update
+apt install sudo wget
+git clone https://github.com/zuzu59/telegraf.git
+# on récupère/copie les secrets keybase sur sa machine avec
+source /Keybase/team/epfl_wwp_blue/influxdb_secrets.sh
+# on les colle dans le terminal OKD
+cd telegraf/
+./install.sh
+# on démarre en background TELEGRAPH
+/usr/bin/telegraf --debug -config /etc/telegraf/telegraf.conf -config-directory /etc/telegraf/telegraf.d &
+
+
+
 
 ```
 
