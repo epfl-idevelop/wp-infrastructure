@@ -6,7 +6,7 @@
 # nouvelle version par rapport à parse-ansible-out2.py où ici je ne tiens compte que des *Task* !
 # sources: https://janakiev.com/blog/python-shell-commands/
 
-version = "parse-ansible-out3.py  zf200130.1734 "
+version = "parse-ansible-out3.py  zf200130.1537 "
 
 """
 ATTENTION: il faut installer les plugins pour le profilage de Ansible AVANT:
@@ -193,35 +193,43 @@ if (__name__ == "__main__"):
 
 
 """
+ATTENTION vérifier (dans Grafana) AVANT que TELEGRAPH tourne bien sur la machine Ansible ET le container mgmt !
+
 ATOM IDE terminal debug zone
 ssh-add -l
 ssh-add
 ssh-add -l
 source /Keybase/team/epfl_wwp_blue/influxdb_secrets.sh
 ssh -A -o SendEnv="GIT*, dbflux*" ubuntu@localhost -p 52222
+# il faut entrer son passwd dans la console du bas ;-)
 cd wp-ops/ansible/
 
+oc login https://xxx.yyy.zzz (à prendre dans l'interface WEB d'OKD)
+
 sur la console terminal de OKD de mgmt(ATTENTION bien vérifier être dans wwp-int):
+bash
 cd /srv/www/www-wwp-int.128.178.222.83.nip.io/htdocs/
 rm -rf about
 
-rm ansible_xfois1.log ansible_xfois2.log ansible_xfois3.log
+rm ansible_xfois1.log ansible_xfois2.log ansible_xfois3.log ansible_xfois4.log
 ./wpsible -vvv -l about_000 2>&1 |tee ansible_xfois1.log
 ./wpsible -vvv -l about_000 2>&1 |tee ansible_xfois2.log
-./wpsible -vvvv -l about_000 2>&1 |tee ansible_xfois3.log
+./wpsible -vvv -l about_000 2>&1 |tee ansible_xfois3.log
+./wpsible -vvv -l about_000 2>&1 |tee ansible_xfois4.log
 ls -alrt
 
-rm ansible_xfois1.log ansible_xfois2.log ansible_xfois3.log
-./wpsible -vvv -l about_001 2>&1 |tee ansible_xfois1.log
-./wpsible -vvv -l about_001 2>&1 |tee ansible_xfois2.log
-./wpsible -vvvv -l about_001 2>&1 |tee ansible_xfois3.log
-./wpsible -vvvv -l about_001 2>&1 |tee ansible_xfois4.log
+rm ansible_xfois1.log ansible_xfois2.log ansible_xfois3.log ansible_xfois4.log
+./wpsible -vvv -l about_01 2>&1 |tee ansible_xfois1.log
+./wpsible -vvv -l about_01 2>&1 |tee ansible_xfois2.log
+./wpsible -vvv -l about_01 2>&1 |tee ansible_xfois3.log
+./wpsible -vvv -l about_01 2>&1 |tee ansible_xfois4.log
 ls -alrt
 
-rm ansible_xfois1.log ansible_xfois2.log ansible_xfois3.log
+rm ansible_xfois1.log ansible_xfois2.log ansible_xfois3.log ansible_xfois4.log
 ./wpsible -vvv -l about_03 2>&1 |tee ansible_xfois1.log
 ./wpsible -vvv -l about_03 2>&1 |tee ansible_xfois2.log
-./wpsible -vvvv -l about_03 2>&1 |tee ansible_xfois3.log
+./wpsible -vvv -l about_03 2>&1 |tee ansible_xfois3.log
+./wpsible -vvv -l about_03 2>&1 |tee ansible_xfois4.log
 ls -alrt
 
 rm t1

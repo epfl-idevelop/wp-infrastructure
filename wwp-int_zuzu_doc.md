@@ -286,7 +286,10 @@ Dans console 3, si on veut entrer en ssh dans un container OKD où il n'y a pas 
 echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDksDVJZQ3GaCkD4N1etyJ8yWpaSXrLnynG7jHqhqEmQQKAwWpauyp2mIUYKFyv9JnAlf91XCwGzE1azSJokkfCMo4AEpgj4SgNuucJEzMy4Zjrl3VSyBPzGvpN40XR/ITOf9Dd8VCTss6z28Kbvj+GBENRNIxGIc0FUgaTVqkjrof24TentxSPbEEpfvsCTh7ANVRrwGZMr4PzX5M+yen+MfQeNTBmSRBUpjWe0BZfTcGpOxYKlohsPbd1If5tnQPURWHhMZChNo4ASqtRRnHm5grlZqZP+jUQ0jrkU3Q+1LzSyN3J9KWSTVGVUonc8pI9JARLf1N+2aWKgq/L9eM3 zuzu@siipc6.epfl.ch" > /root/.ssh/authorized_keys
 chmod 600 /root/.ssh/authorized_keys
 # puis creuser un tunnel SSH reverse
+# si on tourne Ansible sur son portable
 ssh -N -t -R 53222:localhost:22 zuzu@siipc6.epfl.ch
+# si on tourne Ansible sur une VM sur son portable
+ssh -N -t -R 53222:localhost:22 zuzu@siipc6.epfl.ch -p 52222
 # on bascule sur sa machine
 source /Keybase/team/epfl_wwp_blue/influxdb_secrets.sh
 # on copie les secrets pour les coller après dans la console SSH du container ;-)
