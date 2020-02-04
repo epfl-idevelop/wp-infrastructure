@@ -8,6 +8,10 @@ about_001:
         _srv_www_www.epfl.ch_htdocs_about_governance:
         _srv_www_www.epfl.ch_htdocs_about_recruiting:
 
+about_002:
+    hosts:
+        _srv_www_www.epfl.ch_htdocs_about_overview:
+
 about_00:
     hosts:
         _srv_www_www.epfl.ch_htdocs_about:
@@ -41,7 +45,7 @@ about_03:
         _srv_www_www.epfl.ch_htdocs_about_equality:
         _srv_www_www.epfl.ch_htdocs_about_governance:
         _srv_www_www.epfl.ch_htdocs_about_news-and-media:
-        _srv_www_www.epfl.ch_htdocs_about_overview:
+#        _srv_www_www.epfl.ch_htdocs_about_overview:
         _srv_www_www.epfl.ch_htdocs_about_philanthropy:
         _srv_www_www.epfl.ch_htdocs_about_presidency:
         _srv_www_www.epfl.ch_htdocs_about_recruiting:

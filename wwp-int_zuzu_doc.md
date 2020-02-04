@@ -1,6 +1,6 @@
 # ATTENTION, ceci est ma documentation provisoire, c'est ce qui se trouve dans ma tête en ce moment !
 
-zf200130.1734
+zf200204.1823
 
 ## Buts
 *wp-ops* sert à restaurer ou déployer une infra Wordpress de l'EPFL sur Openshift via les commandes oc. Puis en vérifiant l'état via OKD, l'interface WEB de Openshift.
@@ -289,14 +289,14 @@ chmod 600 /root/.ssh/authorized_keys
 # si on tourne Ansible sur son portable
 ssh -N -t -R 53222:localhost:22 zuzu@siipc6.epfl.ch
 # si on tourne Ansible sur une VM sur son portable
-ssh -N -t -R 53222:localhost:22 zuzu@siipc6.epfl.ch -p 52222
+ssh -N -t -R 53222:localhost:22 ubuntu@siipc6.epfl.ch -p 52222
 # on bascule sur sa machine
 source /Keybase/team/epfl_wwp_blue/influxdb_secrets.sh
 # on copie les secrets pour les coller après dans la console SSH du container ;-)
 ssh -A root@localhost -p 53222
 
 
-Installation de TELEGRAPH (capture des métriques) dans le pod mgmt (ATTENTION à chaque démarrage du pod il faudra réinstaller TELEPGRAPH ! )
+Installation de TELEGRAF (capture des métriques) dans le pod mgmt (ATTENTION à chaque démarrage du pod il faudra réinstaller TELEPGRAF ! )
 # dans terminal WEB OKD du container mgmt
 bash
 cd
@@ -308,7 +308,7 @@ source /Keybase/team/epfl_wwp_blue/influxdb_secrets.sh
 # on les colle dans le terminal OKD
 cd telegraf/
 ./install.sh
-# on démarre en background TELEGRAPH
+# on démarre en background TELEGRAF
 /usr/bin/telegraf --debug -config /etc/telegraf/telegraf.conf -config-directory /etc/telegraf/telegraf.d &
 
 
