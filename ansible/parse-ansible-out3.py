@@ -217,14 +217,6 @@ rm ansible_xfois1.log ansible_xfois2.log ansible_xfois3.log ansible_xfois4.log
 ./wpsible -vvv -l about_000 2>&1 |tee ansible_xfois4.log
 ls -alrt
 
-rm ansible_xfois1.log ansible_xfois2.log ansible_xfois3.log
-./wpsible -vvv -l about_001 2>&1 |tee ansible_xfois1.log
-./wpsible -vvv -l about_001 2>&1 |tee ansible_xfois2.log
-./wpsible -vvvv -l about_001 2>&1 |tee ansible_xfois3.log
-./wpsible -vvvv -l about_001 2>&1 |tee ansible_xfois4.log
-
-ls -alrt
-
 rm ansible_xfois1.log ansible_xfois2.log ansible_xfois3.log ansible_xfois4.log
 ./wpsible -vvv -l about_03 2>&1 |tee ansible_xfois1.log
 ./wpsible -vvv -l about_03 2>&1 |tee ansible_xfois2.log
