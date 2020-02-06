@@ -60,7 +60,7 @@ if (__name__ == "__main__"):
     zprint_curl = False
     zsend_grafana = True
 
-    zfile = open("ansible_xfois2.log", "r")
+    zfile = open("ansible_xfois1.log", "r")
     i = 0
 
     ztask_time = ""
@@ -253,6 +253,19 @@ rm ansible_xfois1.log ansible_xfois2.log ansible_xfois3.log ansible_xfois4.log
 # editer le parser !
 ./parse-ansible-out3.py
 ls -alrt
+
+
+
+rm ansible_xfois1.log ansible_xfois2.log ansible_xfois3.log ansible_xfois4.log
+./wpsible -vvv -l labs_1 --connector ssh -f 14 2>&1 |tee ansible_xfois1.log
+# editer le parser !
+./parse-ansible-out3.py
+
+
+
+
+
+
 
 rm t1
 ./parse-ansible-out2.py
