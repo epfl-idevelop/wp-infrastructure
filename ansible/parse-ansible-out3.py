@@ -242,6 +242,10 @@ rm ansible_xfois1.log ansible_xfois2.log ansible_xfois3.log ansible_xfois4.log
 ./wpsible -vvv -l about_03 --connector ssh -f 14 2>&1 |tee ansible_xfois2.log
 # editer le parser !
 ./parse-ansible-out3.py
+./wpsible -vvv -l about_03 --connector ssh -f 1 2>&1 |tee ansible_xfois2.log
+
+# editer le parser !
+./parse-ansible-out3.py
 ./wpsible -vvv -l about_03 --connector ssh 2>&1 |tee ansible_xfois3.log
 # editer le parser !
 ./parse-ansible-out3.py

@@ -5,6 +5,7 @@ t3
 ._.DS_Store
 parser*
 *.log
+bad_archives.txt
 
 
 ansible/*.json
