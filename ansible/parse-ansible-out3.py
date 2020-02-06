@@ -6,7 +6,7 @@
 # nouvelle version par rapport à parse-ansible-out2.py où ici je ne tiens compte que des *Task* !
 # sources: https://janakiev.com/blog/python-shell-commands/
 
-version = "parse-ansible-out3.py  zf200205.1451 "
+version = "parse-ansible-out3.py  zf200206.1557 "
 
 """
 ATTENTION: il faut installer les plugins pour le profilage de Ansible AVANT:
@@ -195,50 +195,57 @@ if (__name__ == "__main__"):
 """
 ATTENTION vérifier (dans Grafana) AVANT que TELEGRAF tourne bien sur la machine Ansible ET le container mgmt !
 
+###################################
 ATOM IDE terminal debug zone
+###################################
 ssh-add -l
 ssh-add
 ssh-add -l
 source /Keybase/team/epfl_wwp_blue/influxdb_secrets.sh
 ssh -A -o SendEnv="GIT*, dbflux*" ubuntu@localhost -p 52222
-# il fauoc login https://pub-os-exopge.epfl.ch --token=PQ59fIXJ08UNg4AbLBPN4Xr0u7H3gmyS2dw9Ix4i2wMt entrer son passwd dans la console du bas ;-)
 cd wp-ops/ansible/
-oc login https://xxx.yyy.zzz (à prendre dans l'interface WEB d'OKD)
+oc login https://pub-os-exopge.epfl.ch -u czufferey
+################### il faut entrer le password dans la fenêtre *terminal*
 oc port-forward -n wwp-int mgmt-1-6s8jz 2222:22
+# le *port-forward* est bloquant, il faut ouvrir donc un seconde terminale et refaire les credentials
 
-sur la console terminal de OKD de mgmt(ATTENTION bien vérifier être dans wwp-int):
+#sur la console terminal de OKD de mgmt(ATTENTION bien vérifier être dans wwp-int):
 bash
 cd /srv/www/www-wwp-int.128.178.222.83.nip.io/htdocs/
 rm -rf about
 
 rm ansible_xfois1.log ansible_xfois2.log ansible_xfois3.log ansible_xfois4.log
-./wpsible -vvv -l about_000 2>&1 |tee ansible_xfois1.log
-./wpsible -vvv -l about_000 2>&1 |tee ansible_xfois2.log
-./wpsible -vvv -l about_000 2>&1 |tee ansible_xfois3.log
-./wpsible -vvv -l about_000 2>&1 |tee ansible_xfois4.log
+./wpsible -vvv -l about_000 --connector ssh 2>&1 |tee ansible_xfois1.log
+./wpsible -vvv -l about_000 --connector ssh 2>&1 |tee ansible_xfois2.log
+./wpsible -vvv -l about_000 --connector ssh 2>&1 |tee ansible_xfois3.log
+./wpsible -vvv -l about_000 --connector ssh 2>&1 |tee ansible_xfois4.log
 ls -alrt
 
 rm ansible_xfois1.log ansible_xfois2.log ansible_xfois3.log ansible_xfois4.log
 
-./wpsible -vvv -l about_02 2>&1 |tee ansible_xfois1.log
-./wpsible -vvv -l about_02 2>&1 |tee ansible_xfois2.log
-./wpsible -vvv -l about_02 2>&1 |tee ansible_xfois3.log
-./wpsible -vvv -l about_02 2>&1 |tee ansible_xfois4.log
+./wpsible -vvv -l about_01 2>&1 |tee ansible_xfois1.log
+./wpsible -vvv -l about_01 2>&1 |tee ansible_xfois2.log
+./wpsible -vvv -l about_01 2>&1 |tee ansible_xfois3.log
+./wpsible -vvv -l about_01 2>&1 |tee ansible_xfois4.log
+
+./wpsible -vvv -l about_02 --connector ssh 2>&1 |tee ansible_xfois1.log
+./wpsible -vvv -l about_02 --connector ssh 2>&1 |tee ansible_xfois2.log
+./wpsible -vvv -l about_02 --connector ssh 2>&1 |tee ansible_xfois3.log
+./wpsible -vvv -l about_02 --connector ssh 2>&1 |tee ansible_xfois4.log
 
 ls -alrt
 
 rm ansible_xfois1.log ansible_xfois2.log ansible_xfois3.log ansible_xfois4.log
-
-./wpsible -vvv -l about_03 2>&1 |tee ansible_xfois1.log
+./wpsible -vvv -l about_03 --connector ssh -f 14 2>&1 |tee ansible_xfois1.log
 # editer le parser !
 ./parse-ansible-out3.py
-./wpsible -vvv -l about_03 2>&1 |tee ansible_xfois2.log
+./wpsible -vvv -l about_03 --connector ssh -f 14 2>&1 |tee ansible_xfois2.log
 # editer le parser !
 ./parse-ansible-out3.py
-./wpsible -vvv -l about_03 2>&1 |tee ansible_xfois3.log
+./wpsible -vvv -l about_03 --connector ssh 2>&1 |tee ansible_xfois3.log
 # editer le parser !
 ./parse-ansible-out3.py
-./wpsible -vvv -l about_03 2>&1 |tee ansible_xfois4.log
+./wpsible -vvv -l about_03 --connector ssh 2>&1 |tee ansible_xfois4.log
 # editer le parser !
 ./parse-ansible-out3.py
 ls -alrt
