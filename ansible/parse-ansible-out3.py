@@ -6,7 +6,7 @@
 # nouvelle version par rapport à parse-ansible-out2.py où ici je ne tiens compte que des *Task* !
 # sources: https://janakiev.com/blog/python-shell-commands/
 
-version = "parse-ansible-out3.py  zf200206.1557 "
+version = "parse-ansible-out3.py  zf200211.1138 "
 
 """
 ATTENTION: il faut installer les plugins pour le profilage de Ansible AVANT:

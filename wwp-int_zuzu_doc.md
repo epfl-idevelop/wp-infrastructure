@@ -1,6 +1,6 @@
 # ATTENTION, ceci est ma documentation provisoire, c'est ce qui se trouve dans ma tête en ce moment !
 
-zf200204.1823
+zf200211.0938
 
 ## Buts
 *wp-ops* sert à restaurer ou déployer une infra Wordpress de l'EPFL sur Openshift via les commandes oc. Puis en vérifiant l'état via OKD, l'interface WEB de Openshift.
@@ -92,7 +92,11 @@ Pour pouvoir récupérer les sauvegardes des sites Wordpress de la prod, il nous
 cd wp-ops/ansible
 ./wpsible -l wp-blue
 ```
+ATTENTION: il faut vérifier le *nom* du *pod* AVANT le déploiement dans:
 
+```
+wp-ops/ansible/roles/wordpress-openshift-namespace/vars/mgmt-vars.yml
+```
 
 
 #### Déploiement des pods serveur Wordpress
