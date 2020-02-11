@@ -6,7 +6,7 @@
 # nouvelle version par rapport à parse-ansible-out2.py où ici je ne tiens compte que des *Task* !
 # sources: https://janakiev.com/blog/python-shell-commands/
 
-version = "parse-ansible-out3.py  zf200211.1138 "
+version = "parse-ansible-out3.py  zf200211.1141 "
 
 """
 ATTENTION: il faut installer les plugins pour le profilage de Ansible AVANT:
@@ -195,9 +195,9 @@ if (__name__ == "__main__"):
 """
 ATTENTION vérifier (dans Grafana) AVANT que TELEGRAF tourne bien sur la machine Ansible ET le container mgmt !
 
-###################################
+################################################################################################
 ATOM IDE terminal debug zone
-###################################
+################################################################################################
 ssh-add -l
 ssh-add
 ssh-add -l
@@ -207,7 +207,7 @@ cd wp-ops/ansible/
 oc login https://pub-os-exopge.epfl.ch -u czufferey
 ################### il faut entrer le password dans la fenêtre *terminal*
 oc port-forward -n wwp-int mgmt-1-6s8jz 2222:22
-# le *port-forward* est bloquant, il faut ouvrir donc un seconde terminale et refaire les credentials
+################### le *port-forward* est bloquant, il faut ouvrir donc un second terminal, refaire les credentials (sauf le 'oc port-forward') et y travailler !
 
 #sur la console terminal de OKD de mgmt(ATTENTION bien vérifier être dans wwp-int):
 bash
@@ -255,8 +255,16 @@ rm ansible_xfois1.log ansible_xfois2.log ansible_xfois3.log ansible_xfois4.log
 ./parse-ansible-out3.py
 
 
+./wpsible -vvv -l labs_50 --connector ssh -f 5 2>&1 |tee ansible_xfois1.log
+./parse-ansible-out3.py
+./wpsible -vvv -l labs_50 --connector ssh -f 50 2>&1 |tee ansible_xfois1.log
+./parse-ansible-out3.py
+./wpsible -vvv -l labs_50 --connector oc -f 50 2>&1 |tee ansible_xfois1.log
+./parse-ansible-out3.py
+./wpsible -vvv -l labs_50 --connector oc -f 5 2>&1 |tee ansible_xfois1.log
 
 
+./wpsible -vvv -l labs_224 --connector ssh -f 10 2>&1 |tee ansible_xfois1_224_5.log
 
 
 
