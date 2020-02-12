@@ -647,7 +647,7 @@ labs_374:
         _srv_labs_www.epfl.ch_htdocs_labs_csf:
         _srv_labs_www.epfl.ch_htdocs_labs_barth-lab:
         _srv_labs_www.epfl.ch_htdocs_labs_lab-u:
-        _srv_labs_www.epfl.ch_htdocs_labs_lastro:
+#        _srv_labs_www.epfl.ch_htdocs_labs_lastro:
         _srv_labs_www.epfl.ch_htdocs_labs_lions:
         _srv_labs_www.epfl.ch_htdocs_labs_dynnet:
         _srv_labs_www.epfl.ch_htdocs_labs_lne:
@@ -660,7 +660,7 @@ labs_374:
         _srv_labs_www.epfl.ch_htdocs_labs_cama:
         _srv_labs_www.epfl.ch_htdocs_labs_lmis4:
         _srv_labs_www.epfl.ch_htdocs_labs_resslab:
-        _srv_labs_www.epfl.ch_htdocs_labs_dcsl:
+#        _srv_labs_www.epfl.ch_htdocs_labs_dcsl:
         _srv_labs_www.epfl.ch_htdocs_labs_lemr:
         _srv_labs_www.epfl.ch_htdocs_labs_gel:
         _srv_labs_www.epfl.ch_htdocs_labs_alice:
