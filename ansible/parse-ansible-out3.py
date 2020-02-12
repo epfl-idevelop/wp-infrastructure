@@ -6,7 +6,7 @@
 # nouvelle version par rapport à parse-ansible-out2.py où ici je ne tiens compte que des *Task* !
 # sources: https://janakiev.com/blog/python-shell-commands/
 
-version = "parse-ansible-out3.py  zf200212.1105 "
+version = "parse-ansible-out3.py  zf200212.1403 "
 
 """
 ATTENTION: il faut installer les plugins pour le profilage de Ansible AVANT:
@@ -40,7 +40,7 @@ curl -i -XPOST "$dbflux_srv_host:$dbflux_srv_port/query?u=$dbflux_u_admin&p=$dbf
 """
 
 
-import datetime, os
+import datetime, os, sys
 
 def zget_unix_time(zdate):
 #    date_time_obj = datetime.datetime.strptime(zdate, '%Y-%m-%d %H:%M:%S.%f')
@@ -60,7 +60,11 @@ if (__name__ == "__main__"):
     zprint_curl = False
     zsend_grafana = True
 
-    zfile = open("ansible_xfois2_374_7.log", "r")
+    if len(sys.argv) == 1 :
+        print("Usage: ./parse-ansible-out3.py fichier_log_a_parser\n\n")
+        sys.exit()
+
+    zfile = open(sys.argv[1], "r")
     i = 0
 
     ztask_time = ""
@@ -204,6 +208,7 @@ ssh-add -l
 source /Keybase/team/epfl_wwp_blue/influxdb_secrets.sh
 ssh -A -o SendEnv="GIT*, dbflux*" ubuntu@localhost -p 52222
 cd wp-ops/ansible/
+oc logout
 oc login https://pub-os-exopge.epfl.ch -u czufferey
 ################### il faut entrer le password dans la fenêtre *terminal*
 oc port-forward -n wwp-int mgmt-1-6s8jz 2222:22
@@ -265,10 +270,12 @@ rm ansible_xfois1.log ansible_xfois2.log ansible_xfois3.log ansible_xfois4.log
 
 
 #############################
-./wpsible -vvv -l labs_big_1 --connector ssh -f 7 2>&1 |tee ansible_xfois1_labs_big_1_7.log
-./parse-ansible-out3.py
-./wpsible -vvv -l labs_big_1 --connector ssh -f 7 2>&1 |tee ansible_xfois1_labs_big_1_7.log
-./parse-ansible-out3.py
+zlog="ansible_xfois1_labs_big_1_7.log"
+./wpsible -vvv -l labs_big_1 --connector ssh -f 7 2>&1 |tee $zlog
+./parse-ansible-out3.py $zlog
+zlog="ansible_xfois2_labs_big_1_7.log"
+./wpsible -vvv -l labs_big_1 --connector ssh -f 7 2>&1 |tee $zlog
+./parse-ansible-out3.py $zlog
 
 
 
