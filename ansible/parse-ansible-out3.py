@@ -6,7 +6,7 @@
 # nouvelle version par rapport à parse-ansible-out2.py où ici je ne tiens compte que des *Task* !
 # sources: https://janakiev.com/blog/python-shell-commands/
 
-version = "parse-ansible-out3.py  zf200211.1141 "
+version = "parse-ansible-out3.py  zf200211.1701 "
 
 """
 ATTENTION: il faut installer les plugins pour le profilage de Ansible AVANT:
@@ -60,7 +60,7 @@ if (__name__ == "__main__"):
     zprint_curl = False
     zsend_grafana = True
 
-    zfile = open("ansible_xfois1.log", "r")
+    zfile = open("ansible_xfois2_224_7.log", "r")
     i = 0
 
     ztask_time = ""
@@ -264,7 +264,11 @@ rm ansible_xfois1.log ansible_xfois2.log ansible_xfois3.log ansible_xfois4.log
 ./wpsible -vvv -l labs_50 --connector oc -f 5 2>&1 |tee ansible_xfois1.log
 
 
-./wpsible -vvv -l labs_224 --connector ssh -f 10 2>&1 |tee ansible_xfois1_224_5.log
+#############################
+./wpsible -vvv -l labs_224 --connector ssh -f 7 2>&1 |tee ansible_xfois1_224_7.log
+./parse-ansible-out3.py
+./wpsible -vvv -l labs_224 --connector ssh -f 7 2>&1 |tee ansible_xfois2_224_7.log
+./parse-ansible-out3.py
 
 
 

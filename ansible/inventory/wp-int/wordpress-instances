@@ -2,6 +2,7 @@
 
 import subprocess
 import yaml
+import json
 from sys import stdout
 from collections import OrderedDict
 import random
@@ -14,6 +15,7 @@ cluster_ip = "128.178.222.83"
 
 port = 2222
 connection_type= subprocess.check_output('echo $ANSIBLE_CONNECTION_MODE', shell=True).decode('utf-8').replace('\n','')
+
 
 def connector_info():
     if connection_type == "ssh":
@@ -172,9 +174,8 @@ def generate_inventory(sorted= True, limit=0, max_depth=-1):
     if max_depth >= 0:
         inventory = limit_depth(inventory, max_depth)
 
-    print( yaml.dump(inventory))
+    print( json.dumps(inventory))
     return inventory
     
 
-#generate_inventory()
-generate_inventory(limit=5, max_depth=1)
+generate_inventory()
