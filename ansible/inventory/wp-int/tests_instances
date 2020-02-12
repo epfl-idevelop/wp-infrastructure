@@ -870,6 +870,224 @@ labs_374:
         _srv_labs_www.epfl.ch_htdocs_labs_lifmet:
 
 
+_srv_labs_www.epfl.ch_htdocs_labs_alice:
+
+
+
+labs_big_1:
+    hosts:
+        _srv_labs_www.epfl.ch_htdocs_labs_alice:
+
+labs_big_2:
+    hosts:
+        _srv_labs_www.epfl.ch_htdocs_labs_alice:
+        _srv_labs_www.epfl.ch_htdocs_labs_lapis:
+
+labs_big_5:
+    hosts:
+        _srv_labs_www.epfl.ch_htdocs_labs_alice:
+        _srv_labs_www.epfl.ch_htdocs_labs_lapis:
+        _srv_labs_www.epfl.ch_htdocs_labs_cvlab:
+        _srv_labs_www.epfl.ch_htdocs_labs_last:
+        _srv_labs_www.epfl.ch_htdocs_labs_ivrl:
+
+labs_big_10:
+    hosts:
+        _srv_labs_www.epfl.ch_htdocs_labs_alice:
+        _srv_labs_www.epfl.ch_htdocs_labs_lapis:
+        _srv_labs_www.epfl.ch_htdocs_labs_cvlab:
+        _srv_labs_www.epfl.ch_htdocs_labs_last:
+        _srv_labs_www.epfl.ch_htdocs_labs_ivrl:
+        _srv_labs_www.epfl.ch_htdocs_labs_lms:
+        _srv_labs_www.epfl.ch_htdocs_labs_ibois:
+        _srv_labs_www.epfl.ch_htdocs_labs_la:
+        _srv_labs_www.epfl.ch_htdocs_labs_imac:
+        _srv_labs_www.epfl.ch_htdocs_labs_disal:
+
+labs_big_20:
+    hosts:
+        _srv_labs_www.epfl.ch_htdocs_labs_alice:
+        _srv_labs_www.epfl.ch_htdocs_labs_lapis:
+        _srv_labs_www.epfl.ch_htdocs_labs_cvlab:
+        _srv_labs_www.epfl.ch_htdocs_labs_last:
+        _srv_labs_www.epfl.ch_htdocs_labs_ivrl:
+        _srv_labs_www.epfl.ch_htdocs_labs_lms:
+        _srv_labs_www.epfl.ch_htdocs_labs_ibois:
+        _srv_labs_www.epfl.ch_htdocs_labs_la:
+        _srv_labs_www.epfl.ch_htdocs_labs_imac:
+        _srv_labs_www.epfl.ch_htdocs_labs_disal:
+        _srv_labs_www.epfl.ch_htdocs_labs_biorob:
+#        _srv_labs_www.epfl.ch_htdocs_labs_lastro:
+        _srv_labs_www.epfl.ch_htdocs_labs_ceat:
+        _srv_labs_www.epfl.ch_htdocs_labs_mir:
+        _srv_labs_www.epfl.ch_htdocs_labs_lcso:
+        _srv_labs_www.epfl.ch_htdocs_labs_lcav:
+        _srv_labs_www.epfl.ch_htdocs_labs_stat:
+        _srv_labs_www.epfl.ch_htdocs_labs_lmer:
+        _srv_labs_www.epfl.ch_htdocs_labs_sber:
+        _srv_labs_www.epfl.ch_htdocs_labs_courtine-lab:
+
+labs_big_50:
+    hosts:
+        _srv_labs_www.epfl.ch_htdocs_labs_alice:
+        _srv_labs_www.epfl.ch_htdocs_labs_lapis:
+        _srv_labs_www.epfl.ch_htdocs_labs_cvlab:
+        _srv_labs_www.epfl.ch_htdocs_labs_last:
+        _srv_labs_www.epfl.ch_htdocs_labs_ivrl:
+        _srv_labs_www.epfl.ch_htdocs_labs_lms:
+        _srv_labs_www.epfl.ch_htdocs_labs_ibois:
+        _srv_labs_www.epfl.ch_htdocs_labs_la:
+        _srv_labs_www.epfl.ch_htdocs_labs_imac:
+        _srv_labs_www.epfl.ch_htdocs_labs_disal:
+        _srv_labs_www.epfl.ch_htdocs_labs_biorob:
+#        _srv_labs_www.epfl.ch_htdocs_labs_lastro:
+        _srv_labs_www.epfl.ch_htdocs_labs_ceat:
+        _srv_labs_www.epfl.ch_htdocs_labs_mir:
+        _srv_labs_www.epfl.ch_htdocs_labs_lcso:
+        _srv_labs_www.epfl.ch_htdocs_labs_lcav:
+        _srv_labs_www.epfl.ch_htdocs_labs_stat:
+        _srv_labs_www.epfl.ch_htdocs_labs_lmer:
+        _srv_labs_www.epfl.ch_htdocs_labs_sber:
+        _srv_labs_www.epfl.ch_htdocs_labs_courtine-lab:
+        _srv_labs_www.epfl.ch_htdocs_labs_lepa:
+        _srv_labs_www.epfl.ch_htdocs_labs_lch:
+        _srv_labs_www.epfl.ch_htdocs_labs_lsms:
+        _srv_labs_www.epfl.ch_htdocs_labs_leso:
+        _srv_labs_www.epfl.ch_htdocs_labs_mcs:
+        _srv_labs_www.epfl.ch_htdocs_labs_suter-lab:
+        _srv_labs_www.epfl.ch_htdocs_labs_lmis1:
+        _srv_labs_www.epfl.ch_htdocs_labs_mathicse:
+        _srv_labs_www.epfl.ch_htdocs_labs_lai:
+        _srv_labs_www.epfl.ch_htdocs_labs_bpe:
+        _srv_labs_www.epfl.ch_htdocs_labs_duboule-lab:
+        _srv_labs_www.epfl.ch_htdocs_labs_building2050:
+        _srv_labs_www.epfl.ch_htdocs_labs_skil:
+        _srv_labs_www.epfl.ch_htdocs_labs_lcc:
+        _srv_labs_www.epfl.ch_htdocs_labs_lsi:
+        _srv_labs_www.epfl.ch_htdocs_labs_lmc:
+        _srv_labs_www.epfl.ch_htdocs_labs_lns:
+        _srv_labs_www.epfl.ch_htdocs_labs_lnco:
+        _srv_labs_www.epfl.ch_htdocs_labs_lab-u:
+        _srv_labs_www.epfl.ch_htdocs_labs_unfold:
+        _srv_labs_www.epfl.ch_htdocs_labs_tic:
+        _srv_labs_www.epfl.ch_htdocs_labs_dcg:
+        _srv_labs_www.epfl.ch_htdocs_labs_pvlab:
+        _srv_labs_www.epfl.ch_htdocs_labs_rrl:
+        _srv_labs_www.epfl.ch_htdocs_labs_lcbc:
+        _srv_labs_www.epfl.ch_htdocs_labs_lben:
+        _srv_labs_www.epfl.ch_htdocs_labs_echo:
+        _srv_labs_www.epfl.ch_htdocs_labs_lasig:
+        _srv_labs_www.epfl.ch_htdocs_labs_lions:
+        _srv_labs_www.epfl.ch_htdocs_labs_lcmd:
+
+labs_big_100:
+    hosts:
+        _srv_labs_www.epfl.ch_htdocs_labs_alice:
+        _srv_labs_www.epfl.ch_htdocs_labs_lapis:
+        _srv_labs_www.epfl.ch_htdocs_labs_cvlab:
+        _srv_labs_www.epfl.ch_htdocs_labs_last:
+        _srv_labs_www.epfl.ch_htdocs_labs_ivrl:
+        _srv_labs_www.epfl.ch_htdocs_labs_lms:
+        _srv_labs_www.epfl.ch_htdocs_labs_ibois:
+        _srv_labs_www.epfl.ch_htdocs_labs_la:
+        _srv_labs_www.epfl.ch_htdocs_labs_imac:
+        _srv_labs_www.epfl.ch_htdocs_labs_disal:
+        _srv_labs_www.epfl.ch_htdocs_labs_biorob:
+#        _srv_labs_www.epfl.ch_htdocs_labs_lastro:
+        _srv_labs_www.epfl.ch_htdocs_labs_ceat:
+        _srv_labs_www.epfl.ch_htdocs_labs_mir:
+        _srv_labs_www.epfl.ch_htdocs_labs_lcso:
+        _srv_labs_www.epfl.ch_htdocs_labs_lcav:
+        _srv_labs_www.epfl.ch_htdocs_labs_stat:
+        _srv_labs_www.epfl.ch_htdocs_labs_lmer:
+        _srv_labs_www.epfl.ch_htdocs_labs_sber:
+        _srv_labs_www.epfl.ch_htdocs_labs_courtine-lab:
+        _srv_labs_www.epfl.ch_htdocs_labs_lepa:
+        _srv_labs_www.epfl.ch_htdocs_labs_lch:
+        _srv_labs_www.epfl.ch_htdocs_labs_lsms:
+        _srv_labs_www.epfl.ch_htdocs_labs_leso:
+        _srv_labs_www.epfl.ch_htdocs_labs_mcs:
+        _srv_labs_www.epfl.ch_htdocs_labs_suter-lab:
+        _srv_labs_www.epfl.ch_htdocs_labs_lmis1:
+        _srv_labs_www.epfl.ch_htdocs_labs_mathicse:
+        _srv_labs_www.epfl.ch_htdocs_labs_lai:
+        _srv_labs_www.epfl.ch_htdocs_labs_bpe:
+        _srv_labs_www.epfl.ch_htdocs_labs_duboule-lab:
+        _srv_labs_www.epfl.ch_htdocs_labs_building2050:
+        _srv_labs_www.epfl.ch_htdocs_labs_skil:
+        _srv_labs_www.epfl.ch_htdocs_labs_lcc:
+        _srv_labs_www.epfl.ch_htdocs_labs_lsi:
+        _srv_labs_www.epfl.ch_htdocs_labs_lmc:
+        _srv_labs_www.epfl.ch_htdocs_labs_lns:
+        _srv_labs_www.epfl.ch_htdocs_labs_lnco:
+        _srv_labs_www.epfl.ch_htdocs_labs_lab-u:
+        _srv_labs_www.epfl.ch_htdocs_labs_unfold:
+        _srv_labs_www.epfl.ch_htdocs_labs_tic:
+        _srv_labs_www.epfl.ch_htdocs_labs_dcg:
+        _srv_labs_www.epfl.ch_htdocs_labs_pvlab:
+        _srv_labs_www.epfl.ch_htdocs_labs_rrl:
+        _srv_labs_www.epfl.ch_htdocs_labs_lcbc:
+        _srv_labs_www.epfl.ch_htdocs_labs_lben:
+        _srv_labs_www.epfl.ch_htdocs_labs_echo:
+        _srv_labs_www.epfl.ch_htdocs_labs_lasig:
+        _srv_labs_www.epfl.ch_htdocs_labs_lions:
+        _srv_labs_www.epfl.ch_htdocs_labs_lcmd:
+        _srv_labs_www.epfl.ch_htdocs_labs_laspe:
+        _srv_labs_www.epfl.ch_htdocs_labs_gmf:
+        _srv_labs_www.epfl.ch_htdocs_labs_las:
+        _srv_labs_www.epfl.ch_htdocs_labs_cryos:
+        _srv_labs_www.epfl.ch_htdocs_labs_ecos:
+        _srv_labs_www.epfl.ch_htdocs_labs_mcss:
+        _srv_labs_www.epfl.ch_htdocs_labs_lnb:
+        _srv_labs_www.epfl.ch_htdocs_labs_ecol:
+        _srv_labs_www.epfl.ch_htdocs_labs_lasa:
+        _srv_labs_www.epfl.ch_htdocs_labs_cclab:
+        _srv_labs_www.epfl.ch_htdocs_labs_limno:
+        _srv_labs_www.epfl.ch_htdocs_labs_lphe:
+        _srv_labs_www.epfl.ch_htdocs_labs_tne:
+        _srv_labs_www.epfl.ch_htdocs_labs_mmspg:
+        _srv_labs_www.epfl.ch_htdocs_labs_lpmc:
+        _srv_labs_www.epfl.ch_htdocs_labs_lo:
+        _srv_labs_www.epfl.ch_htdocs_labs_laba:
+        _srv_labs_www.epfl.ch_htdocs_labs_lts4:
+        _srv_labs_www.epfl.ch_htdocs_labs_lcbim:
+        _srv_labs_www.epfl.ch_htdocs_labs_lpmv:
+        _srv_labs_www.epfl.ch_htdocs_labs_k-lab:
+        _srv_labs_www.epfl.ch_htdocs_labs_lutolf-lab:
+        _srv_labs_www.epfl.ch_htdocs_labs_lashuel-lab:
+        _srv_labs_www.epfl.ch_htdocs_labs_lsmo:
+        _srv_labs_www.epfl.ch_htdocs_labs_lspn:
+        _srv_labs_www.epfl.ch_htdocs_labs_lfmi:
+        _srv_labs_www.epfl.ch_htdocs_labs_lsp:
+        _srv_labs_www.epfl.ch_htdocs_labs_lapd:
+        _srv_labs_www.epfl.ch_htdocs_labs_powerlab:
+        _srv_labs_www.epfl.ch_htdocs_labs_lsis:
+        _srv_labs_www.epfl.ch_htdocs_labs_lnce:
+        _srv_labs_www.epfl.ch_htdocs_labs_lmh:
+        _srv_labs_www.epfl.ch_htdocs_labs_lasur:
+        _srv_labs_www.epfl.ch_htdocs_labs_far:
+        _srv_labs_www.epfl.ch_htdocs_labs_lfim:
+        _srv_labs_www.epfl.ch_htdocs_labs_emc:
+        _srv_labs_www.epfl.ch_htdocs_labs_lbni:
+        _srv_labs_www.epfl.ch_htdocs_labs_gdp:
+        _srv_labs_www.epfl.ch_htdocs_labs_topo:
+        _srv_labs_www.epfl.ch_htdocs_labs_tsam:
+        _srv_labs_www.epfl.ch_htdocs_labs_ict4sm:
+        _srv_labs_www.epfl.ch_htdocs_labs_chili:
+        _srv_labs_www.epfl.ch_htdocs_labs_lsu:
+        _srv_labs_www.epfl.ch_htdocs_labs_ldm:
+        _srv_labs_www.epfl.ch_htdocs_labs_lbo:
+        _srv_labs_www.epfl.ch_htdocs_labs_flexlab:
+        _srv_labs_www.epfl.ch_htdocs_labs_cosmo:
+        _srv_labs_www.epfl.ch_htdocs_labs_gr-cel:
+        _srv_labs_www.epfl.ch_htdocs_labs_lsbi:
+        _srv_labs_www.epfl.ch_htdocs_labs_eml:
+
+
+
+
+
+
 
 gutenberg_00:
     hosts:
