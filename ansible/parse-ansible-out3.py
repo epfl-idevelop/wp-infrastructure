@@ -238,7 +238,12 @@ zlog="ansible_xfois1_labs_10_7.log"
 ./wpsible -vvv -l labs_10 --connector ssh --ssh-port 2222 -f 7 2>&1 |tee $zlog
 ./parse-ansible-out3.py $zlog
 
+
 zlog="ansible_xfois1_labs_224_7.log"
+./wpsible -vvv -l labs_224 --connector ssh --ssh-port 2222 -f 7 2>&1 |tee $zlog
+./parse-ansible-out3.py $zlog
+
+zlog="ansible_xfois2_labs_224_7.log"
 ./wpsible -vvv -l labs_224 --connector ssh --ssh-port 2222 -f 7 2>&1 |tee $zlog
 ./parse-ansible-out3.py $zlog
 
