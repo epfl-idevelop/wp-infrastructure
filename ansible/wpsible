@@ -87,6 +87,12 @@ while [ "$#" -gt 0 ]; do
             export ANSIBLE_CONNECTION_MODE=$2
             shift 
             shift ;;
+        --ssh-port)
+            export ANSIBLE_FORWARD_PORT=$2
+            oc port-forward $(oc get pods -o name | grep mgmt | head -1) $2:22 &
+            export SSH_TUNNEL_PID=$!
+            shift
+            shift;;
         *)
             ansible_args+=("$1")
             shift ;;
@@ -107,3 +113,8 @@ case "$mode" in
         ansible $(inventories) $ansible_flags "${ansible_args[@]}"
         ;;
 esac
+
+if [[ ! -z "${SSH_TUNNEL_PID}" ]]; then 
+    kill -9 "$SSH_TUNNEL_PID"
+    unset SSH_TUNNEL_PID
+fi

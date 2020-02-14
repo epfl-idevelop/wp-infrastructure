@@ -1,6 +1,4 @@
 ---
-# zf191219.1427
-# zf200121.1614
 
 - include_vars: restore-vars.yml
 
@@ -21,15 +19,10 @@
     state: directory
   when: restore_backup_folder is defined
 
-#zzz zf200121.1614
-- name: wp evaluation 1
+- name: wp evaluation
   shell:
     cmd: |
-      echo "toto0"
-      echo "zuzu1: "$(date --iso-8601=seconds)
-      echo "toto1"
       echo $({{wp_cli_command }} eval '1;')
-      echo "toto2"
   register: out
   changed_when: false
 - debug:
@@ -40,8 +33,6 @@
 - name: wp symlink
   file:
     state: link
-    #zzz 191113.1555
-    #src: /wp/4
     src: /wp/5
     dest: "{{wp_dir}}/wp"
 
@@ -57,21 +48,32 @@
       ln -sf wp/wp-settings.php wp-settings.php
       ln -sf wp/wp-includes wp-includes
       ln -sf wp/wp-login.php wp-login.php
+      mkdir wp-content
+      ln -sf ../wp/wp-content/themes wp-content/themes
+      ln -sf ../wp/wp-content/plugins wp-content/plugins
+      ln -sf ../wp/wp-content/mu-plugins wp-content/mu-plugins
+      ln -sf ../wp/wp-content/index.php wp-content/index.php
   when: "'This does not seem to be a WordPress install.' in out.stderr and restore_backup_folder is defined"
 
 
 # Unziping data from wp-content folder after a fresh symlink "installation"
-#TODO: seulement extraire /uploads plus tard
-
+# Uncomment lines 68,70 and 'uploads_rm_timer' to test deployments times without leaving contents on disk
 - name: unzip backup archive
   shell:
     cmd: |
       cd "{{wp_dir}}"
-      tar --transform 's,^.*/wp-content,wp-content,S' -xvf {{ restore_tar_full_path }} --wildcards '*/wp-content'
+      tar -xf {{ restore_tar_full_path }} --wildcards '*/wp-content/uploads' --wildcards '{{ restore_htaccess_path_tar}}' > /dev/null
+      cp {{ restore_htaccess_path_tar }} .htaccess
+      rm -r srv
+#      bash -c 'time rm -rf {{wp_dir}}/wp-content/uploads'
   when: "'This does not seem to be a WordPress install.' in out.stderr and restore_backup_folder is defined"
+#  register: rm_timer
 
+#- name: uploads_rm_timer
+#  debug:
+#    var: rm_timer.stderr
 
-- name: wp evaluation 2
+- name: wp evaluation
   shell:
     cmd: |
       echo $({{wp_cli_command }} eval '1;')
@@ -107,13 +109,13 @@
   when: "(('wp-config.php' in out.stderr and 'not found' in out.stderr) or 'Error establishing a database connection' in out.stderr) and restore_backup_folder is defined "
 
 # Always extract .htaccess file when we are restoring from backups
-- name: extract .htaccess
-  shell:
-    creates: "{{restore_htaccess_path}}"
-    chdir: "{{wp_dir}}"
-    cmd: |
-      tar -xvf {{ restore_tar_full_path }} --wildcards --to-stdout {{ restore_htaccess_path_tar }} > .htaccess
-  when: restore_backup_folder is defined
+#- name: extract .htaccess
+#  shell:
+#    creates: "{{restore_htaccess_path}}"
+#    chdir: "{{wp_dir}}"
+#    cmd: |
+#      tar -xvf {{ restore_tar_full_path }} --wildcards --to-stdout {{ restore_htaccess_path_tar }} > .htaccess
+#  when: restore_backup_folder is defined
 
 
 # Always rename wordpress site when we are restoring from backups
@@ -129,7 +131,6 @@
 - name: reactivate plugins
   shell:
     cmd: |
-      echo "zuzu2: "$(date --iso-8601=seconds)
       {{wp_cli_command}} plugin deactivate epfl epfl-menus polylang
       {{wp_cli_command}} plugin activate polylang epfl-menus epfl ||true
   when: restore_backup_folder is defined

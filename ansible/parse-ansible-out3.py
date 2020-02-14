@@ -271,10 +271,10 @@ rm ansible_xfois1.log ansible_xfois2.log ansible_xfois3.log ansible_xfois4.log
 
 #############################
 zlog="ansible_xfois1_labs_big_1_7.log"
-./wpsible -vvv -l labs_big_1 --connector ssh -f 7 2>&1 |tee $zlog
+./wpsible -vvv -l labs_big_1 --connector ssh --ssh-port 2222 -f 7 2>&1 |tee $zlog
 ./parse-ansible-out3.py $zlog
 zlog="ansible_xfois2_labs_big_1_7.log"
-./wpsible -vvv -l labs_big_1 --connector ssh -f 7 2>&1 |tee $zlog
+./wpsible -vvv -l labs_big_1 --connector ssh --ssh-port 2222 -f 7 2>&1 |tee $zlog
 ./parse-ansible-out3.py $zlog
 
 
