@@ -13,11 +13,14 @@ pod_name= pod_name.decode('utf-8').replace('\n','')
 cluster_ip = "128.178.222.83"
 
 
-port = 2222
+port = subprocess.check_output('echo $ANSIBLE_FORWARD_PORT', shell=True).decode('utf-8').replace('\n','')
 connection_type= subprocess.check_output('echo $ANSIBLE_CONNECTION_MODE', shell=True).decode('utf-8').replace('\n','')
 
 
 def connector_info():
+    connection_type= subprocess.check_output('echo $ANSIBLE_CONNECTION_MODE', shell=True).decode('utf-8').replace('\n','')
+    if connection_type != "ssh" and connection_type != "oc":
+        connection_type = "oc"
     if connection_type == "ssh":
         return {
                    "ansible_python_interpreter": "python3",
@@ -44,7 +47,7 @@ def connector_info():
 
 
 def limit_hosts(inv,nb):
-    """ returns a valid inventory with at most nb instances per group """    
+    """ returns a valid inventory with at most nb instances per group """
 
     limited_inv = inv
     for group in limited_inv:
@@ -53,9 +56,18 @@ def limit_hosts(inv,nb):
                 limited_inv[group]["hosts"]=limited_inv[group]["hosts"][0:nb]
     return limited_inv
 
+def get_last_validarchive(backup_files):
+    """ Fetches last valid and synced tar/sql pair for a given site, assumes there is always a valid and synced tar/sql pair"""
+    for path in backup_files:
+        identity = path.split('.')[0]
+        if(identity+'.tar.gz' in backup_files and identity+'.sql' in backup_files):
+          return {"tar": identity+'.tar.gz', "sql": identity+'.sql'}
+
+
+
 
 def bkp_to_dict():
-    """ Populates a python dictionary using the expected inventory structure by ansible's inventory sript plugin """ 
+    """ Populates a python dictionary using the expected inventory structure by ansible's inventory sript plugin """
 
     command = "oc exec %(pod_name)s -- find /backups -maxdepth 2 -mindepth 2 -type f" %{"pod_name":pod_name}
     ls_output = subprocess.check_output(command, shell=True).decode('utf-8')
@@ -70,28 +82,34 @@ def bkp_to_dict():
 
     for path in ls_list_raw:
        path_list =path.split('/')
-       
+
        site_name=path_list[2]
 
        if not site_name in backups:
-           
+
            if len(last_site)>0:
                backups[last_site] = list(filter(lambda x: "full" in x,backups[last_site]))
                backups[last_site].sort()
-               
+
+               # picking the last valid full archive along with its valid sql backup if it exists
+               archives=get_last_validarchive(backups[last_site][::-1])
+
                backups[last_site] = backups[last_site][::-1][0:2]
-                
+
                hostvars= parse_bkp_name1(last_site)
 
                if len(backups[last_site]) > 1:
-                   hostvars["restore_archive_name"]= backups[last_site][0]
-                   hostvars["restore_sql_name"]= backups[last_site][1]
-                   archive_id= backups[last_site][0].split(".")[0]
-                   sql_id= backups[last_site][1].split(".")[0]
-                   if archive_id != sql_id:
-                       f = open("bad_archives.txt", "a")
-                       f.write(last_site+ " :: "+backups[last_site][0] + " -- "+ backups[last_site][1]+"\n")
-                       f.close()
+                   hostvars["restore_archive_name"] = archives["tar"]
+                   hostvars["restore_sql_name"] = archives["sql"]
+                   #UNCOMMENT to detect wrongly archived sites
+                   #hostvars["restore_archive_name"]= backups[last_site][0]
+                   #hostvars["restore_sql_name"]= backups[last_site][1]
+                   #archive_id= backups[last_site][0].split(".")[0]
+                   #sql_id= backups[last_site][1].split(".")[0]
+                   #if archive_id != sql_id:
+                   #    f = open("bad_archives.txt", "a")
+                   #    f.write(last_site+ " :: "+backups[last_site][0] + " -- "+ backups[last_site][1]+"\n")
+                   #    f.close()
 
                else:
                    hostvars["restore_archive_name"]= ""
@@ -115,7 +133,7 @@ def bkp_to_dict():
 
 def parse_env_path(bkp_name):
     """ parses core informations contained within the backup folder name """
-   
+
     bkp_list = bkp_name.split('_')
     bkp_path = bkp_name.split("htdocs_")
     if len(bkp_list) > 1:
@@ -123,11 +141,11 @@ def parse_env_path(bkp_name):
             wp_path = bkp_name.split("htdocs_")[1].replace('_','/')
         else: wp_path=""
         return{
-            "wp_env": bkp_list[2],
             "wp_path":wp_path,
+            "wp_env": bkp_list[2],
             "url_from": bkp_list[3]
-        }  
-    else: return {}  
+        }
+    else: return {}
 
 def parse_bkp_name1(bkp_name):
     """ populates generated and parsed variable for a given wordpress instance """
@@ -142,8 +160,8 @@ def parse_bkp_name1(bkp_name):
                 "restore_backup_folder": bkp_name,
                 "db_name":random_db_name,
                 "url_from": env_path["url_from"]
-         } 
-    else: return {} 
+         }
+    else: return {}
 
 def sort_inv_by_deph(inv_dict):
     """ sorts instances lists on each group by depth to process from root site and downwards instead of random ordering """
@@ -176,6 +194,6 @@ def generate_inventory(sorted= True, limit=0, max_depth=-1):
 
     print( json.dumps(inventory))
     return inventory
-    
+
 
 generate_inventory()
