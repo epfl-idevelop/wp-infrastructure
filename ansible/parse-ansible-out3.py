@@ -6,7 +6,7 @@
 # nouvelle version par rapport à parse-ansible-out2.py où ici je ne tiens compte que des *Task* !
 # sources: https://janakiev.com/blog/python-shell-commands/
 
-version = "parse-ansible-out3.py  zf200212.1403 "
+version = "parse-ansible-out3.py  zf200214.1504 "
 
 """
 ATTENTION: il faut installer les plugins pour le profilage de Ansible AVANT:
@@ -211,65 +211,15 @@ cd wp-ops/ansible/
 oc logout
 oc login https://pub-os-exopge.epfl.ch -u czufferey
 ################### il faut entrer le password dans la fenêtre *terminal*
-oc port-forward -n wwp-int mgmt-1-6s8jz 2222:22
-################### le *port-forward* est bloquant, il faut ouvrir donc un second terminal, refaire les credentials (sauf le 'oc port-forward') et y travailler !
 
 #sur la console terminal de OKD de mgmt(ATTENTION bien vérifier être dans wwp-int):
 bash
-cd /srv/www/www-wwp-int.128.178.222.83.nip.io/htdocs/
-rm -rf about
-
-rm ansible_xfois1.log ansible_xfois2.log ansible_xfois3.log ansible_xfois4.log
-./wpsible -vvv -l about_000 --connector ssh 2>&1 |tee ansible_xfois1.log
-./wpsible -vvv -l about_000 --connector ssh 2>&1 |tee ansible_xfois2.log
-./wpsible -vvv -l about_000 --connector ssh 2>&1 |tee ansible_xfois3.log
-./wpsible -vvv -l about_000 --connector ssh 2>&1 |tee ansible_xfois4.log
-ls -alrt
-
-rm ansible_xfois1.log ansible_xfois2.log ansible_xfois3.log ansible_xfois4.log
-./wpsible -vvv -l about_02 --connector ssh 2>&1 |tee ansible_xfois1.log
-./wpsible -vvv -l about_02 --connector ssh 2>&1 |tee ansible_xfois2.log
-./wpsible -vvv -l about_02 --connector ssh 2>&1 |tee ansible_xfois3.log
-./wpsible -vvv -l about_02 --connector ssh 2>&1 |tee ansible_xfois4.log
-ls -alrt
-
-rm ansible_xfois1.log ansible_xfois2.log ansible_xfois3.log ansible_xfois4.log
-./wpsible -vvv -l about_03 --connector ssh -f 14 2>&1 |tee ansible_xfois1.log
-# editer le parser !
-./parse-ansible-out3.py
-./wpsible -vvv -l about_03 --connector ssh -f 14 2>&1 |tee ansible_xfois2.log
-# editer le parser !
-./parse-ansible-out3.py
-./wpsible -vvv -l about_03 --connector ssh -f 1 2>&1 |tee ansible_xfois2.log
-
-# editer le parser !
-./parse-ansible-out3.py
-./wpsible -vvv -l about_03 --connector ssh 2>&1 |tee ansible_xfois3.log
-# editer le parser !
-./parse-ansible-out3.py
-./wpsible -vvv -l about_03 --connector ssh 2>&1 |tee ansible_xfois4.log
-# editer le parser !
-./parse-ansible-out3.py
-ls -alrt
+cd /srv/le_truc_à_effacer_pour_partir_de_scratch
+rm -rf le_truc_à_effacer_pour_partir_de_scratch
 
 
 
-rm ansible_xfois1.log ansible_xfois2.log ansible_xfois3.log ansible_xfois4.log
-./wpsible -vvv -l labs_1 --connector ssh -f 14 2>&1 |tee ansible_xfois1.log
-# editer le parser !
-./parse-ansible-out3.py
-
-
-./wpsible -vvv -l labs_50 --connector ssh -f 5 2>&1 |tee ansible_xfois1.log
-./parse-ansible-out3.py
-./wpsible -vvv -l labs_50 --connector ssh -f 50 2>&1 |tee ansible_xfois1.log
-./parse-ansible-out3.py
-./wpsible -vvv -l labs_50 --connector oc -f 50 2>&1 |tee ansible_xfois1.log
-./parse-ansible-out3.py
-./wpsible -vvv -l labs_50 --connector oc -f 5 2>&1 |tee ansible_xfois1.log
-
-
-#############################
+##########################################################
 zlog="ansible_xfois1_labs_big_1_7.log"
 ./wpsible -vvv -l labs_big_1 --connector ssh --ssh-port 2222 -f 7 2>&1 |tee $zlog
 ./parse-ansible-out3.py $zlog
@@ -284,43 +234,16 @@ zlog="ansible_xfois2_labs_big_5_7.log"
 ./wpsible -vvv -l labs_big_5 --connector ssh --ssh-port 2222 -f 7 2>&1 |tee $zlog
 ./parse-ansible-out3.py $zlog
 
+zlog="ansible_xfois1_labs_10_7.log"
+./wpsible -vvv -l labs_10 --connector ssh --ssh-port 2222 -f 7 2>&1 |tee $zlog
+./parse-ansible-out3.py $zlog
 
-rm t1
-./parse-ansible-out2.py
-ls -alrt
-cat t1
-
-reset
-export ztable="ansible_logs3"
-export zaction="bobo_bubu"
-export ztask="titi_tata"
-export t1=$(date +%s%N)
-echo $t1
-export t2=$(date +%s%N)
-echo $t2
-export t21=$(echo "($t2 - $t1)/1000000000" | bc -l)
-echo $t21
-
-echo "curl -i -XPOST \"$dbflux_srv_host:$dbflux_srv_port/write?db=$dbflux_db&u=$dbflux_u_user&p=$dbflux_p_user\"  --data-binary \"$ztable,action=$zaction,task=$ztask duration=$t21 $t1\""
-
-curl -i -XPOST "$dbflux_srv_host:$dbflux_srv_port/write?db=$dbflux_db&u=$dbflux_u_user&p=$dbflux_p_user"  --data-binary "$ztable,action=$zaction,task=$ztask duration=$t21 $t1"
+zlog="ansible_xfois1_labs_224_7.log"
+./wpsible -vvv -l labs_224 --connector ssh --ssh-port 2222 -f 7 2>&1 |tee $zlog
+./parse-ansible-out3.py $zlog
 
 
 
-python
-import os
-i=12
-zcmd = 'echo "' + str(i) + '" >> toto.txt'
-print(zcmd)
-os.system(zcmd)
 
-
-
-python
-import datetime, os
-zdate="22 January 2020  17:07:58"
-date_time_obj = datetime.datetime.strptime(zdate, '%d %B %Y %H:%M:%S')
-print(date_time_obj)
-date_time_obj = datetime.datetime.strptime(zdate, '%Y-%m-%d %H:%M:%S.%f')
 
 """
