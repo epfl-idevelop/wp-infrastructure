@@ -54,13 +54,23 @@ WARNING: eyaml is not installed, cannot decipher and push secrets.
 NO_EYAML
 }
 
+
 inventory_mode="test"
 inventories () {
-    case "$inventory_mode" in
-        test) echo "-i inventory/test" ;;
-        test_and_prod) echo "-i inventory/test -i inventory/prod" ;;
-        wp_veritas) echo "-i inventory/wp-veritas" ;;
-    esac
+    CONFIG=$(oc config current-context)
+    if [[ $CONFIG == "myproject/192-168-99-"*"developer" ]]
+    then
+      echo "-i inventory/minishift -e " IPADRS="`curl https://api.ipify.org`" " "
+    elif [[ $CONFIG == "wwp-int/pub-os-exopge-epfl-ch:443/"* ]]
+    then
+      echo "-i inventory/wp-int "    
+    else
+	case "$inventory_mode" in
+       	    test) echo "-i inventory/test" ;;
+	    test_and_prod) echo "-i inventory/test -i inventory/prod" ;;
+	    wp_veritas) echo "-i inventory/wp-veritas" ;;
+	esac
+    fi
 }
 
 ###########################################################################
@@ -78,6 +88,10 @@ while [ "$#" -gt 0 ]; do
             shift ;;
         -m) mode=ansible
             ansible_args+=("-m")
+            shift ;; 
+        --connector)
+            export ANSIBLE_CONNECTION_MODE=$2
+            shift 
             shift ;;
         *)
             ansible_args+=("$1")

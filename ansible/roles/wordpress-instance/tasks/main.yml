@@ -5,6 +5,7 @@
 # Variables:: (in addition to those defined or documented in
 #              ../vars/*.yml)
 
+
 - include_vars: wp-destructive.yml   # For wp_can
   tags: always
 
@@ -15,6 +16,11 @@
     # TODO: configure.yml uses wp_is_symlinked, which requires facts.yml to have run.
     # Can we use a handler instead?
     - config
+
+# TODO: Tu peux shooter les tâches (et leurs dépendances) "Backup",
+# "Wipe" "Recreate", "Create" et "Restore" qui suivent (cependant, tu
+# voudras peut-être utiliser un create.yml que tu réécris de zéro,
+# afin que ce fichier-ci ne devienne pas trop long)
 
 - name: Backup
   # We include_tasks (not import_tasks) here, because we do *not* want
@@ -31,22 +37,18 @@
     - backup.code
     - backup.data
     - backup.uploads
+  when: not is_minishift_instance  
 
 - name: Wipe
   import_tasks: "wipe.yml"
+  when: not is_minishift_instance
   tags:
     - never
     - wipe
 
-- name: "{{ 'Recreate' if 'wipe' in ansible_run_tags else 'Create' }}"
-  include_tasks: "create.yml"
-  when: "'wipe' in ansible_run_tags or not wp_is_installed"
+- name: restore from /backups
+  import_tasks: "restore-from-prod.yml"
 
-- name: Restore
-  import_tasks: "restore.yml"
-  tags:
-    - never
-    - restore
 
 - name: Serving infrastructure
   when: wp_can.configure
@@ -54,14 +56,27 @@
     - config
   import_tasks: "serving-infrastructure.yml"
 
+# TODO: À partir d'ici, à garder; avant de livrer, ces tâches doivent
+# redevenir fonctionnelles et ne pas contenir de "if" qui ferait de
+# wp-int et/ou MiniShift des cas spéciaux.
+#
+# C'est-à-dire : étant donné un SITE qui fonctionne, après
+#
+#    wpsible -t symlink -l SITE
+#
+# il doit être symlinké (c'est-à-dire que son code réside dans le /wp
+# de l'image), et continuer à fonctionner. Si ce n'est pas le cas
+# c'est un bug (du code préexistant).
+
 - name: Check that WordPress is working
   command: "{{ wp_cli_command }} eval '1;'"
   changed_when: false
 
-- name: "Set up “symlink” serving discipline"
+- name: "Set up / revert “symlink” serving discipline"
   when:
     - wp_ensure_symlink_version is defined
     - (wp_can.configure and wp_can.write_code) or ansible_check_mode
+    - not is_minishift_instance
   tags:
     - never
     - symlink
@@ -72,6 +87,8 @@
   # segregate the `-t symlink` and `-t unsymlink` use cases)
   include_tasks: "symlink.yml"
 
+
+
 - name: Configure
   when: wp_can.configure
   tags:
@@ -81,6 +98,8 @@
     # Because `include_tasks` is dynamic, tags don't auto-inherit.
     apply:
       tags: ["config"]
+
+
 
 - name: Set up plugins
   when: wp_can.configure
@@ -116,16 +135,19 @@
 # "Ventilation"-related
 - name: "Dump to WXR for ventilation"
   import_tasks: "dump.yml"
+  when: not is_minishift_instance
   tags:
     - never
     - dump
 - name: "Undump from WXR for ventilation"
   import_tasks: "undump.yml"
+  when: not is_minishift_instance
   tags:
     - never
     - undump
 
 - name: CSV plug-in versions report
+  when: not is_minishift_instance
   tags:
     - never
     - reportcsv
@@ -138,6 +160,7 @@
 # We could do a with_items but then we would get the entire content
 # dumped into the terminal as part of the "items" structure. Oh well
 - name: CSV must-use plug-in versions report
+  when: not is_minishift_instance
   tags:
     - never
     - reportcsv
@@ -146,3 +169,8 @@
     module: copy
     dest: '{{ muplugin_report_csv_out }}'
     content: '{{ hostvars | wp_muplugin_versions_csv_report }}'
+
+
+
+
+##########################################################################

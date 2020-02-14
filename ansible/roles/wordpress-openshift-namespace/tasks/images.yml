@@ -6,9 +6,11 @@
 # See also continuous-integration.yml (which has its own set of images)
 
 - include_vars: image-vars.yml
+  tags:
+    - always
 
 - name: "Testing ImageStreams and their build information"
-  when: not openshift_is_production
+  when: not openshift_is_production and not openshift_namespace == "wwp-int"
   openshift_imagestream:
     name: "{{ item.name }}"
     namespace: "{{ openshift_namespace }}"
@@ -36,3 +38,29 @@
   with_items:
     - name: "{{ httpd_image_name }}"
     - name: "{{ mgmt_image_name }}"
+
+
+#TODO figure out an automated way to pull prod images
+- name: "wwp-int ImageStreams"
+  when: openshift_namespace == "wwp-int"
+  openshift_imagestream:
+    name: "{{ item.name }}"
+    namespace: "{{ openshift_namespace }}"
+    metadata: "{{ item.metadata | default({}) }}"
+  with_items:
+    - name: "{{ httpd_image_name }}"
+    - name: "{{ mgmt_image_name }}"
+
+
+# re-imports images on the image stream if it is linked to a docker registry
+- name: "Resync images"
+  shell:
+    cmd: |
+      set -e -x
+      oc import-image {{item.name}}:prod
+  with_items:
+    - name: "{{ httpd_image_name }}"
+    - name: "{{ mgmt_image_name }}"
+  tags:
+    - never
+    - resync
