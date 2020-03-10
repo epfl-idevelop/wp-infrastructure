@@ -1,6 +1,6 @@
 # ATTENTION, ceci est ma documentation provisoire, c'est ce qui se trouve dans ma tête en ce moment !
 
-zf200211.0938
+zf200310.1053
 
 ## Buts
 *wp-ops* sert à restaurer ou déployer une infra Wordpress de l'EPFL sur Openshift via les commandes oc. Puis en vérifiant l'état via OKD, l'interface WEB de Openshift.
@@ -285,22 +285,19 @@ Dans un browser
 http://noc-tst.idev-fsd.ml:9092/
 
 
-Dans console 3, si on veut entrer en ssh dans un container OKD où il n'y a pas d'export ssh
-# Dans le container, via la console terminal web OKD, il faut en premier copier sa clef dans le container:
-echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDksDVJZQ3GaCkD4N1etyJ8yWpaSXrLnynG7jHqhqEmQQKAwWpauyp2mIUYKFyv9JnAlf91XCwGzE1azSJokkfCMo4AEpgj4SgNuucJEzMy4Zjrl3VSyBPzGvpN40XR/ITOf9Dd8VCTss6z28Kbvj+GBENRNIxGIc0FUgaTVqkjrof24TentxSPbEEpfvsCTh7ANVRrwGZMr4PzX5M+yen+MfQeNTBmSRBUpjWe0BZfTcGpOxYKlohsPbd1If5tnQPURWHhMZChNo4ASqtRRnHm5grlZqZP+jUQ0jrkU3Q+1LzSyN3J9KWSTVGVUonc8pI9JARLf1N+2aWKgq/L9eM3 zuzu@siipc6.epfl.ch" > /root/.ssh/authorized_keys
+###################################
+# Pour pouvoir utiliser la commande *oc forward* pour utiliser le connecteur *ssh* dans les scripts Ansible il faut ajouter le fichier *authorized_keys* avec SA clef ssh publique
+# ATTENTION, il faut le faire à **chaque redémarrage** du container mgnt !
+###################################
+# Dans le container, via la console *terminal* web OKD, il faut en premier copier sa clef dans le container:
+echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDksDVJZQ3GaCkD4N1etyJ8yWpaSXrLnynG7jHqhqEmQQKAwWpauyp2mIUYKFyv9JnAlf91XCwGzE1azSJokkfCMo4AEpgj4SgNuucJEzMy4Zjrl3VSyBPzGvpN40XR/ITOf9Dd8VCTss6z28Kbvj+GBENRNIxGIc0FUgaTVqkjrof24TentxSPbEEpfvsCTh7ANVRrwGZMr4PzX5M+yen+MfQeNTBmSRBUpjWe0BZfTcGpOxYKlohsPbd1If5tnQPURWHhMZChNo4ASqtRRnHm5grlZqZP+jUQ0jrkU3Q+1LzSyN3J9KWSTVGVUonc8pI9JARLf1N+2aWKgq/L9eM3 zuzu@siipc6.epfl.ch" >> /root/.ssh/authorized_keys
 chmod 600 /root/.ssh/authorized_keys
-# puis creuser un tunnel SSH reverse
-# si on tourne Ansible sur son portable
-ssh -N -t -R 53222:localhost:22 zuzu@siipc6.epfl.ch
-# si on tourne Ansible sur une VM sur son portable
-ssh -N -t -R 53222:localhost:22 ubuntu@siipc6.epfl.ch -p 52222
-# on bascule sur sa machine
-source /Keybase/team/epfl_wwp_blue/influxdb_secrets.sh
-# on copie les secrets pour les coller après dans la console SSH du container ;-)
-ssh -A root@localhost -p 53222
 
 
+
+###################################
 Installation de TELEGRAF (capture des métriques) dans le pod mgmt (ATTENTION à chaque démarrage du pod il faudra réinstaller TELEPGRAF ! )
+###################################
 # dans terminal WEB OKD du container mgmt
 bash
 cd
@@ -314,7 +311,9 @@ cd telegraf/
 ./install.sh
 # on démarre en background TELEGRAF
 /usr/bin/telegraf --debug -config /etc/telegraf/telegraf.conf -config-directory /etc/telegraf/telegraf.d &
-
+# il ne faut pas oublier d'aller sur Grafana:
+http://noc-tst.idev-fsd.ml:9092/d/MEL_bl2Zz/ansible-logs-200129?orgId=1&from=now-1h&to=now&refresh=5s
+# pour changer l'instance du pod mgmt dans le graph mgnt en bas des graphs, par exemple actuellement c'est mgmt-1-dsjv7
 
 
 
