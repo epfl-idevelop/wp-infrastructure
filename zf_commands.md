@@ -1,9 +1,4 @@
-<!-- TOC titleSize:2 tabSpaces:2 depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 skip:0 title:1 charForUnorderedList:* -->
-## Table of Contents
-* [zf200513.1518](#zf2005131518)
-<!-- /TOC -->Listes des commandes souvent utilisées pour le dev profiling AWX
-
-#zf200513.1518
+#zf200513.1723
 
 Mon mais c'est si simple pour AWX:
 https://drive.google.com/open?id=1NyrVYI0ub9yKV8dxzvWOnYJQWrrw6oD5gn117xehhQU
@@ -22,6 +17,18 @@ oc projects
 
 https://awx-poc-vpsi.epfl.ch/#/login
 https://pub-os-exopge.epfl.ch/console/project/wwp-test/overview
+
+
+
+Dans un runner
+
+bash
+sudo yum -y install git nano
+git clone https://github.com/zuzu59/deploy-proxmox.git
+source ./deploy-proxmox/alias
+./deploy-proxmox/env_a_zuzu.sh
+git clone https://github.com/zuzu59/telegraf.git
+cd telegraf
 
 
 

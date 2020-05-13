@@ -1,4 +1,4 @@
-#canary200513.1602
+#canary200513.1706
 
 # Custom runner image with the `wp` command-line tool and a WordPress layout in /wp
 - include_vars: ../../../vars/image-vars.yml
@@ -25,10 +25,10 @@
       RUN yum -y install http://rpms.remirepo.net/enterprise/remi-release-7.rpm
       RUN yum-config-manager --disable remi-php54 && \
           yum-config-manager --enable remi-php73
+      RUN yum -y install php-cli php-mysql python3
       
-      #zzz200513.1530
-      # RUN yum -y install php-cli php-mysql python3
-      RUN yum -y install php-cli php-mysql python3 htop
+      #zzz200513.1706
+      RUN yum -y install htop nano git
 
       #zzz200513.1602
       RUN echo "www-data ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
