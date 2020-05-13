@@ -21,4 +21,8 @@ oc projects
 ./wpsible -t awx --test
 
 https://awx-poc-vpsi.epfl.ch/#/login
+https://pub-os-exopge.epfl.ch/console/project/wwp-test/overview
+
+
+
 
