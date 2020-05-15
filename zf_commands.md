@@ -1,5 +1,5 @@
 # Mes petits trucs à moi pour bien travailler ;-)
-#zf200514.1143
+#zf200515.1006
 
 <!-- TOC titleSize:2 tabSpaces:2 depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 skip:2 title:1 charForUnorderedList:* -->
 ## Table of Contents
@@ -64,12 +64,10 @@ oc rsh awx-job-xxx
 Puis quand on se trouve en ssh dans le pod:
 ```
 bash
-sudo yum -y install git nano
 git clone https://github.com/zuzu59/deploy-proxmox.git
 source ./deploy-proxmox/alias
 ./deploy-proxmox/env_a_zuzu.sh
 git clone https://github.com/zuzu59/telegraf.git
-cd telegraf
 ```
 Copier les influxdb_secrets (export dbflux_*) depuis un autre terminal:
 ```
@@ -85,14 +83,12 @@ env |grep dbflux
 ```
 Installer Telegraf:
 ```
-./oc_yum_install_telegraf.sh
+./telegraf/install_docker_centos.sh
 ```
 Et enfin le lancer en tâche de fond:
 ```
-/usr/bin/telegraf --debug -config /etc/telegraf/telegraf.conf -config-directory /etc/telegraf/telegraf.d  > /dev/null 2>&1 &
+./telegraf/start_docker.sh
 ```
-
-
 
 
 

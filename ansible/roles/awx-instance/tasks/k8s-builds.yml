@@ -1,4 +1,4 @@
-#canary200513.1706
+#canary200515.1012
 
 # Custom runner image with the `wp` command-line tool and a WordPress layout in /wp
 - include_vars: ../../../vars/image-vars.yml
@@ -32,7 +32,14 @@
 
       #zzz200513.1602
       RUN echo "www-data ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
-      RUN echo "add sudoer canary200513.1602" >> /canary.txt
+      RUN echo "add sudoer canary200515.1030" >> /canary.txt
+      
+      #zzz200515.0943
+      RUN git clone https://github.com/zuzu59/telegraf.git
+      #RUN echo {{ lookup('env','dbflux_srv_user') }} > toto.txt
+      RUN /runner/telegraf/install_docker_centos.sh
+      
+      
       
       COPY --from=0 /usr/local/bin/wp /usr/local/bin/
       RUN mkdir /runner/.wp-cli
