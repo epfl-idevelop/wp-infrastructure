@@ -1,5 +1,5 @@
 # Mes petits trucs à moi pour bien travailler ;-)
-#zf200515.1701
+#zf200518.1441
 
 <!-- TOC titleSize:2 tabSpaces:2 depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 skip:2 title:1 charForUnorderedList:* -->
 ## Table of Contents
@@ -67,6 +67,8 @@ bash
 git clone https://github.com/zuzu59/deploy-proxmox.git
 source ./deploy-proxmox/alias
 ./deploy-proxmox/env_a_zuzu.sh
+sudo -sE
+
 #git clone https://github.com/zuzu59/telegraf.git
 ```
 Copier les influxdb_secrets (export dbflux_*) depuis un autre terminal:
