@@ -1,5 +1,5 @@
 # Mes petits trucs à moi pour bien travailler ;-)
-#zf200515.1006
+#zf200515.1701
 
 <!-- TOC titleSize:2 tabSpaces:2 depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 skip:2 title:1 charForUnorderedList:* -->
 ## Table of Contents
@@ -59,7 +59,7 @@ oc get pod |grep awx-job
 ```
 Se connecter en ssh dans le pod:
 ```
-oc rsh awx-job-xxx
+oc rsh awx-job-10xx
 ```
 Puis quand on se trouve en ssh dans le pod:
 ```
