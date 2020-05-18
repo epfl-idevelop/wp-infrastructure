@@ -27,7 +27,10 @@
           yum-config-manager --enable remi-php73
       RUN yum -y install php-cli php-mysql python3
       
-      #zzz200513.1706
+      
+      
+      
+      #zzz200518.1055
       RUN yum -y install htop nano git
 
       #zzz200513.1602
@@ -43,6 +46,9 @@
       export dbflux_u_user={{ lookup('env','dbflux_u_user') }} && \
       export dbflux_p_user={{ lookup('env','dbflux_p_user') }} && \
       /runner/telegraf/install_docker_centos.sh
+      
+      #RUN echo "echo `date` >> /toto1104.txt" >> /etc/bashrc
+      
       
       
       

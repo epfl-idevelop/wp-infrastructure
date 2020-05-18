@@ -67,7 +67,7 @@ bash
 git clone https://github.com/zuzu59/deploy-proxmox.git
 source ./deploy-proxmox/alias
 ./deploy-proxmox/env_a_zuzu.sh
-git clone https://github.com/zuzu59/telegraf.git
+#git clone https://github.com/zuzu59/telegraf.git
 ```
 Copier les influxdb_secrets (export dbflux_*) depuis un autre terminal:
 ```
