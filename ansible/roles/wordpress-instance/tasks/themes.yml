@@ -5,7 +5,7 @@
 - include_vars: theme-vars.yml
 
 ### 2018 Themes
-###zzz200519.1350
+#zzz200519.1350
 - name: WordPress theme 2018
   wordpress_theme:
     name: wp-theme-2018
