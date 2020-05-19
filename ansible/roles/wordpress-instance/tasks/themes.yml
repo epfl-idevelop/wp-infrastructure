@@ -11,8 +11,8 @@
     name: wp-theme-2018
     state: '{{ [ "symlinked", "active" ] if theme_wp_theme_2018_active else "symlinked" }}'
   #zzz200519.1411
-  debug:
-    msg: "toto1204"
+  # debug:
+  #   msg: "toto1204"
 
 - name: WordPress theme 2018 (light)
   wordpress_theme:
