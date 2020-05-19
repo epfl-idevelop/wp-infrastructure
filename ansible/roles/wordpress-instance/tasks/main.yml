@@ -1,4 +1,4 @@
-#canary200519.1205
+#canary200519.1355
 
 
 # file: roles/wordpress-instance/tasks/main.yml
@@ -9,9 +9,9 @@
 #              ../vars/*.yml)
 
 #zzz200519.1155
-hosts: all
-  tasks:
-    - debug: msg="{{ lookup('pipe','date +%Y-%m-%d-%H-%M-%S') }}
+# hosts: all
+#   tasks:
+#     - debug: msg="{{ lookup('pipe','date +%Y-%m-%d-%H-%M-%S') }}
 
 - meta: end_play
   when: |
