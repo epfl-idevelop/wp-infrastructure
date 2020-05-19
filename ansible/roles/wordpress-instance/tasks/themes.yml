@@ -6,13 +6,17 @@
 
 ### 2018 Themes
 #zzz200519.1350
+- debug:
+    msg: "WordPress theme 2018 start at {{ lookup('pipe','date +%Y-%m-%d-%H-%M-%S') }}"
+
 - name: WordPress theme 2018
   wordpress_theme:
     name: wp-theme-2018
     state: '{{ [ "symlinked", "active" ] if theme_wp_theme_2018_active else "symlinked" }}'
-  #zzz200519.1411
+
+#zzz200519.1350
 - debug:
-    msg: "toto1204"
+    msg: "WordPress theme 2018 end at {{ lookup('pipe','date +%Y-%m-%d-%H-%M-%S') }}"
 
 - name: WordPress theme 2018 (light)
   wordpress_theme:
