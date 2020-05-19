@@ -5,7 +5,8 @@
 - include_vars: theme-vars.yml
 
 ### 2018 Themes
-- name: WordPress theme 2018
+###zzz200519.1350
+- name: WordPress theme 2018 vive zuzu
   wordpress_theme:
     name: wp-theme-2018
     state: '{{ [ "symlinked", "active" ] if theme_wp_theme_2018_active else "symlinked" }}'

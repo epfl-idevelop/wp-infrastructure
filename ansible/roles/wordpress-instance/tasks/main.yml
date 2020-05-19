@@ -1,9 +1,17 @@
+#canary200519.1205
+
+
 # file: roles/wordpress-instance/tasks/main.yml
 #
 # What to do to install and configure a WordPress instance
 #
 # Variables:: (in addition to those defined or documented in
 #              ../vars/*.yml)
+
+#zzz200519.1155
+hosts: all
+  tasks:
+    - debug: msg="{{ lookup('pipe','date +%Y-%m-%d-%H-%M-%S') }}
 
 - meta: end_play
   when: |
@@ -35,6 +43,9 @@
 
 - wordpress_facts:
   tags: always
+  ###zzz200519.1204
+  - debug:
+      msg: "toto1204"
 
 - name: "{{ 'Recreate' if 'wipe' in ansible_run_tags else 'Create' }}"
   include_tasks: "create.yml"
