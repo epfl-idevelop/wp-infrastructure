@@ -43,7 +43,7 @@
 
 - wordpress_facts:
   tags: always
-  ###zzz200519.1204
+  #zzz200519.1204
   #- debug:
   msg: "toto1204"
 
