@@ -1,3 +1,7 @@
+#zzz200519.1450
+- debug:
+    msg: "canary200519.1452"
+
 - include_vars: wp-destructive.yml   # For wp_can
 - assert:
     that: wp_can.configure or ansible_check_mode
@@ -7,7 +11,7 @@
 ### 2018 Themes
 #zzz200519.1350
 - debug:
-    msg: "WordPress theme 2018 start at {{ lookup('pipe','date +%Y-%m-%d-%H-%M-%S') }}"
+    msg: "WordPress theme 2018 start at {{ lookup('pipe','date +%Y-%m-%d-%H-%M-%S.%N') }}"
 
 - name: WordPress theme 2018
   wordpress_theme:
@@ -16,7 +20,7 @@
 
 #zzz200519.1350
 - debug:
-    msg: "WordPress theme 2018 end at {{ lookup('pipe','date +%Y-%m-%d-%H-%M-%S') }}"
+    msg: "WordPress theme 2018 end at {{ lookup('pipe','date +%Y-%m-%d-%H-%M-%S.%N') }}"
 
 - name: WordPress theme 2018 (light)
   wordpress_theme:
