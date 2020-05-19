@@ -1,6 +1,5 @@
-#zzz200519.1450
 - debug:
-    msg: "canary200519.1452"
+    msg: "themes.yml canary200519.1516"
 
 - include_vars: wp-destructive.yml   # For wp_can
 - assert:
@@ -17,6 +16,7 @@
   wordpress_theme:
     name: wp-theme-2018
     state: '{{ [ "symlinked", "active" ] if theme_wp_theme_2018_active else "symlinked" }}'
+  msg: "toto1516"
 
 #zzz200519.1350
 - debug:
