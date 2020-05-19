@@ -1,4 +1,4 @@
-#canary200519.1358
+#canary200519.1405
 
 
 # file: roles/wordpress-instance/tasks/main.yml
@@ -43,9 +43,6 @@
 
 - wordpress_facts:
   tags: always
-  #zzz200519.1204
-  #- debug:
-  msg: "toto1204"
 
 - name: "{{ 'Recreate' if 'wipe' in ansible_run_tags else 'Create' }}"
   include_tasks: "create.yml"
