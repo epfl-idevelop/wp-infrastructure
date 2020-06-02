@@ -46,7 +46,8 @@
     - wipe
 
 #zzz200519.1350
-- debug:
+- tags: always
+  debug:
     msg: "main start at {{ lookup('pipe','date +%Y-%m-%d-%H-%M-%S.%N') }}"
 
 - wordpress_facts:
