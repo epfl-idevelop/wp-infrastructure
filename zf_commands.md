@@ -1,5 +1,5 @@
 # Mes petits trucs à moi pour bien travailler ;-)
-#zf200618.1204
+#zf200618.1453
 
 <!-- TOC titleSize:2 tabSpaces:2 depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 skip:2 title:1 charForUnorderedList:* -->
 ## Table of Contents
@@ -9,8 +9,8 @@
   * [Sur sa machine](#sur-sa-machine)
   * [Sur sa machine dans une console](#sur-sa-machine-dans-une-console)
     * [A faire au début du travail](#a-faire-au-début-du-travail)
+    * [Copier son dépôt *local* sur le POD AWX](#copier-son-dépôt-local-sur-le-pod-awx)
     * [En travail](#en-travail)
-    * [Copier son dépôt *local* sur le POD AWX afin de gagner beaucoup de temps pour les tests *lancés* de *templates* (*Modèles*)](#copier-son-dépôt-local-sur-le-pod-awx-afin-de-gagner-beaucoup-de-temps-pour-les-tests-lancés-de-templates-modèles)
   * [Se connecter en ssh dans un runner (pod)](#se-connecter-en-ssh-dans-un-runner-pod)
   * [Sur Grafana](#sur-grafana)
 <!-- /TOC -->
@@ -46,22 +46,41 @@ oc projects
 ```
 
 
-### En travail
-Dans sa console de sa machine
-```
-./wpsible -t awx --test
-```
-
-### Copier son dépôt *local* sur le POD AWX afin de gagner beaucoup de temps pour les tests *lancés* de *templates* (*Modèles*)
-Quand on *lance* un template sur AWX (icône petite fusée), il va normalement *chercher* ses données Ansible sur https://github.com/epfl-si/wp-ops dans la branche *profiling/awx*, cela demande à chaque changement de code Ansible, de faire un *commit* et un *push* de notre *local* sur Github !
-On peut accélérer grandement le processus en faisant, une fois sur l'interface WEB AWX, une copie du projet *WWP* et en lui configurant:<br>
+### Copier son dépôt *local* sur le POD AWX
+Quand on *lance* un template sur AWX (icône petite *fusée*), il va normalement *chercher* ses données Ansible sur https://github.com/epfl-si/wp-ops dans la branche *profiling/awx*, cela demande à chaque changement de code Ansible, de faire un *commit* et un *push* de notre *local* sur Github !
+On peut **accélérer grandement le processus** en faisant, une fois sur l'interface WEB AWX, une copie du projet *WWP* et en lui configurant:<br>
 **Type de SCM**=manuel, **Chemin de base du projet**=/var/lib/awx/projects, **Répertoire de playbooks**=wp-ops
 
 **ATTENTION: cette configuration n'est pas pérenne, il faut la refaire à chaque redéploiement du POD AWX !**
 
-Après pour synchroniser son *dépôt local* avec celui du *POD AWX* il suffit de faire à chaque fois:
+Après pour synchroniser son *dépôt local* avec celui du *POD AWX*, il suffit de faire à chaque fois:
+
 ```
-oc rsync /Users/zuzu/dev-vpsi/wp-ops awx-0:/var/lib/awx/projects --exclude .git --exclude ansible-deps-cache
+oc rsync --delete /Users/zuzu/dev-vpsi/wp-ops awx-0:/var/lib/awx/projects --exclude .git --exclude ansible-deps-cache
+```
+
+**ATTENTION: on ne peut copier qu'un *dossier*, pas un *fichier*. Si on ne veut copier qu'un seul fichier, il faut tout *exclure* puis *inclure* spécifiquement le fichier désiré:**
+
+```
+--exclude=* --include=toto.txt
+```
+
+On peut après voir le résultat dans le POD AWX avec:
+
+```
+oc rsh awx-0
+bash
+cd /var/lib/awx/projects/wp-ops/
+ls -al
+exit
+exit
+```
+
+
+### En travail
+Dans sa console de sa machine
+```
+./wpsible -t awx --test
 ```
 
 
