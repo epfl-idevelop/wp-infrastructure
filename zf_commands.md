@@ -1,5 +1,5 @@
 # Mes petits trucs à moi pour bien travailler ;-)
-#zf200618.1453
+#zf200618.1640
 
 <!-- TOC titleSize:2 tabSpaces:2 depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 skip:2 title:1 charForUnorderedList:* -->
 ## Table of Contents
@@ -57,6 +57,11 @@ Après pour synchroniser son *dépôt local* avec celui du *POD AWX*, il suffit 
 
 ```
 oc rsync --delete /Users/zuzu/dev-vpsi/wp-ops awx-0:/var/lib/awx/projects --exclude .git --exclude ansible-deps-cache
+```
+
+On peut le faire de manière automatique (--watch), détecte automatiquement les modifications de fichiers, mais cela déconne encore à cause du **ansible.suitecase** de domq :-(
+```
+oc rsync --delete /Users/zuzu/dev-vpsi/wp-ops awx-0:/var/lib/awx/projects --exclude .git --exclude ansible-deps-cache --watch
 ```
 
 **ATTENTION: on ne peut copier qu'un *dossier*, pas un *fichier*. Si on ne veut copier qu'un seul fichier, il faut tout *exclure* puis *inclure* spécifiquement le fichier désiré:**
