@@ -1,4 +1,4 @@
-#canary200608.0921
+#canary200629.1107
 
 # Custom runner image with the `wp` command-line tool and a WordPress layout in /wp
 - include_vars: ../../../vars/image-vars.yml
@@ -28,13 +28,12 @@
       RUN yum -y install http://rpms.remirepo.net/enterprise/remi-release-8.rpm
       
       RUN dnf module enable php:remi-7.3 -y
-      
-      
-      
+            
       #zzz200608.0908 patch du build pour Greg
       RUN yum -y install php-cli php-mysql python3
       
       
+      #pour forcer le rebuild
       
       
       #zzz200518.1055

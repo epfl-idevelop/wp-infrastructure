@@ -1,5 +1,5 @@
 # Mes petits trucs à moi pour bien travailler ;-)
-#zf200618.1640
+#zf200629.1047
 
 <!-- TOC titleSize:2 tabSpaces:2 depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 skip:2 title:1 charForUnorderedList:* -->
 ## Table of Contents
@@ -10,7 +10,7 @@
   * [Sur sa machine dans une console](#sur-sa-machine-dans-une-console)
     * [A faire au début du travail](#a-faire-au-début-du-travail)
     * [Copier son dépôt *local* sur le POD AWX](#copier-son-dépôt-local-sur-le-pod-awx)
-    * [En travail](#en-travail)
+    * [En travail, refaire l'image du ansible runner](#en-travail-refaire-limage-du-ansible-runner)
   * [Se connecter en ssh dans un runner (pod)](#se-connecter-en-ssh-dans-un-runner-pod)
   * [Sur Grafana](#sur-grafana)
 <!-- /TOC -->
@@ -37,6 +37,8 @@ https://pub-os-exopge.epfl.ch/console/project/wwp-test/overview
 ## Sur sa machine dans une console
 ### A faire au début du travail
 ```
+allumer le VPN !
+
 source /Keybase/team/epfl_wwp_blue/influxdb_secrets.sh
 cd ansible
 pwd
@@ -82,7 +84,7 @@ exit
 ```
 
 
-### En travail
+### En travail, refaire l'image du ansible runner
 Dans sa console de sa machine
 ```
 ./wpsible -t awx --test
