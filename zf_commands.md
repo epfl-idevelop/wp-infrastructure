@@ -1,8 +1,10 @@
 # Mes petits trucs à moi pour bien travailler ;-)
-#zf200629.1047
+#zf200630.0958
 
 <!-- TOC titleSize:2 tabSpaces:2 depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 skip:2 title:1 charForUnorderedList:* -->
 ## Table of Contents
+* [Problèmes actuels](#problèmes-actuels)
+  * [Erreur du DistutilsFileError: cannot copy tree '/var/lib/awx/projects/XXX_Project': not a directory](#erreur-du-distutilsfileerror-cannot-copy-tree-varlibawxprojectsxxxproject-not-a-directory)
 * [Mon ..., mais c'est si simple pour AWX](#mon--mais-cest-si-simple-pour-awx)
 * [Shortcuts pour Atom](#shortcuts-pour-atom)
 * [Go go go !](#go-go-go-)
@@ -14,6 +16,25 @@
   * [Se connecter en ssh dans un runner (pod)](#se-connecter-en-ssh-dans-un-runner-pod)
   * [Sur Grafana](#sur-grafana)
 <!-- /TOC -->
+
+# Problèmes actuels
+## Erreur du DistutilsFileError: cannot copy tree '/var/lib/awx/projects/XXX_Project': not a directory
+zf200629.1812
+En voulant utiliser les playbooks sur le disque du container AWX au lieu de Github, j'ai cette erreur:
+
+```
+Traceback (most recent call last): File "/var/lib/awx/venv/awx/lib/python3.6/site-packages/awx/main/tasks.py", line 1345, in run self.pre_run_hook(self.instance, private_data_dir) File "/var/lib/awx/venv/awx/lib/python3.6/site-packages/awx/main/tasks.py", line 1949, in pre_run_hook job.project.scm_type, job_revision File "/var/lib/awx/venv/awx/lib/python3.6/site-packages/awx/main/tasks.py", line 2342, in make_local_copy copy_tree(project_path, destination_folder, preserve_symlinks=1) File "/usr/lib64/python3.6/distutils/dir_util.py", line 124, in copy_tree "cannot copy tree '%s': not a directory" % src) distutils.errors.DistutilsFileError: cannot copy tree '/var/lib/awx/projects/wp-ops': not a directory
+```
+
+J'ai trouvé des infos sur:
+
+https://github.com/ansible/awx/issues/6213
+
+Mais je n'arrive pas à les interpréter :-(
+  
+https://www.google.com/search?q=awx+copy_tree+%22cannot+copy+tree+%27%25s%27%3A+not+a+directory%22+%25+src)&rlz=1C5CHFA_enCH890CH890&oq=awx+copy_tree+%22cannot+copy+tree+%27%25s%27%3A+not+a+directory%22+%25+src)&aqs=chrome..69i57.1395j1j4&sourceid=chrome&ie=UTF-8
+
+
 
 # Mon ..., mais c'est si simple pour AWX
 https://drive.google.com/open?id=1NyrVYI0ub9yKV8dxzvWOnYJQWrrw6oD5gn117xehhQU

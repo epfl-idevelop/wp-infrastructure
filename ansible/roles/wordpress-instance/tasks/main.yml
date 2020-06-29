@@ -1,9 +1,9 @@
 - debug:
-    msg: "main.yml canary200519.1525"
+    msg: "main.yml canary200629.1708"
 
 #zzz200519.1350
 - debug:
-    msg: "main start at {{ lookup('pipe','date +%Y-%m-%d-%H-%M-%S.%N') }}"
+    msg: "zuzu200629.1713, main start at {{ lookup('pipe','date +%Y-%m-%d-%H-%M-%S.%N') }}"
 
 # file: roles/wordpress-instance/tasks/main.yml
 #
@@ -45,10 +45,10 @@
     - never
     - wipe
 
-#zzz200519.1350
+#zzz200629.1708
 - tags: always
   debug:
-    msg: "main start at {{ lookup('pipe','date +%Y-%m-%d-%H-%M-%S.%N') }}"
+    msg: "zuzu200629.1708, main start at {{ lookup('pipe','date +%Y-%m-%d-%H-%M-%S.%N') }}"
 
 - wordpress_facts:
   tags: always
