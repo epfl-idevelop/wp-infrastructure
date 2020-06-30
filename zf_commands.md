@@ -1,5 +1,5 @@
 # Mes petits trucs à moi pour bien travailler ;-)
-#zf200630.0958
+#zf200630.1111
 
 <!-- TOC titleSize:2 tabSpaces:2 depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 skip:2 title:1 charForUnorderedList:* -->
 ## Table of Contents
@@ -11,7 +11,9 @@
   * [Sur sa machine](#sur-sa-machine)
   * [Sur sa machine dans une console](#sur-sa-machine-dans-une-console)
     * [A faire au début du travail](#a-faire-au-début-du-travail)
-    * [Copier son dépôt *local* sur le POD AWX](#copier-son-dépôt-local-sur-le-pod-awx)
+    * [Accélération des tests du code Ansible](#accélération-des-tests-du-code-ansible)
+      * [1ère solution](#1ère-solution)
+      * [2ème solution](#2ème-solution)
     * [En travail, refaire l'image du ansible runner](#en-travail-refaire-limage-du-ansible-runner)
   * [Se connecter en ssh dans un runner (pod)](#se-connecter-en-ssh-dans-un-runner-pod)
   * [Sur Grafana](#sur-grafana)
@@ -69,9 +71,18 @@ oc projects
 ```
 
 
-### Copier son dépôt *local* sur le POD AWX
-Quand on *lance* un template sur AWX (icône petite *fusée*), il va normalement *chercher* ses données Ansible sur https://github.com/epfl-si/wp-ops dans la branche *profiling/awx*, cela demande à chaque changement de code Ansible, de faire un *commit* et un *push* de notre *local* sur Github !
-On peut **accélérer grandement le processus** en faisant, une fois sur l'interface WEB AWX, une copie du projet *WWP* et en lui configurant:<br>
+### Accélération des tests du code Ansible
+Quand on *lance* un template sur AWX (icône petite *fusée*), il va normalement *chercher* ses données Ansible sur https://github.com/epfl-si/wp-ops dans la branche *profiling/awx*, cela demande à chaque changement de code Ansible, de faire un *commit* et un *push* de notre *local* sur Github !<br>
+
+#### 1ère solution
+On peut y remédier en *trichant* un peu lors du commit:
+```
+GIT_EDITOR=true git commit -a --amend && git push -f
+```
+Du coup on gagne beaucoup de temps pour les tests !
+
+#### 2ème solution
+Ou alors, on peut **accélérer grandement le processus** en faisant, une fois sur l'interface WEB AWX, une copie du projet *WWP* et en lui configurant:<br>
 **Type de SCM**=manuel, **Chemin de base du projet**=/var/lib/awx/projects, **Répertoire de playbooks**=wp-ops
 
 **ATTENTION: cette configuration n'est pas pérenne, il faut la refaire à chaque redéploiement du POD AWX !**
