@@ -1,5 +1,5 @@
 # Mes petits trucs à moi pour bien travailler ;-)
-#zf200630.1111
+#zf200630.1122
 
 <!-- TOC titleSize:2 tabSpaces:2 depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 skip:2 title:1 charForUnorderedList:* -->
 ## Table of Contents
@@ -15,6 +15,7 @@
       * [1ère solution](#1ère-solution)
       * [2ème solution](#2ème-solution)
     * [En travail, refaire l'image du ansible runner](#en-travail-refaire-limage-du-ansible-runner)
+    * [En travail, si on veut rebuilder AWX](#en-travail-si-on-veut-rebuilder-awx)
   * [Se connecter en ssh dans un runner (pod)](#se-connecter-en-ssh-dans-un-runner-pod)
   * [Sur Grafana](#sur-grafana)
 <!-- /TOC -->
@@ -65,7 +66,7 @@ allumer le VPN !
 source /Keybase/team/epfl_wwp_blue/influxdb_secrets.sh
 cd ansible
 pwd
-oc login
+oc login -u czufferey
 oc project wwp-test
 oc projects
 ```
@@ -121,6 +122,16 @@ Dans sa console de sa machine
 ```
 ./wpsible -t awx --test
 ```
+
+
+### En travail, si on veut rebuilder AWX
+Dans sa console de sa machine
+```
+./wpsible -t awx
+```
+
+
+
 
 
 ## Se connecter en ssh dans un runner (pod)

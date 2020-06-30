@@ -1,4 +1,4 @@
-#canary200629.1107
+#canary200630.1131
 
 # Custom runner image with the `wp` command-line tool and a WordPress layout in /wp
 - include_vars: ../../../vars/image-vars.yml
@@ -35,7 +35,7 @@
       RUN yum -y install php-cli php-mysql python3
       
       
-      #pour forcer le rebuild
+      #pour forcer le rebuild 200630.1205
       
       
       #zzz200518.1055
@@ -105,7 +105,7 @@
   shell: "oc -n {{ awx_build_namespace }} start-build --wait {{ awx_task_image_name }}"
   delegate_to: localhost
 
-############# Temporaire (?) - Bidouillage de l'image awx_web
+############# Temporaire (?) - Bidouillage de l'image awx_web zf200630.1131
 
 - name: "Pull {{ awx_web_base_image_fullname }}"
   delegate_to: localhost
@@ -117,19 +117,28 @@
     tag: latest
 
 - name: "Build {{ awx_web_image_name }} in OpenShift"
-  register: _awx_web_buildconfig
   delegate_to: localhost
+  register: _awx_web_buildconfig
   openshift_imagestream:
     tag: "{{ awx_version }}"
     metadata:
       name: "{{ awx_web_image_name }}"
       namespace: "{{ ansible_oc_namespace }}"
     dockerfile: |
-      FROM docker-registry.default.svc:5000/{{ ansible_oc_namespace }}/{{ awx_web_base_image_name }}:latest
-      USER 0
-      RUN id; chmod -R g+w /var/lib/awx/venv/ || true
-      USER 1000
+      # FROM docker-registry.default.svc:5000/{{ ansible_oc_namespace }}/{{ awx_web_base_image_name }}:latest
 
+      FROM docker-registry.default.svc:5000/{{ ansible_oc_namespace }}/{{ wp_base_image_name }}:latest
+      FROM docker-registry.default.svc:5000/{{ ansible_oc_namespace }}/{{ awx_web_base_image_name }}:latest
+
+
+
+      # USER 0
+      # RUN id; chmod -R g+w /var/lib/awx/venv/ || true
+      # USER 1000
+
+      # RUN toto1144
+      
+      
 - name: "Rebuild {{ awx_web_image_name }} now"
   when: _awx_web_buildconfig is changed
   shell: "oc -n {{ awx_build_namespace }} start-build --wait {{ awx_web_image_name }}"
