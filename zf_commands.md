@@ -1,5 +1,5 @@
 # Mes petits trucs à moi pour bien travailler ;-)
-#zf200630.1122
+#zf200630.1725
 
 <!-- TOC titleSize:2 tabSpaces:2 depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 skip:2 title:1 charForUnorderedList:* -->
 ## Table of Contents
@@ -64,8 +64,7 @@ https://pub-os-exopge.epfl.ch/console/project/wwp-test/overview
 allumer le VPN !
 
 source /Keybase/team/epfl_wwp_blue/influxdb_secrets.sh
-cd ansible
-pwd
+cd /Users/zuzu/dev-vpsi/wp-ops/ansible
 oc login -u czufferey
 oc project wwp-test
 oc projects

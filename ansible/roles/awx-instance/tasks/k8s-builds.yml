@@ -84,6 +84,8 @@
   shell: "oc -n {{ awx_build_namespace }} start-build --wait {{ awx_runner_image_name }}"
   delegate_to: localhost
 
+
+
 - name: "Patch {{ awx_task_base_image_fullname }} into {{ awx_task_image_name }}"
   register: _awx_task_buildconfig
   delegate_to: localhost
@@ -114,33 +116,36 @@
       name: "{{ awx_web_base_image_name }}"
       namespace: "{{ ansible_oc_namespace }}"
     from: "{{ awx_web_base_image_fullname }}"
-    tag: latest
+    tag: "{{ awx_version }}"
 
 - name: "Build {{ awx_web_image_name }} in OpenShift"
   delegate_to: localhost
   register: _awx_web_buildconfig
   openshift_imagestream:
-    tag: "{{ awx_version }}"
+    # tags: "{{ awx_version }}"
     metadata:
       name: "{{ awx_web_image_name }}"
       namespace: "{{ ansible_oc_namespace }}"
     dockerfile: |
       # FROM docker-registry.default.svc:5000/{{ ansible_oc_namespace }}/{{ awx_web_base_image_name }}:latest
 
-      FROM docker-registry.default.svc:5000/{{ ansible_oc_namespace }}/{{ wp_base_image_name }}:latest
-      FROM docker-registry.default.svc:5000/{{ ansible_oc_namespace }}/{{ awx_web_base_image_name }}:latest
+      # FROM docker-registry.default.svc:5000/{{ ansible_oc_namespace }}/{{ wp_base_image_name }}:latest
+      FROM docker-registry.default.svc:5000/{{ ansible_oc_namespace }}/{{ awx_web_base_image_name }}:{{ awx_version }}
 
-
+      #merde et remerde et encore une fois merde
 
       # USER 0
       # RUN id; chmod -R g+w /var/lib/awx/venv/ || true
       # USER 1000
 
       # RUN toto1144
+  tags: toto1630
       
       
 - name: "Rebuild {{ awx_web_image_name }} now"
   when: _awx_web_buildconfig is changed
   shell: "oc -n {{ awx_build_namespace }} start-build --wait {{ awx_web_image_name }}"
   delegate_to: localhost
+  tags: toto16202
+    
 
