@@ -11,6 +11,10 @@ awx_runner_image_name: "wp-ansible-runner"
 awx_task_base_image_fullname: "docker.io/ansible/awx_task:{{ awx_version }}"
 awx_task_image_name: "wp-awx-task"
 
+awx_web_base_image_name: "awx_web"
+awx_web_base_image_fullname: "docker.io/ansible/awx_web:{{ awx_version }}"
+awx_web_image_name: "wp-awx-web"
+
 awx_inventory: "{{ awx_inventories[ansible_oc_namespace] }}"
 awx_inventories:
   wwp: prod

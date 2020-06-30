@@ -88,7 +88,7 @@
           containers:
           #####################################################
           - name: awx-web
-            image: "ansible/awx_web:{{ awx_version }}"
+            image: "docker-registry.default.svc:5000/{{ ansible_oc_namespace }}/{{ awx_web_image_name }}:{{ awx_version }}"
             ports:
             - containerPort: 8052
               protocol: TCP

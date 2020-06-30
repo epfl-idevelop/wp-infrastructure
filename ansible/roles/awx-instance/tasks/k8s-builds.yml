@@ -5,6 +5,7 @@
 - include_vars: k8s-vars.yml
 
 - name: "Pull {{ awx_runner_base_image_fullname }}"
+  delegate_to: localhost
   openshift_imagestream:
     metadata:
       name: "{{ awx_runner_base_image_name }}"
@@ -13,6 +14,7 @@
     tag: latest
 
 - name: "Build {{ awx_runner_image_name }} in OpenShift"
+  delegate_to: localhost
   register: _awx_runner_buildconfig
   openshift_imagestream:
     metadata:
@@ -84,6 +86,7 @@
 
 - name: "Patch {{ awx_task_base_image_fullname }} into {{ awx_task_image_name }}"
   register: _awx_task_buildconfig
+  delegate_to: localhost
   openshift_imagestream:
     tag: "{{ awx_version }}"
     metadata:
@@ -101,3 +104,34 @@
   when: _awx_task_buildconfig is changed
   shell: "oc -n {{ awx_build_namespace }} start-build --wait {{ awx_task_image_name }}"
   delegate_to: localhost
+
+############# Temporaire (?) - Bidouillage de l'image awx_web
+
+- name: "Pull {{ awx_web_base_image_fullname }}"
+  delegate_to: localhost
+  openshift_imagestream:
+    metadata:
+      name: "{{ awx_web_base_image_name }}"
+      namespace: "{{ ansible_oc_namespace }}"
+    from: "{{ awx_web_base_image_fullname }}"
+    tag: latest
+
+- name: "Build {{ awx_web_image_name }} in OpenShift"
+  register: _awx_web_buildconfig
+  delegate_to: localhost
+  openshift_imagestream:
+    tag: "{{ awx_version }}"
+    metadata:
+      name: "{{ awx_web_image_name }}"
+      namespace: "{{ ansible_oc_namespace }}"
+    dockerfile: |
+      FROM docker-registry.default.svc:5000/{{ ansible_oc_namespace }}/{{ awx_web_base_image_name }}:latest
+      USER 0
+      RUN id; chmod -R g+w /var/lib/awx/venv/ || true
+      USER 1000
+
+- name: "Rebuild {{ awx_web_image_name }} now"
+  when: _awx_web_buildconfig is changed
+  shell: "oc -n {{ awx_build_namespace }} start-build --wait {{ awx_web_image_name }}"
+  delegate_to: localhost
+
