@@ -1,10 +1,11 @@
 - debug:
-    msg: "main.yml canary200707.0947"
+    msg: "main.yml canary200707.1127"
   tags: always
 
-#zzz200519.1350
+
+#zzz200707.1112
 - debug:
-    msg: "zuzu200707.0948, début main start at {{ lookup('pipe','date +%Y-%m-%d-%H-%M-%S.%N') }}"
+    msg: "ztime, /include_vars/ start at {{ lookup('pipe','TZ=Europe/Paris date \"+%Y-%m-%d %H:%M:%S.%N\"') }}"
   tags: always
       
 
@@ -14,11 +15,6 @@
 #
 # Variables:: (in addition to those defined or documented in
 #              ../vars/*.yml)
-
-#zzz200519.1155
-# hosts: all
-#   tasks:
-#     - debug: msg="{{ lookup('pipe','date +%Y-%m-%d-%H-%M-%S') }}
 
 - meta: end_play
   when: |
@@ -48,17 +44,13 @@
     - never
     - wipe
 
-#zzz200629.1708
+
+#zzz200707.1112
 - debug:
-    msg: "zuzu200707.0949, main start at {{ lookup('pipe','date +%Y-%m-%d-%H-%M-%S.%N') }}"
+    msg: "ztime, /wordpress_facts/ start at {{ lookup('pipe','TZ=Europe/Paris date \"+%Y-%m-%d %H:%M:%S.%N\"') }}"
   tags: always
   
 - wordpress_facts:
-  tags: always
-
-#zzz200519.1350
-- debug:
-    msg: "main stop at {{ lookup('pipe','date +%Y-%m-%d-%H-%M-%S.%N') }}"
   tags: always
 
 - name: "{{ 'Recreate' if 'wipe' in ansible_run_tags else 'Create' }}"
@@ -116,6 +108,12 @@
     apply:
       tags: ["plugins"]
 
+
+#zzz200707.1112
+- debug:
+    msg: "ztime, /Set up themes/ start at {{ lookup('pipe','TZ=Europe/Paris date \"+%Y-%m-%d %H:%M:%S.%N\"') }}"
+  tags: always
+
 - name: Set up themes
   when: wp_can.configure or ansible_check_mode
   tags:
@@ -143,3 +141,4 @@
     - never
     - wp.menus
     - wp.menus.refresh
+
