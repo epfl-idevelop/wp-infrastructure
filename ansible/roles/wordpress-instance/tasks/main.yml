@@ -1,9 +1,12 @@
 - debug:
-    msg: "main.yml canary200629.1708"
+    msg: "main.yml canary200707.0947"
+  tags: always
 
 #zzz200519.1350
 - debug:
-    msg: "zuzu200629.1713, main start at {{ lookup('pipe','date +%Y-%m-%d-%H-%M-%S.%N') }}"
+    msg: "zuzu200707.0948, début main start at {{ lookup('pipe','date +%Y-%m-%d-%H-%M-%S.%N') }}"
+  tags: always
+      
 
 # file: roles/wordpress-instance/tasks/main.yml
 #
@@ -46,16 +49,17 @@
     - wipe
 
 #zzz200629.1708
-- tags: always
-  debug:
-    msg: "zuzu200629.1708, main start at {{ lookup('pipe','date +%Y-%m-%d-%H-%M-%S.%N') }}"
-
+- debug:
+    msg: "zuzu200707.0949, main start at {{ lookup('pipe','date +%Y-%m-%d-%H-%M-%S.%N') }}"
+  tags: always
+  
 - wordpress_facts:
   tags: always
 
 #zzz200519.1350
 - debug:
     msg: "main stop at {{ lookup('pipe','date +%Y-%m-%d-%H-%M-%S.%N') }}"
+  tags: always
 
 - name: "{{ 'Recreate' if 'wipe' in ansible_run_tags else 'Create' }}"
   include_tasks: "create.yml"

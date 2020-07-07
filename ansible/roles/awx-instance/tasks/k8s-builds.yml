@@ -1,4 +1,4 @@
-#canary200630.1131
+#canary200702.1147
 
 # Custom runner image with the `wp` command-line tool and a WordPress layout in /wp
 - include_vars: ../../../vars/image-vars.yml
@@ -127,7 +127,11 @@
     dockerfile: |
       FROM docker-registry.default.svc:5000/{{ ansible_oc_namespace }}/{{ awx_web_base_image_name }}:latest
       USER 0
-      RUN id; chmod -R g+w /var/lib/awx/venv/ || true
+      RUN id; chmod -R g+w /var/lib/awx/venv/awx/lib/python3.6/site-packages/awx/ || true
+      
+      #zzz200702.1134
+      RUN echo "chmod -R canary200707.0929" >> /canary.txt
+      
       USER 1000
 
 - name: "Rebuild {{ awx_web_image_name }} now"
