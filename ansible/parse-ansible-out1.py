@@ -4,7 +4,7 @@
 # Petit script pour parser les logs de Ansible dans ce project
 # sources: https://janakiev.com/blog/python-shell-commands/
 
-version = "parse-ansible-out1.py  zf200707.1405 "
+version = "parse-ansible-out1.py  zf200707.1742 "
 
 """
 génération du fichier logs:
@@ -70,49 +70,79 @@ if (__name__ == "__main__"):
     ztask_line_1 = 0
     ztask_name_1 = ""
     ztask_path_1 = ""
+    ztask_site_1 = ""
     ztask_time_1_obj = 0
     ztask_duration_1_obj = 0
 
     ztask_line_2 = 0
     ztask_name_2 = ""
     ztask_path_2 = ""
+    ztask_site_2 = ""
     ztask_time_2_obj = 0
-#    ztask_duration_2_obj = 0      pas besoin !
 
+    zflag_ztime = False
+    
+# ALT+CMD+F bascule du code au terminal
+
+# On parse le fichier de logs
     while True:
         zline = zfile.readline()
         i = i + 1
 
+# Est-ce une TASK ?
         a = 'TASK ['
         if zline[0:len(a)] == a :
-
-# ALT+CMD+F bascule du code au terminal
-
-# Récupération du nom de la Task
-            # print(zline)
         
 # Est-ce la Task 'debug' ?
-
             if zline.find(": debug") != -1 :
                 print(zline)
 
 # On passe à la ligne suivante
-            zline = zfile.readline()
-            i = i + 1
+                zline = zfile.readline()
+                i = i + 1
+                print(zline)
 
 # Récupération du path de la Task
-            print(zline)
+                zpath = "/project/ansible/roles/wordpress-instance/tasks/"
+                ztask_path_1 = zline[zline.find(zpath)+len(zpath):-1]
+                if zdebug2 : print(str(i) + " ztask_path_1: [" + ztask_path_1 + "]")
+
+                while True:
+                    if i > 100 :
+                        quit()
+
+# On passe à la ligne suivante
+                    zline = zfile.readline()
+                    i = i + 1
+                    print(zline)
+
+# Récupération du nom du site
+                    ztask_site_1 = zline[zline.find("["):zline.find("]")]
+                    if zdebug2 : print(str(i) + " ztask_site_1: [" + ztask_site_1 + "]")
+        
+# On passe à la ligne suivante
+                    zline = zfile.readline()
+                    i = i + 1
+                    print(zline)
+        
+# Est-ce la ligne 'ztime' ?
+                    zflag_ztime = False
+                    if zline.find("ztime, ") != -1 :
+                        zflag_ztime = True
+                        print("c'est une ligne ztime............")
             
-            zpath = "/project/ansible/roles/wordpress-instance/tasks/"
-            ztask_path_2 = zline[zline.find(zpath)+len(zpath):-1]
-            if zdebug2 : print(str(i) + " ztask_path_2: [" + ztask_path_2 + "]")
-        
-        # # Recherche de la ligne "msg": "ztime...
-        # a = 'ztime, /'
-        # if zline.find(a) != -1 :
-        # 
-        #     print(zline)
-        
+# Récupération du nom de la Task
+                        ztask_name_1 = zline[1+zline.find("/"):zline.find("/",1+zline.find("/"))]
+                        if zdebug2 : print(str(i) + " ztask_name_1: [" + ztask_name_1 + "]")
+            
+# Récupération du time de la Task
+                        ztask_time_1 = zline[2+zline.find("/ "):-2]
+                        if zdebug2 : print(str(i) + " ztask_time_1: [" + ztask_time_1 + "]")
+                                    
+                        if zflag_ztime == False :
+                            break
+
+            
             
             """
             TASK [../roles/wordpress-instance : debug] *************************************
@@ -123,6 +153,14 @@ if (__name__ == "__main__"):
             ok: [test_migration_wp__labs__aqua] => {
                 "msg": "main.yml canary200707.1133"
             }
+
+            TASK [../roles/wordpress-instance : debug] *************************************
+            task path: /tmp/awx_1219_b0giyx5k/project/ansible/roles/wordpress-instance/tasks/main.yml:7
+            ok: [test_migration_wp__labs__apc] => {
+                "msg": "ztime, /include_vars/ 2020-07-07 11:35:25.618007731"
+            }
+            ok: [test_migration_wp__labs__aqua] => {
+    "msg": "ztime, /include_vars/ 2020-07-07 11:35:25.627282382"
             """
             
             
