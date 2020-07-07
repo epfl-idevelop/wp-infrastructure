@@ -1,5 +1,5 @@
 # Mes petits trucs à moi pour bien travailler ;-)
-#zf200707.1146
+#zf200707.1357
 
 <!-- TOC titleSize:2 tabSpaces:2 depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 skip:2 title:1 charForUnorderedList:* -->
 ## Table of Contents
@@ -16,6 +16,7 @@
       * [2ème solution](#2ème-solution)
     * [En travail lancer la petite fusée d'un template dans le GUI de AWX](#en-travail-lancer-la-petite-fusée-dun-template-dans-le-gui-de-awx)
       * [Puis récupérer les logs de la tâche (numéro) du template](#puis-récupérer-les-logs-de-la-tâche-numéro-du-template)
+      * [Et enfin parser les logs avec le parser en python](#et-enfin-parser-les-logs-avec-le-parser-en-python)
     * [En travail, refaire l'image du ansible runner](#en-travail-refaire-limage-du-ansible-runner)
     * [En travail, si on veut rebuilder AWX](#en-travail-si-on-veut-rebuilder-awx)
   * [Se connecter en ssh dans un runner (pod)](#se-connecter-en-ssh-dans-un-runner-pod)
@@ -65,7 +66,8 @@ https://pub-os-exopge.epfl.ch/console/project/wwp-test/overview
 ```
 allumer le VPN !
 
-source /Keybase/team/epfl_wwp_blue/influxdb_secrets.sh
+source /keybase/team/epfl_wwp_blue/influxdb_secrets.sh
+source /keybase/private/zuzu59/tequila_zf_secrets.sh
 cd /Users/zuzu/dev-vpsi/wp-ops/ansible
 oc login -u czufferey
 oc project wwp-test
@@ -132,9 +134,12 @@ https://awx-poc-vpsi.epfl.ch/#/login
   https://awx-poc-vpsi.epfl.ch/api/v2/jobs/1219/stdout/?format=txt
 
 ```
-curl https://$username:$password@awx-poc-vpsi.epfl.ch/api/v2/jobs/1219/stdout/?format=txt
-```
+curl https://$ABC_DEF:$KLM_NOP@awx-poc-vpsi.epfl.ch/api/v2/jobs/1219/stdout/?format=txt > awx_logs.txt
 
+less awx_logs.txt
+```
+     
+#### Et enfin parser les logs avec le parser en python
 
 
 
@@ -151,9 +156,6 @@ Dans sa console de sa machine
 ```
 ./wpsible -t awx
 ```
-
-
-
 
 
 ## Se connecter en ssh dans un runner (pod)
