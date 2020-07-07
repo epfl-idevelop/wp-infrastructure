@@ -1,5 +1,5 @@
 # Mes petits trucs à moi pour bien travailler ;-)
-#zf200630.1725
+#zf200707.1146
 
 <!-- TOC titleSize:2 tabSpaces:2 depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 skip:2 title:1 charForUnorderedList:* -->
 ## Table of Contents
@@ -14,6 +14,8 @@
     * [Accélération des tests du code Ansible](#accélération-des-tests-du-code-ansible)
       * [1ère solution](#1ère-solution)
       * [2ème solution](#2ème-solution)
+    * [En travail lancer la petite fusée d'un template dans le GUI de AWX](#en-travail-lancer-la-petite-fusée-dun-template-dans-le-gui-de-awx)
+      * [Puis récupérer les logs de la tâche (numéro) du template](#puis-récupérer-les-logs-de-la-tâche-numéro-du-template)
     * [En travail, refaire l'image du ansible runner](#en-travail-refaire-limage-du-ansible-runner)
     * [En travail, si on veut rebuilder AWX](#en-travail-si-on-veut-rebuilder-awx)
   * [Se connecter en ssh dans un runner (pod)](#se-connecter-en-ssh-dans-un-runner-pod)
@@ -114,6 +116,27 @@ ls -al
 exit
 exit
 ```
+
+
+### En travail lancer la petite fusée d'un template dans le GUI de AWX
+https://awx-poc-vpsi.epfl.ch/#/login
+
+#### Puis récupérer les logs de la tâche (numéro) du template
+
+* Dans un browser en mode *humain*
+
+  https://awx-poc-vpsi.epfl.ch/api/v2/jobs/1219/stdout/
+
+* Dans un curl en mode *machine*
+
+  https://awx-poc-vpsi.epfl.ch/api/v2/jobs/1219/stdout/?format=txt
+
+```
+curl https://$username:$password@awx-poc-vpsi.epfl.ch/api/v2/jobs/1219/stdout/?format=txt
+```
+
+
+
 
 
 ### En travail, refaire l'image du ansible runner
