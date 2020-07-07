@@ -86,6 +86,63 @@ if (__name__ == "__main__"):
         a = 'TASK ['
         if zline[0:len(a)] == a :
 
+# ALT+CMD+F bascule du code au terminal
+
+# Récupération du nom de la Task
+            # print(zline)
+        
+# Est-ce la Task 'debug' ?
+
+            if zline.find(": debug") != -1 :
+                print(zline)
+
+# On passe à la ligne suivante
+            zline = zfile.readline()
+            i = i + 1
+
+# Récupération du path de la Task
+            print(zline)
+            
+            zpath = "/project/ansible/roles/wordpress-instance/tasks/"
+            ztask_path_2 = zline[zline.find(zpath)+len(zpath):-1]
+            if zdebug2 : print(str(i) + " ztask_path_2: [" + ztask_path_2 + "]")
+        
+        # # Recherche de la ligne "msg": "ztime...
+        # a = 'ztime, /'
+        # if zline.find(a) != -1 :
+        # 
+        #     print(zline)
+        
+            
+            """
+            TASK [../roles/wordpress-instance : debug] *************************************
+            task path: /tmp/awx_1219_b0giyx5k/project/ansible/roles/wordpress-instance/tasks/main.yml:1
+            ok: [test_migration_wp__labs__apc] => {
+                "msg": "main.yml canary200707.1133"
+            }
+            ok: [test_migration_wp__labs__aqua] => {
+                "msg": "main.yml canary200707.1133"
+            }
+            """
+            
+            
+            
+            
+            
+            
+
+
+
+
+        if zline == "" :
+            break
+
+    zfile.close()
+
+
+
+
+"""
 # Récupération du nom de la Task
             if zline.find(" : ") != -1 :
                 ztask_name_2 = zline[zline.find(" : ")+3:zline.find("] *")]
@@ -177,14 +234,12 @@ if (__name__ == "__main__"):
             ztask_line_1 = ztask_line_2
 
 
+"""
 
 
 
 
-        if zline == "" :
-            break
 
-    zfile.close()
 
 
 
