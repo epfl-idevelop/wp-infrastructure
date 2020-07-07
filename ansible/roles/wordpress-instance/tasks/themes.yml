@@ -1,11 +1,11 @@
 - debug:
-    msg: "themes.yml canary200707.1126"
+    msg: "themes.yml canary200707.1133"
   tags: always
 
 
 #zzz200707.1112
 - debug:
-    msg: "ztime, /include_vars/ start at {{ lookup('pipe','TZ=Europe/Paris date \"+%Y-%m-%d %H:%M:%S.%N\"') }}"
+    msg: "ztime, /include_vars/ {{ lookup('pipe','TZ=Europe/Paris date \"+%Y-%m-%d %H:%M:%S.%N\"') }}"
   tags: always
 
 - include_vars: wp-destructive.yml   # For wp_can
@@ -13,7 +13,7 @@
 
 #zzz200707.1112
 - debug:
-    msg: "ztime, /assert/ start at {{ lookup('pipe','TZ=Europe/Paris date \"+%Y-%m-%d %H:%M:%S.%N\"') }}"
+    msg: "ztime, /assert/ {{ lookup('pipe','TZ=Europe/Paris date \"+%Y-%m-%d %H:%M:%S.%N\"') }}"
   tags: always
 
 - assert:
@@ -22,7 +22,7 @@
 
 #zzz200707.1112
 - debug:
-    msg: "ztime, /include_vars/ start at {{ lookup('pipe','TZ=Europe/Paris date \"+%Y-%m-%d %H:%M:%S.%N\"') }}"
+    msg: "ztime, /include_vars/ {{ lookup('pipe','TZ=Europe/Paris date \"+%Y-%m-%d %H:%M:%S.%N\"') }}"
   tags: always
 
 - include_vars: theme-vars.yml
@@ -32,7 +32,7 @@
 
 #zzz200707.1112
 - debug:
-    msg: "ztime, /WordPress theme 2018/ start at {{ lookup('pipe','TZ=Europe/Paris date \"+%Y-%m-%d %H:%M:%S.%N\"') }}"
+    msg: "ztime, /WordPress theme 2018/ {{ lookup('pipe','TZ=Europe/Paris date \"+%Y-%m-%d %H:%M:%S.%N\"') }}"
   tags: always
 
 - name: WordPress theme 2018
@@ -43,7 +43,7 @@
 
 #zzz200707.1112
 - debug:
-    msg: "ztime, /WordPress theme 2018 (light)/ start at {{ lookup('pipe','TZ=Europe/Paris date \"+%Y-%m-%d %H:%M:%S.%N\"') }}"
+    msg: "ztime, /WordPress theme 2018 (light)/ {{ lookup('pipe','TZ=Europe/Paris date \"+%Y-%m-%d %H:%M:%S.%N\"') }}"
   tags: always
 
 - name: WordPress theme 2018 (light)
@@ -54,7 +54,7 @@
 
 #zzz200707.1112
 - debug:
-    msg: "ztime, /WordPress theme 2010/ start at {{ lookup('pipe','TZ=Europe/Paris date \"+%Y-%m-%d %H:%M:%S.%N\"') }}"
+    msg: "ztime, /WordPress theme 2010/ {{ lookup('pipe','TZ=Europe/Paris date \"+%Y-%m-%d %H:%M:%S.%N\"') }}"
   tags: always
 
 ### 2010 Themes
@@ -66,7 +66,7 @@
 
 #zzz200707.1112
 - debug:
-    msg: "ztime, /WordPress theme 2010 (blank)/ start at {{ lookup('pipe','TZ=Europe/Paris date \"+%Y-%m-%d %H:%M:%S.%N\"') }}"
+    msg: "ztime, /WordPress theme 2010 (blank)/ {{ lookup('pipe','TZ=Europe/Paris date \"+%Y-%m-%d %H:%M:%S.%N\"') }}"
   tags: always
 
 - name: WordPress theme 2010 (blank)

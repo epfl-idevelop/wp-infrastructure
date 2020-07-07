@@ -1,11 +1,11 @@
 - debug:
-    msg: "main.yml canary200707.1127"
+    msg: "main.yml canary200707.1133"
   tags: always
 
 
 #zzz200707.1112
 - debug:
-    msg: "ztime, /include_vars/ start at {{ lookup('pipe','TZ=Europe/Paris date \"+%Y-%m-%d %H:%M:%S.%N\"') }}"
+    msg: "ztime, /include_vars/ {{ lookup('pipe','TZ=Europe/Paris date \"+%Y-%m-%d %H:%M:%S.%N\"') }}"
   tags: always
       
 
@@ -47,7 +47,7 @@
 
 #zzz200707.1112
 - debug:
-    msg: "ztime, /wordpress_facts/ start at {{ lookup('pipe','TZ=Europe/Paris date \"+%Y-%m-%d %H:%M:%S.%N\"') }}"
+    msg: "ztime, /wordpress_facts/ {{ lookup('pipe','TZ=Europe/Paris date \"+%Y-%m-%d %H:%M:%S.%N\"') }}"
   tags: always
   
 - wordpress_facts:
@@ -111,7 +111,7 @@
 
 #zzz200707.1112
 - debug:
-    msg: "ztime, /Set up themes/ start at {{ lookup('pipe','TZ=Europe/Paris date \"+%Y-%m-%d %H:%M:%S.%N\"') }}"
+    msg: "ztime, /Set up themes/ {{ lookup('pipe','TZ=Europe/Paris date \"+%Y-%m-%d %H:%M:%S.%N\"') }}"
   tags: always
 
 - name: Set up themes
