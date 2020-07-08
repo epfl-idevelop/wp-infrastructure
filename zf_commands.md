@@ -1,5 +1,5 @@
 # Mes petits trucs à moi pour bien travailler ;-)
-#zf200707.1357
+#zf200708.0915
 
 <!-- TOC titleSize:2 tabSpaces:2 depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 skip:2 title:1 charForUnorderedList:* -->
 ## Table of Contents
@@ -137,6 +137,8 @@ https://awx-poc-vpsi.epfl.ch/#/login
 curl https://$ABC_DEF:$KLM_NOP@awx-poc-vpsi.epfl.ch/api/v2/jobs/1219/stdout/?format=txt > awx_logs.txt
 
 less awx_logs.txt
+
+./parse-ansible-out1.py awx_logs.txt
 ```
      
 #### Et enfin parser les logs avec le parser en python
