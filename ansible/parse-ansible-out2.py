@@ -89,6 +89,67 @@ if (__name__ == "__main__"):
 # ALT+CMD+F bascule du code au terminal
 
 
+
+    ztask = {
+            1:{
+                "name": "toto",
+                "site":{
+                    "toto":123,
+                    "tutu":234,
+                    "titi":345
+                    }
+                },
+            2:{
+                "name": "tutu",
+                "site":{
+                    "toto":1232,
+                    "tutu":2342,
+                    "titi":3452
+                    }
+                },
+            3:{
+                "name": "titi",
+                "site":{
+                    "toto":1233,
+                    "tutu":2343,
+                    "titi":3453
+                    }
+                }
+            }
+            
+    print(ztask)
+    print(ztask[2])
+    print(ztask[2]["site"]["tutu"])
+
+    ztask[4] = {
+                "name": "tata",
+                "site":{
+                    "toto":1234,
+                    "tutu":2344,
+                    "titi":3454
+                    }
+                }
+            
+
+    print(ztask)
+    print(ztask[4])
+    print(ztask[4]["site"]["tutu"])
+
+    quit()
+
+
+    # task1
+    #     site1, time1
+    #     site1, time1
+    # task2
+    #     site2, time2
+    #     site2, time2
+    # task3
+    #     site2, time2
+    #     site2, time2
+
+
+
     # On parse le fichier de logs
     while True:
         zline = zfile.readline()

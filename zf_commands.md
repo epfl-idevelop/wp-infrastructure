@@ -134,7 +134,7 @@ https://awx-poc-vpsi.epfl.ch/#/login
   https://awx-poc-vpsi.epfl.ch/api/v2/jobs/1219/stdout/?format=txt
 
 ```
-curl https://$ABC_DEF:$KLM_NOP@awx-poc-vpsi.epfl.ch/api/v2/jobs/1219/stdout/?format=txt > awx_logs.txt
+curl https://$ABC_DEF:$KLM_NOP@awx-poc-vpsi.epfl.ch/api/v2/jobs/1222/stdout/?format=txt > awx_logs.txt
 
 less awx_logs.txt
 
