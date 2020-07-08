@@ -4,7 +4,7 @@
 # Petit script pour parser les logs de Ansible dans ce project
 # sources: https://janakiev.com/blog/python-shell-commands/
 
-version = "parse-ansible-out1.py  zf200708.0955 "
+version = "parse-ansible-out1.py  zf200708.1204 "
 
 """
 génération du fichier logs:
@@ -163,36 +163,6 @@ if (__name__ == "__main__"):
                                         
                     else:
                         break
-
-            
-            
-            """
-            TASK [../roles/wordpress-instance : debug] *************************************
-            task path: /tmp/awx_1219_b0giyx5k/project/ansible/roles/wordpress-instance/tasks/main.yml:1
-            ok: [test_migration_wp__labs__apc] => {
-                "msg": "main.yml canary200707.1133"
-            }
-            ok: [test_migration_wp__labs__aqua] => {
-                "msg": "main.yml canary200707.1133"
-            }
-
-            TASK [../roles/wordpress-instance : debug] *************************************
-            task path: /tmp/awx_1219_b0giyx5k/project/ansible/roles/wordpress-instance/tasks/main.yml:7
-            ok: [test_migration_wp__labs__apc] => {
-                "msg": "ztime, /include_vars/ 2020-07-07 11:35:25.618007731"
-            }
-            ok: [test_migration_wp__labs__aqua] => {
-    "msg": "ztime, /include_vars/ 2020-07-07 11:35:25.627282382"
-            """
-            
-            
-            
-            
-            
-            
-
-
-
 
         if zline == "" :
             break
