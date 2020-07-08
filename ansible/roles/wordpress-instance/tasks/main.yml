@@ -1,5 +1,11 @@
 - debug:
-    msg: "main.yml canary200707.1133"
+    msg: "main.yml canary200708.1047"
+  tags: always
+
+
+#zzz200707.1112
+- debug:
+    msg: "ztime, /Playbook start/ {{ lookup('pipe','TZ=Europe/Paris date \"+%Y-%m-%d %H:%M:%S.%N\"') }}"
   tags: always
 
 
@@ -8,7 +14,6 @@
     msg: "ztime, /include_vars/ {{ lookup('pipe','TZ=Europe/Paris date \"+%Y-%m-%d %H:%M:%S.%N\"') }}"
   tags: always
       
-
 # file: roles/wordpress-instance/tasks/main.yml
 #
 # What to do to install and configure a WordPress instance
@@ -142,3 +147,8 @@
     - wp.menus
     - wp.menus.refresh
 
+
+#zzz200707.1112
+- debug:
+    msg: "ztime, /Playbook end/ {{ lookup('pipe','TZ=Europe/Paris date \"+%Y-%m-%d %H:%M:%S.%N\"') }}"
+  tags: always
