@@ -8,7 +8,7 @@
 import sys
 # import os
 import datetime
-version = "parse-ansible-out2.py  zf200709.1354 "
+version = "parse-ansible-out2.py  zf200709.1449 "
 
 """
 génération du fichier logs:
@@ -42,26 +42,24 @@ zdebug2 = False
 zprint_curl = True
 zsend_grafana = False
 
+db_logs = {}
+ztask_number = 0
+ztask_line = 0
+ztask_name = ""
+ztask_path = ""
+ztask_site = ""
 ztask_time = ""
-ztask_time_obj = 0
-ztask_time_0_obj = 0
-zclock = ""
-zclock_obj = 0
-zclock_0_obj = 0
-zduration = ""
 
-ztask_line_1 = 0
-ztask_name_1 = ""
-ztask_path_1 = ""
-ztask_site_1 = ""
-ztask_time_1_obj = 0
-ztask_duration_1_obj = 0
 
-ztask_line_2 = 0
-ztask_name_2 = ""
-ztask_path_2 = ""
-ztask_site_2 = ""
-ztask_time_2_obj = 0
+# ztask_time = ""
+# ztask_time_obj = 0
+# ztask_time_0_obj = 0
+# zclock = ""
+# zclock_obj = 0
+# zclock_0_obj = 0
+# zduration = ""
+# ztask_time_obj = 0
+# ztask_duration_1_obj = 0
 
 
 def zget_unix_time(zdate):
@@ -92,37 +90,37 @@ if (__name__ == "__main__"):
 
 # ALT+CMD+F bascule du code au terminal
 
-    db_logs = {}
-
-    db_logs[1] = {"ztask_name": "toto1", "ztask_path": "tutu1", "zsite_name": {}}
-    print("La db au complet: " + str(db_logs))
-
-    db_logs[1]["zsite_name"].update({"tata1": {"ztime_start": 123}})
-    db_logs[1]["zsite_name"].update({"tata2": {"ztime_start": 234}})
-    
-    print("La db au complet après l'ajout des 2x sites: " + str(db_logs))
-    print("La 1ère task: " + str(db_logs[1]))
-    print("Tous les sites de la 1ère task: " + str(db_logs[1]["zsite_name"]))
-    print("La time du site tata1: " + str(db_logs[1]["zsite_name"]["tata1"]["ztime_start"]))
-    print("\n")
-
-    db_logs[2] = {"ztask_name": "toto2", "ztask_path": "tutu2", "zsite_name": {}}
-    print("La db au complet: " + str(db_logs))
-
-    db_logs[2]["zsite_name"].update({"tata1": {"ztime_start": 345}})
-    db_logs[2]["zsite_name"].update({"tata2": {"ztime_start": 456}})
-    
-    print("La db au complet après l'ajout des 2x sites: " + str(db_logs))
-    print("La 2ème task: " + str(db_logs[2]))
-    print("Tous les sites de la 2ème task: " + str(db_logs[2]["zsite_name"]))
-    print("La time du site tata1: " + str(db_logs[2]["zsite_name"]["tata1"]["ztime_start"]))
-    print("\n")
-
-    db_logs[1]["zsite_name"]["tata1"].update({"ztime_duration": 1})
-    print("Tous les sites de la 1ère task: " + str(db_logs[1]["zsite_name"]))
-    print("La time du site tata1 de la task 1: " + str(db_logs[1]["zsite_name"]["tata1"]["ztime_duration"]))
-
-    quit()
+    # db_logs = {}
+    # 
+    # db_logs[1] = {"ztask_name": "toto1", "ztask_path": "tutu1", "zsite_name": {}}
+    # print("La db au complet: " + str(db_logs))
+    # 
+    # db_logs[1]["zsite_name"].update({"tata1": {"ztime_start": 123}})
+    # db_logs[1]["zsite_name"].update({"tata2": {"ztime_start": 234}})
+    # 
+    # print("La db au complet après l'ajout des 2x sites: " + str(db_logs))
+    # print("La 1ère task: " + str(db_logs[1]))
+    # print("Tous les sites de la 1ère task: " + str(db_logs[1]["zsite_name"]))
+    # print("La time du site tata1: " + str(db_logs[1]["zsite_name"]["tata1"]["ztime_start"]))
+    # print("\n")
+    # 
+    # db_logs[2] = {"ztask_name": "toto2", "ztask_path": "tutu2", "zsite_name": {}}
+    # print("La db au complet: " + str(db_logs))
+    # 
+    # db_logs[2]["zsite_name"].update({"tata1": {"ztime_start": 345}})
+    # db_logs[2]["zsite_name"].update({"tata2": {"ztime_start": 456}})
+    # 
+    # print("La db au complet après l'ajout des 2x sites: " + str(db_logs))
+    # print("La 2ème task: " + str(db_logs[2]))
+    # print("Tous les sites de la 2ème task: " + str(db_logs[2]["zsite_name"]))
+    # print("La time du site tata1: " + str(db_logs[2]["zsite_name"]["tata1"]["ztime_start"]))
+    # print("\n")
+    # 
+    # db_logs[1]["zsite_name"]["tata1"].update({"ztime_duration": 1})
+    # print("Tous les sites de la 1ère task: " + str(db_logs[1]["zsite_name"]))
+    # print("La time du site tata1 de la task 1: " + str(db_logs[1]["zsite_name"]["tata1"]["ztime_duration"]))
+    # 
+    # quit()
 
 
 # index: 1
@@ -158,6 +156,8 @@ if (__name__ == "__main__"):
             if zline.find(": debug") != -1:
                 if zdebug2:
                     print(str(i) + " " + zline)
+                ztask_number = ztask_number + 1
+                db_logs[ztask_number] = {"zsite_name": {}}
 
                 # On passe à la ligne suivante
                 zline = zfile.readline()
@@ -167,12 +167,13 @@ if (__name__ == "__main__"):
 
                 # Récupération du path de la Task
                 zpath = "/project/ansible/roles/wordpress-instance/tasks/"
-                ztask_path_1 = zline[zline.find(zpath) + len(zpath):-1]
+                ztask_path = zline[zline.find(zpath) + len(zpath):-1]
                 if zdebug2:
-                    print(str(i) + " ztask_path_1: [" + ztask_path_1 + "]")
+                    print(str(i) + " ztask_path: [" + ztask_path + "]")
+                db_logs[ztask_number].update({"ztask_path": ztask_path})
 
                 while True:
-                    if i > 2000000:
+                    if i > 200:
                         quit()
 
                     # On passe à la ligne suivante
@@ -185,10 +186,11 @@ if (__name__ == "__main__"):
                     if zline.find("ok: [") != -1:
 
                         # Récupération du nom du site
-                        ztask_site_1 = zline[1 + zline.find("["):zline.find("]")]
+                        ztask_site = zline[1 + zline.find("["):zline.find("]")]
                         if zdebug2:
                             print(
-                                str(i) + " ztask_site_1: [" + ztask_site_1 + "]")
+                                str(i) + " ztask_site: [" + ztask_site + "]")
+                        db_logs[ztask_number]["zsite_name"].update({ztask_site: {}})
 
                         # On passe à la ligne suivante
                         zline = zfile.readline()
@@ -202,28 +204,33 @@ if (__name__ == "__main__"):
                                 print("c'est une ligne ztime............")
 
                             # Récupération de la position dans le logs
-                            ztask_line_1 = i
+                            ztask_line = i
 
                             # Récupération du nom de la Task
-                            ztask_name_1 = zline[1 + zline.find(
+                            ztask_name = zline[1 + zline.find(
                                 "/"):zline.find("/", 1 + zline.find("/"))]
                             if zdebug2:
                                 print(
-                                    str(i) + " ztask_name_1: [" + ztask_name_1 + "]")
+                                    str(i) + " ztask_name: [" + ztask_name + "]")
+                            db_logs[ztask_number].update({"ztask_name": ztask_name})
 
                             # Récupération du time de la Task
-                            ztask_time_1 = zline[2 + zline.find("/ "):-2]
+                            ztask_time = zline[2 + zline.find("/ "):-2]
                             if zdebug2:
                                 print(
-                                    str(i) + " ztask_time_1: [" + ztask_time_1 + "]")
+                                    str(i) + " ztask_time: [" + ztask_time + "]")
+                            db_logs[ztask_number]["zsite_name"].update({ztask_site: {"ztime_start": ztask_time}})
+                            
 
                             print(
                                 "..................................................")
-                            print("Task name: " + str(ztask_line_1))
-                            print("Task name: " + ztask_name_1)
-                            print("Path name: " + ztask_path_1)
-                            print("Site name: " + ztask_site_1)
-                            print("Timestamp: " + ztask_time_1)
+                            print(str(db_logs[ztask_number]))
+                            print("Task number: " + ztask_number)
+                            print("Task line: " + str(ztask_line))
+                            print("Task name: " + db_logs[ztask_number]["ztask_name"])
+                            print("Path path: " + db_logs[ztask_number]["ztask_path"])
+                            print("Site name: " + ztask_site)
+                            print("Timestamp: " + db_logs[ztask_number]["zsite_name"][ztask_site]["ztime_start"])
                             print(
                                 "..................................................")
 
