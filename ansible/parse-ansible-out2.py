@@ -8,7 +8,7 @@
 import sys
 # import os
 import datetime
-version = "parse-ansible-out2.py  zf200709.1449 "
+version = "parse-ansible-out2.py  zf200709.1514 "
 
 """
 génération du fichier logs:
@@ -65,15 +65,12 @@ ztask_time = ""
 def zget_unix_time(zdate):
     #    date_time_obj = datetime.datetime.strptime(zdate, '%Y-%m-%d %H:%M:%S.%f')
     zdate_time_obj = zdate
-    if zdebug2:
-        print(" zdate_time_obj: [" + str(zdate_time_obj) + "]")
+    if zdebug2: print(" zdate_time_obj: [" + str(zdate_time_obj) + "]")
     zdate_time_1970_obj = datetime.datetime.strptime(
         "1970-01-01 01:00:00", '%Y-%m-%d %H:%M:%S')  # Astuce pour faire UTC-1 à cause de Grafana !
-    if zdebug2:
-        print(" zdate_time_1970_obj: [" + str(zdate_time_1970_obj) + "]")
+    if zdebug2: print(" zdate_time_1970_obj: [" + str(zdate_time_1970_obj) + "]")
     zdate_time_unix_obj = (zdate_time_obj - zdate_time_1970_obj)
-    if zdebug2:
-        print(" zdate_time_unix_obj: [" + str(zdate_time_unix_obj) + "]")
+    if zdebug2: print(" zdate_time_unix_obj: [" + str(zdate_time_unix_obj) + "]")
     return zdate_time_unix_obj
 
 
@@ -91,35 +88,35 @@ if (__name__ == "__main__"):
 # ALT+CMD+F bascule du code au terminal
 
     # db_logs = {}
-    # 
+    #
     # db_logs[1] = {"ztask_name": "toto1", "ztask_path": "tutu1", "zsite_name": {}}
     # print("La db au complet: " + str(db_logs))
-    # 
+    #
     # db_logs[1]["zsite_name"].update({"tata1": {"ztime_start": 123}})
     # db_logs[1]["zsite_name"].update({"tata2": {"ztime_start": 234}})
-    # 
+    #
     # print("La db au complet après l'ajout des 2x sites: " + str(db_logs))
     # print("La 1ère task: " + str(db_logs[1]))
     # print("Tous les sites de la 1ère task: " + str(db_logs[1]["zsite_name"]))
     # print("La time du site tata1: " + str(db_logs[1]["zsite_name"]["tata1"]["ztime_start"]))
     # print("\n")
-    # 
+    #
     # db_logs[2] = {"ztask_name": "toto2", "ztask_path": "tutu2", "zsite_name": {}}
     # print("La db au complet: " + str(db_logs))
-    # 
+    #
     # db_logs[2]["zsite_name"].update({"tata1": {"ztime_start": 345}})
     # db_logs[2]["zsite_name"].update({"tata2": {"ztime_start": 456}})
-    # 
+    #
     # print("La db au complet après l'ajout des 2x sites: " + str(db_logs))
     # print("La 2ème task: " + str(db_logs[2]))
     # print("Tous les sites de la 2ème task: " + str(db_logs[2]["zsite_name"]))
     # print("La time du site tata1: " + str(db_logs[2]["zsite_name"]["tata1"]["ztime_start"]))
     # print("\n")
-    # 
+    #
     # db_logs[1]["zsite_name"]["tata1"].update({"ztime_duration": 1})
     # print("Tous les sites de la 1ère task: " + str(db_logs[1]["zsite_name"]))
     # print("La time du site tata1 de la task 1: " + str(db_logs[1]["zsite_name"]["tata1"]["ztime_duration"]))
-    # 
+    #
     # quit()
 
 
@@ -142,7 +139,6 @@ if (__name__ == "__main__"):
 #             time_start: 234
 #             time_duree: 23
 
-
     # On parse le fichier de logs
     while True:
         zline = zfile.readline()
@@ -154,91 +150,80 @@ if (__name__ == "__main__"):
 
             # Est-ce la Task 'debug' ?
             if zline.find(": debug") != -1:
-                if zdebug2:
-                    print(str(i) + " " + zline)
+                if zdebug2: print(str(i) + " " + zline)
                 ztask_number = ztask_number + 1
                 db_logs[ztask_number] = {"zsite_name": {}}
 
                 # On passe à la ligne suivante
                 zline = zfile.readline()
                 i = i + 1
-                if zdebug2:
-                    print(str(i) + " " + zline)
+                if zdebug2: print(str(i) + " " + zline)
 
                 # Récupération du path de la Task
                 zpath = "/project/ansible/roles/wordpress-instance/tasks/"
                 ztask_path = zline[zline.find(zpath) + len(zpath):-1]
-                if zdebug2:
-                    print(str(i) + " ztask_path: [" + ztask_path + "]")
+                if zdebug2: print(str(i) + " ztask_path: [" + ztask_path + "]")
                 db_logs[ztask_number].update({"ztask_path": ztask_path})
 
                 while True:
-                    if i > 200:
+                    if i > 200000000:
                         quit()
 
                     # On passe à la ligne suivante
                     zline = zfile.readline()
                     i = i + 1
-                    if zdebug2:
-                        print(str(i) + " " + zline)
+                    if zdebug2: print(str(i) + " " + zline)
 
                     # Est-ce une ligne ok: [site name] ?
                     if zline.find("ok: [") != -1:
 
                         # Récupération du nom du site
                         ztask_site = zline[1 + zline.find("["):zline.find("]")]
-                        if zdebug2:
-                            print(
-                                str(i) + " ztask_site: [" + ztask_site + "]")
-                        db_logs[ztask_number]["zsite_name"].update({ztask_site: {}})
+                        if zdebug2: print(str(i) + " ztask_site: [" + ztask_site + "]")
+                        db_logs[ztask_number]["zsite_name"].update(
+                            {ztask_site: {}})
 
                         # On passe à la ligne suivante
                         zline = zfile.readline()
                         i = i + 1
-                        if zdebug2:
-                            print(str(i) + " " + zline)
+                        if zdebug2: print(str(i) + " " + zline)
 
                         # Est-ce la ligne 'ztime' ?
                         if zline.find("ztime, ") != -1:
-                            if zdebug2:
-                                print("c'est une ligne ztime............")
+                            if zdebug2: print("c'est une ligne ztime............")
 
                             # Récupération de la position dans le logs
                             ztask_line = i
+                            db_logs[ztask_number]["zsite_name"][ztask_site].update(
+                                {"ztask_line": ztask_line})
 
                             # Récupération du nom de la Task
                             ztask_name = zline[1 + zline.find(
                                 "/"):zline.find("/", 1 + zline.find("/"))]
-                            if zdebug2:
-                                print(
-                                    str(i) + " ztask_name: [" + ztask_name + "]")
-                            db_logs[ztask_number].update({"ztask_name": ztask_name})
+                            if zdebug2: print(str(i) + " ztask_name: [" + ztask_name + "]")
+                            db_logs[ztask_number].update(
+                                {"ztask_name": ztask_name})
 
                             # Récupération du time de la Task
                             ztask_time = zline[2 + zline.find("/ "):-2]
-                            if zdebug2:
-                                print(
-                                    str(i) + " ztask_time: [" + ztask_time + "]")
-                            db_logs[ztask_number]["zsite_name"].update({ztask_site: {"ztime_start": ztask_time}})
-                            
+                            if zdebug2: print(str(i) + " ztask_time: [" + ztask_time + "]")
+                            db_logs[ztask_number]["zsite_name"][ztask_site].update(
+                                {"ztime_start": ztask_time})
 
-                            print(
-                                "..................................................")
+                            print("..................................................")
                             print(str(db_logs[ztask_number]))
-                            print("Task number: " + ztask_number)
-                            print("Task line: " + str(ztask_line))
+                            print("Task number: " + str(ztask_number))
+                            print("Task line: " + str(db_logs[ztask_number]["zsite_name"][ztask_site]["ztask_line"]))
                             print("Task name: " + db_logs[ztask_number]["ztask_name"])
                             print("Path path: " + db_logs[ztask_number]["ztask_path"])
                             print("Site name: " + ztask_site)
                             print("Timestamp: " + db_logs[ztask_number]["zsite_name"][ztask_site]["ztime_start"])
-                            print(
-                                "..................................................")
+                            print("..................................................")
 
                             # On passe à la ligne suivante
                             zline = zfile.readline()
                             i = i + 1
-                            if zdebug2:
-                                print(str(i) + " " + zline)
+                            if zdebug2: print(str(i) + " " + zline)
 
                     else:
                         break
