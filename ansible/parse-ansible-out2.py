@@ -8,7 +8,7 @@
 import sys
 # import os
 import datetime
-version = "parse-ansible-out2.py  zf200708.1211 "
+version = "parse-ansible-out2.py  zf200709.1354 "
 
 """
 génération du fichier logs:
@@ -92,83 +92,58 @@ if (__name__ == "__main__"):
 
 # ALT+CMD+F bascule du code au terminal
 
-    # ztask = {
-    #         1:{
-    #             "name": "toto",
-    #             "site":{
-    #                 "toto":123,
-    #                 "tutu":234,
-    #                 "titi":345
-    #                 }
-    #             },
-    #         2:{
-    #             "name": "tutu",
-    #             "site":{
-    #                 "toto":1232,
-    #                 "tutu":2342,
-    #                 "titi":3452
-    #                 }
-    #             },
-    #         3:{
-    #             "name": "titi",
-    #             "site":{
-    #                 "toto":1233,
-    #                 "tutu":2343,
-    #                 "titi":3453
-    #                 }
-    #             }
-    #         }
-    #
-    # print(ztask)
-    # print(ztask[2])
-    # print(ztask[2]["site"]["tutu"])
-    #
-    # ztask[4] = {
-    #             "name": "tata",
-    #             "site":{
-    #                 "toto":1234,
-    #                 "tutu":2344,
-    #                 "titi":3454
-    #                 }
-    #             }
-    #
-    #
-    # print(ztask)
-    # print(ztask[4])
-    # print(ztask[4]["site"]["tutu"])
-    #
-    # ztask[5] = {"name": "tata","site":{"toto":1235,"tutu":2345,"titi":3455}}
-    # print(ztask)
-    # print(ztask[5])
-    # print(ztask[5]["site"]["tutu"])
-    #
-    # ztask[5]["site"].update({"tata":4565})
-    #
-    # print(ztask[5])
-    # print(ztask[5]["site"]["tata"])
-
     db_logs = {}
 
-    db_logs[1] = {"ztask_name": "toto", "ztask_site": {}}
-    print(db_logs)
+    db_logs[1] = {"ztask_name": "toto1", "ztask_path": "tutu1", "zsite_name": {}}
+    print("La db au complet: " + str(db_logs))
 
-    db_logs[1]["ztask_site"].update({"toto1": 123})
-    print(db_logs)
+    db_logs[1]["zsite_name"].update({"tata1": {"ztime_start": 123}})
+    db_logs[1]["zsite_name"].update({"tata2": {"ztime_start": 234}})
+    
+    print("La db au complet après l'ajout des 2x sites: " + str(db_logs))
+    print("La 1ère task: " + str(db_logs[1]))
+    print("Tous les sites de la 1ère task: " + str(db_logs[1]["zsite_name"]))
+    print("La time du site tata1: " + str(db_logs[1]["zsite_name"]["tata1"]["ztime_start"]))
+    print("\n")
 
-    db_logs[1]["ztask_site"].update({"toto2": 234})
-    print(db_logs)
+    db_logs[2] = {"ztask_name": "toto2", "ztask_path": "tutu2", "zsite_name": {}}
+    print("La db au complet: " + str(db_logs))
+
+    db_logs[2]["zsite_name"].update({"tata1": {"ztime_start": 345}})
+    db_logs[2]["zsite_name"].update({"tata2": {"ztime_start": 456}})
+    
+    print("La db au complet après l'ajout des 2x sites: " + str(db_logs))
+    print("La 2ème task: " + str(db_logs[2]))
+    print("Tous les sites de la 2ème task: " + str(db_logs[2]["zsite_name"]))
+    print("La time du site tata1: " + str(db_logs[2]["zsite_name"]["tata1"]["ztime_start"]))
+    print("\n")
+
+    db_logs[1]["zsite_name"]["tata1"].update({"ztime_duration": 1})
+    print("Tous les sites de la 1ère task: " + str(db_logs[1]["zsite_name"]))
+    print("La time du site tata1 de la task 1: " + str(db_logs[1]["zsite_name"]["tata1"]["ztime_duration"]))
 
     quit()
 
-    # task1
-    #     site1, time1
-    #     site1, time1
-    # task2
-    #     site2, time2
-    #     site2, time2
-    # task3
-    #     site2, time2
-    #     site2, time2
+
+# index: 1
+#     task_name: toto1
+#         task_path: tutu1
+#         site_name: tata1
+#             time_start: 123
+#             time_duree: 12
+#         site_name: tata2
+#             time_start: 234
+#             time_duree: 23
+# index: 2
+#     task_name: toto1
+#         task_path: tutu1
+#         site_name: tata1
+#             time_start: 123
+#             time_duree: 12
+#         site_name: tata2
+#             time_start: 234
+#             time_duree: 23
+
 
     # On parse le fichier de logs
     while True:
