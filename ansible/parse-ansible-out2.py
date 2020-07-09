@@ -8,7 +8,7 @@
 import sys
 # import os
 import datetime
-version = "parse-ansible-out2.py  zf200709.1514 "
+version = "parse-ansible-out2.py  zf200709.1820 "
 
 """
 génération du fichier logs:
@@ -211,7 +211,7 @@ if (__name__ == "__main__"):
                                 {"ztime_start": ztask_time})
 
                             print("..................................................")
-                            print(str(db_logs[ztask_number]))
+                            # print(str(db_logs[ztask_number]))
                             print("Task number: " + str(ztask_number))
                             print("Task line: " + str(db_logs[ztask_number]["zsite_name"][ztask_site]["ztask_line"]))
                             print("Task name: " + db_logs[ztask_number]["ztask_name"])
@@ -224,6 +224,9 @@ if (__name__ == "__main__"):
                             zline = zfile.readline()
                             i = i + 1
                             if zdebug2: print(str(i) + " " + zline)
+                        else:
+                            # Ce n'est pas une task debug avec un ztime, on recule donc le pointeur du dictionnaire
+                            ztask_number = ztask_number - 1
 
                     else:
                         break
@@ -232,3 +235,62 @@ if (__name__ == "__main__"):
             break
 
     zfile.close()
+    
+    # index: 1
+    #     task_name: toto1
+    #         task_path: tutu1
+    #         site_name: tata1
+    #             time_start: 123
+    #             time_duree: 12
+    #         site_name: tata2
+    #             time_start: 234
+    #             time_duree: 23
+    # index: 2
+    #     task_name: toto1
+    #         task_path: tutu1
+    #         site_name: tata1
+    #             time_start: 123
+    #             time_duree: 12
+    #         site_name: tata2
+    #             time_start: 234
+    #             time_duree: 23
+
+    # Calcul les duration pour chaque sites
+    for i in range(1, ztask_number):
+        print(str(i))
+    
+        for j in db_logs[i]["zsite_name"]:
+            print(j + ": " + db_logs[i]["zsite_name"][j]["ztime_start"])
+            
+            ztask_time_1 = db_logs[i]["zsite_name"][j]["ztime_start"][0:-3]
+            # print("moins les nano secondes" + ztask_time[0:-3])
+            ztask_time_obj_1 = datetime.datetime.strptime(ztask_time_1, '%Y-%m-%d %H:%M:%S.%f')
+            ztask_unix_time_nano_1 = zget_unix_time(ztask_time_obj_1).total_seconds()
+            print("ztask_unix_time_nano_1: " + str(ztask_unix_time_nano_1))
+            
+            ztask_time_2 = db_logs[i+1]["zsite_name"][j]["ztime_start"][0:-3]
+            # print("moins les nano secondes" + ztask_time[0:-3])
+            ztask_time_obj_2 = datetime.datetime.strptime(ztask_time_2, '%Y-%m-%d %H:%M:%S.%f')
+            ztask_unix_time_nano_2 = zget_unix_time(ztask_time_obj_2).total_seconds()
+            print("ztask_unix_time_nano_2: " + str(ztask_unix_time_nano_2))
+            
+            print("Durée: " + str(ztask_unix_time_nano_2 - ztask_unix_time_nano_1))
+
+            
+            # # ztask_unix_time_nano = zget_unix_time(ztask_time_obj).total_seconds()*1000000000
+            # ztask_unix_time_nano = zget_unix_time(ztask_time_obj).total_seconds()
+            # zdate_time_obj_1900 = zget_unix_time(datetime.datetime.strptime("1900-01-01 00:00:00", '%Y-%m-%d %H:%M:%S')).total_seconds()
+            
+            
+                # ztask_time_obj = datetime.datetime.strptime(ztask_time, '%d %B %Y %H:%M:%S')
+                # ztask_time_2_obj = ztask_time_0_obj + (zclock_obj - zclock_0_obj)
+
+                # ztask_unix_time_nano = zget_unix_time(ztask_time_1_obj).total_seconds()*1000000000
+                # zdate_time_obj_1900 = datetime.datetime.strptime("1900-01-01 00:00:00", '%Y-%m-%d %H:%M:%S')
+                # ztask_duration = (ztask_duration_1_obj - zdate_time_obj_1900).total_seconds()
+
+            # print("time 1990: " + str(zdate_time_obj_1900))
+            # print("Durée: " + str(ztask_unix_time_nano))
+            # print("durée: " + str(zget_unix_time(db_logs[i+1]["zsite_name"][j]["ztime_start"])))
+    
+    
