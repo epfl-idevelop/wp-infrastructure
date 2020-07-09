@@ -1,5 +1,5 @@
 # Mes petits trucs à moi pour bien travailler ;-)
-#zf200708.0915
+#zf200709.1534
 
 <!-- TOC titleSize:2 tabSpaces:2 depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 skip:2 title:1 charForUnorderedList:* -->
 ## Table of Contents
@@ -134,11 +134,23 @@ https://awx-poc-vpsi.epfl.ch/#/login
   https://awx-poc-vpsi.epfl.ch/api/v2/jobs/1219/stdout/?format=txt
 
 ```
-curl https://$ABC_DEF:$KLM_NOP@awx-poc-vpsi.epfl.ch/api/v2/jobs/1222/stdout/?format=txt > awx_logs.txt
+curl https://$ABC_DEF:$KLM_NOP@awx-poc-vpsi.epfl.ch/api/v2/jobs/1222/stdout/?format=txt > awx_logs_2_sites_1_pods.txt
+curl https://$ABC_DEF:$KLM_NOP@awx-poc-vpsi.epfl.ch/api/v2/jobs/1241/stdout/?format=txt > awx_logs_10_sites_1_pods.txt
+curl https://$ABC_DEF:$KLM_NOP@awx-poc-vpsi.epfl.ch/api/v2/jobs/1225/stdout/?format=txt_download > awx_logs_347_sites_1_pods.txt
+curl https://$ABC_DEF:$KLM_NOP@awx-poc-vpsi.epfl.ch/api/v2/jobs/1229/stdout/?format=txt_download > awx_logs_347_sites_10_pods_1.txt
+curl https://$ABC_DEF:$KLM_NOP@awx-poc-vpsi.epfl.ch/api/v2/jobs/1230/stdout/?format=txt_download > awx_logs_347_sites_10_pods_2.txt
+curl https://$ABC_DEF:$KLM_NOP@awx-poc-vpsi.epfl.ch/api/v2/jobs/1231/stdout/?format=txt_download > awx_logs_347_sites_10_pods_3.txt
+curl https://$ABC_DEF:$KLM_NOP@awx-poc-vpsi.epfl.ch/api/v2/jobs/1232/stdout/?format=txt_download > awx_logs_347_sites_10_pods_4.txt
+curl https://$ABC_DEF:$KLM_NOP@awx-poc-vpsi.epfl.ch/api/v2/jobs/1233/stdout/?format=txt_download > awx_logs_347_sites_10_pods_5.txt
+curl https://$ABC_DEF:$KLM_NOP@awx-poc-vpsi.epfl.ch/api/v2/jobs/1234/stdout/?format=txt_download > awx_logs_347_sites_10_pods_6.txt
+curl https://$ABC_DEF:$KLM_NOP@awx-poc-vpsi.epfl.ch/api/v2/jobs/1235/stdout/?format=txt_download > awx_logs_347_sites_10_pods_7.txt
+curl https://$ABC_DEF:$KLM_NOP@awx-poc-vpsi.epfl.ch/api/v2/jobs/1236/stdout/?format=txt_download > awx_logs_347_sites_10_pods_8.txt
+curl https://$ABC_DEF:$KLM_NOP@awx-poc-vpsi.epfl.ch/api/v2/jobs/1237/stdout/?format=txt_download > awx_logs_347_sites_10_pods_9.txt
+curl https://$ABC_DEF:$KLM_NOP@awx-poc-vpsi.epfl.ch/api/v2/jobs/1238/stdout/?format=txt_download > awx_logs_347_sites_10_pods_10.txt
 
 less awx_logs.txt
 
-./parse-ansible-out1.py awx_logs.txt
+./parse-ansible-out1.py awx_logs_2_sites_1_pods.txt
 ```
      
 #### Et enfin parser les logs avec le parser en python

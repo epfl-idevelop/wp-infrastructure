@@ -9,4 +9,4 @@ ansible/state
 node_modules/
 .DS_Store
 ansible-deps-cache
-awx_logs.txt
+awx_logs*.txt
