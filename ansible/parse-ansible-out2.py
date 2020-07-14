@@ -10,7 +10,7 @@ import sys
 import os
 import datetime
 
-version = "parse-ansible-out2.py  zf200714.1146 "
+version = "parse-ansible-out2.py  zf200714.1511 "
 
 """
 génération du fichier logs:
@@ -24,6 +24,7 @@ curl https://$ABC_DEF:$KLM_NOP@awx-poc-vpsi.epfl.ch/api/v2/jobs/1219/stdout/?for
 
 reset
 ./parse-ansible-out2.py awx_logs_2_sites_1_pods.txt
+./parse-ansible-out2.py awx_logs_10_sites_1_pods.txt
 
 Puis voir le résultat dans un browser
 http://noc-tst.idev-fsd.ml:9092/
@@ -266,6 +267,7 @@ if (__name__ == "__main__"):
             ztask_site_1 = j
             
             ztask_name = ztask_name_1.replace(" ", "_") + "_" + str(ztask_line_1)
+            ztask_name = ztask_name_1.replace(" ", "_")
             ztask_path = ztask_path_1.replace(" ", "_")
             ztask_path = ztask_path.replace(":", "_")
             ztask_path = ztask_path.replace(".", "_")
