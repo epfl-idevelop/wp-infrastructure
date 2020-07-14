@@ -10,7 +10,7 @@ import sys
 import os
 import datetime
 
-version = "parse-ansible-out2.py  zf200714.0957 "
+version = "parse-ansible-out2.py  zf200714.1122 "
 
 """
 génération du fichier logs:
@@ -268,19 +268,21 @@ if (__name__ == "__main__"):
             ztask_path = ztask_path_1.replace(" ", "_")
             ztask_path = ztask_path.replace(":", "_")
             ztask_path = ztask_path.replace(".", "_")
-            # 
-            ztask_unix_time_nano = db_logs[i]["zsite_name"][j]["ztask_time"]*1000000000
+            
+            ztask_time_1 = db_logs[i]["zsite_name"][j]["ztask_time"][0:-3]
+            ztask_time_obj_1 = datetime.datetime.strptime(ztask_time_1, '%Y-%m-%d %H:%M:%S.%f')
+            ztask_unix_time_1 = zget_unix_time(ztask_time_obj_1).total_seconds()
+            ztask_unix_time_nano = ztask_unix_time_1 * 1000000000
+            
+            ztask_duration = db_logs[i]["zsite_name"][j]["ztask_duration"]
 
-            # zdate_time_obj_1900 = datetime.datetime.strptime("1900-01-01 00:00:00", '%Y-%m-%d %H:%M:%S')
-            # ztask_duration = db_logs[i]["zsite_name"][j]["ztask_duration"]
-
-            # zcmd = 'curl -i -XPOST "$dbflux_srv_host:$dbflux_srv_port/write?db=$dbflux_db&u=$dbflux_u_user&p=$dbflux_p_user"  --data-binary "' + ztable + ',action=' + ztask_path + ',task=' + ztask_name + ' duration=' + str(ztask_duration) + ' ' + '%0.0f' % (ztask_unix_time_nano) + '"'
-            # if zprint_curl: print(zcmd)
-            # 
-            # if zsend_grafana:
-            #     zerr = os.system(zcmd)
-            #     if zerr != 0:
-            #         print(zerr)
+            zcmd = 'curl -i -XPOST "$dbflux_srv_host:$dbflux_srv_port/write?db=$dbflux_db&u=$dbflux_u_user&p=$dbflux_p_user"  --data-binary "' + ztable + ',action=' + ztask_path + ',task=' + ztask_name + ' duration=' + str(ztask_duration) + ' ' + '%0.0f' % (ztask_unix_time_nano) + '"'
+            if zprint_curl: print(zcmd)
+            
+            if zsend_grafana:
+                zerr = os.system(zcmd)
+                if zerr != 0:
+                    print(zerr)
 
 
 
