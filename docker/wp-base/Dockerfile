@@ -1,7 +1,7 @@
-FROM ubuntu:bionic
+FROM ubuntu:focal
 
 # Version pins are defined here:
-ENV PHP_VERSION=7.3
+ENV PHP_VERSION=7.4
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -11,11 +11,7 @@ RUN apt-get -qy update && \
     apt-get -qy autoremove && \
     apt-get clean
 
-RUN curl -sL https://deb.nodesource.com/setup_12.x | bash -
-
-# “The main PPA for supported PHP versions[...]”, see
-# https://launchpad.net/~ondrej/+archive/ubuntu/php
-RUN add-apt-repository ppa:ondrej/php; rm -rf /tmp/tmp*
+RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
 
 RUN apt-get -qy update && apt-get  -qy install --no-install-recommends \
     composer \
@@ -49,22 +45,12 @@ RUN apt-get -qy update && apt-get  -qy install --no-install-recommends \
 ARG GITHUB_API_USER
 ARG GITHUB_API_TOKEN
 
-# Download latest WP-CLI in the 1.5.x branch (otherwise diggy/polylang-cli
-# won't install):
-RUN set -x;                                                              \
-   curl -o /usr/local/bin/wp -L                                          \
-        $(curl $(if [ -n "${GITHUB_API_TOKEN}" ]; then                   \
-                echo -u "${GITHUB_API_USER}":"${GITHUB_API_TOKEN}";      \
-              fi)                                                        \
-        https://api.github.com/repos/wp-cli/wp-cli/releases              \
-       | jq -r 'if type == "object" then error                           \
-                else [.[] | select (.tag_name | startswith("v1.5"))][0]  \
-                          | .assets[0].browser_download_url              \
-                end')
+# Download latest WP-CLI:
+RUN curl -o /usr/local/bin/wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
 RUN chmod 755 /usr/local/bin/wp
 
 # Add Polylang-related extension packages to wp-cli
-COPY ./config.yml /var/www/.wp-cli/config.yml
+COPY ./wp-cli-config.yml /var/www/.wp-cli/config.yml
 RUN mkdir /var/www/.composer; \
     chown -R www-data:www-data /var/www/.wp-cli /var/www/.composer
 RUN su -s /bin/sh www-data -c " \
@@ -72,9 +58,9 @@ RUN su -s /bin/sh www-data -c " \
     if [ -n '${GITHUB_API_TOKEN}' ]; then                                 \
         composer config -g github-oauth.github.com '${GITHUB_API_TOKEN}'; \
     fi;                                                                   \
-    wp package install https://github.com/diggy/polylang-cli.git ;        \
-    wp package install https://github.com/epfl-si/wp-cli-polylang.git;    \
-    wp package install https://github.com/epfl-si/wp-cli.git;       \
+    wp package install https://github.com/epfl-si/polylang-cli/archive/master.zip ;     \
+    wp package install https://github.com/epfl-si/wp-cli-polylang/archive/master.zip;   \
+    wp package install https://github.com/epfl-si/wp-cli/archive/master.zip;            \
     rm -f ~/.composer/auth.json"
 
 
@@ -83,7 +69,7 @@ RUN su -s /bin/sh www-data -c " \
 ######################################################################
 # Install multiple versions of WordPress into /wp/, and patch them to
 # support our symlink-based serving layout
-ARG WORDPRESS_VERSION_LINEAGES="4.9 5.2 5.3"
+ARG WORDPRESS_VERSION_LINEAGES="4.9 5.2 5.3 5.4"
 RUN set -x;                                                              \
     for lineage in ${WORDPRESS_VERSION_LINEAGES}; do                     \
         version=$(curl https://api.wordpress.org/core/version-check/1.7/ \
@@ -116,7 +102,8 @@ RUN set -e -x;                                                           \
 ######################################################################
 
 ADD install-plugins-and-themes.py clearstatcache-wp-import.patch /tmp/
-# Get all plugins and themes ("auto" mode) from the jahia2wp manifest;
+# Get all plugins and themes (in "auto" mode) out of the Ansible
+# `plugins.yml` file:
 ARG INSTALL_AUTO_FLAGS
 RUN set -e -x; for wp in /wp/*; do cd $wp ;                              \
         /tmp/install-plugins-and-themes.py auto ${INSTALL_AUTO_FLAGS};   \

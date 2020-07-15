@@ -10,7 +10,6 @@
 - assert:
     that: wp_can.configure or ansible_check_mode
 
-
 - include_vars: "{{ item }}"
   tags: always
   with_items:
@@ -27,6 +26,61 @@
     - akismet
     - hello
 
+- name: Enumerate active plugins
+  shell:
+    chdir: "{{ wp_dir }}"
+    cmd: "wp plugin list --status=active --field=name"
+  register: _active_plugins
+  changed_when: false
+  check_mode: no
+  tags: always
+
+- name: Was “coming soon” plug-in active?
+  check_mode: no   # That means yes
+  shell:
+    chdir: "{{ wp_dir }}"
+    cmd: wp plugin list --name=coming-soon --status=active --format=count
+  changed_when: false
+  tags: wp.plugins.coming-soon
+  register: _coming_soon_plugin_was_active
+
+- name: Enable Coming Soon on new sites
+  wordpress_option: "{{ item }}"
+  with_items: "{{ plugin_coming_soon_options }}"
+  vars:
+    plugin_coming_soon_shall_be_enabled: true
+  when: >-
+    _active_plugins.stdout == ""
+  tags: wp.plugins.coming-soon
+
+# We changed the standard operating procedure around mid-2020
+# regarding Coming Soon's configuration management. Turning it off
+# through its configuration (as opposed to uninstalling the plug-in,
+# as we did before) empowers the user and lets them turn Coming Soon
+# mode back on at will. The following task is intended to migrate
+# WordPress sites to the new way of doing things, without turning
+# Coming Soon back on inadvertently (in case the old config was still
+# lingering in the wp_options table despite the plug-in having been
+# uninstalled). Once this task has run on the entire fleet, it ought
+# to be removed.
+- name: Disable Coming Soon on sites where the plug-in was previously inactive
+  wordpress_option: "{{ item }}"
+  with_items: "{{ plugin_coming_soon_options }}"
+  vars:
+    plugin_coming_soon_shall_be_enabled: false
+  when: >-
+    _active_plugins.stdout != "" and _coming_soon_plugin_was_active.stdout == "0"
+  tags: wp.plugins.coming-soon
+
+- name: Coming Soon plugin (always installed)
+  wordpress_plugin:
+    name: coming-soon
+    state:
+      - symlinked
+      - active
+    from: wordpress.org/plugins
+  tags: wp.plugins.coming-soon
+
 ##################### Must-use plugins ###########################
 
 - name: Custom editor menu (must-use plugin)
@@ -38,14 +92,12 @@
       - https://github.com/epfl-si/wp-mu-plugins/blob/master/epfl-custom-editor-menu
       - https://github.com/epfl-si/wp-mu-plugins/blob/master/EPFL_custom_editor_menu_loader.php
 
-
 - name: Blocks white-list (must-use plugin)
   wordpress_plugin:
     name: EPFL_block_white_list
     is_mu: yes
     state: '{{ "symlinked" if wp_is_managed else "absent" }}'
     from: https://github.com/epfl-si/wp-mu-plugins/blob/master/EPFL_block_white_list.php
-
 
 - name: Disable comments (must-use plugin)
   wordpress_plugin:
@@ -148,11 +200,23 @@
       - active
     from: wordpress.org/plugins
 
-- name: Coming Soon plugin
-  wordpress_plugin:
-    name: coming-soon
-    state: symlinked
-    from: wordpress.org/plugins
+- name: Count Polylang languages
+  shell: |
+    {{ wp_cli_command }} pll lang list --field=term_id --format=csv
+  changed_when: false
+  register: _polylang_languages_csv
+  tags: plugins.polylang
+  check_mode: no
+
+- name: Polylang translations (taglines, date formats etc)
+  wordpress_polylang_language:
+    state: present
+    language: "{{ item }}"
+  with_items: "{{ lookup('wpveritas', 'languages') | languages_in_order }}"
+  tags: plugins.polylang
+  # We don't want to resurrect languages that the user deleted:
+  when: |-
+    _polylang_languages_csv.stdout == ""
 
 - name: mainwp-child plugin
   wordpress_plugin:
@@ -198,11 +262,11 @@
 
 - name: Cache-Control plugin
   wordpress_plugin:
-    name: cache-control
+    name: epfl-cache-control
     state:
       - symlinked
       - active
-    from: https://github.com/epfl-si/jahia2wp/tree/release2018/data/wp/wp-content/plugins/cache-control
+    from: https://github.com/epfl-si/jahia2wp/tree/release2018/data/wp/wp-content/plugins/epfl-cache-control
 
 - name: Cache-Control options
   wordpress_option: "{{ item }}"
@@ -236,17 +300,13 @@
       - active
     from: wordpress.org/plugins
 
-- name: SVG-support plugin options
-  wordpress_option: "{{ item }}"
-  with_items: "{{ plugin_svg_support_options }}"
-
 - name: remote-content-shortcode plugin
   wordpress_plugin:
-    name: remote-content-shortcode
+    name: epfl-remote-content-shortcode
     state:
       - symlinked
       - active
-    from: https://github.com/epfl-si/jahia2wp/tree/release2018/data/wp/wp-content/plugins/remote-content-shortcode
+    from: https://github.com/epfl-si/jahia2wp/tree/release2018/data/wp/wp-content/plugins/epfl-remote-content-shortcode
 
 - name: shortcode-ui plugin
   wordpress_plugin:
@@ -268,7 +328,6 @@
     state: >-
       {{ "absent" if plugins_use_gutenberg else [ "symlinked", "active" ]  }}
     from: https://github.com/epfl-si/jahia2wp/tree/release2018/data/wp/wp-content/plugins/epfl
-
 
 - name: EPFL Gutenberg plugin
   wordpress_plugin:
@@ -337,7 +396,6 @@
 - name: enlighter configuration
   wordpress_option: "{{ item }}"
   with_items: "{{ plugin_enlighter_options }}"
-
 
 ##################### 2010-only plugins ###########################
 
@@ -478,12 +536,28 @@
     name: epfl-intranet
     state: "{{ plugins_for_inside_category }}"
     from: https://github.com/epfl-si/wp-plugin-epfl-intranet
+  tags:
+    - plugins.intranet
 
 - name: epfl-intranet status
-  wordpress_plugin_epfl_intranet: 
-    protection_enabled: '{{ "yes" if wp_site_category == "Inside" else "no" }}'
+  wordpress_plugin_epfl_intranet:
+    protection_enabled: '{{ "yes" if "Inside" in wp_site_categories else "no" }}'
     restrict_to_groups: ''
-    
+  tags:
+    - plugins.intranet
+
+- name: epfl-intranet htaccess
+  blockinfile:
+    path: "{{ wp_htaccess_path }}"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK FOR EPFL-Intranet"
+    block: |
+      RewriteCond %{REQUEST_URI} wp-content/uploads/
+      RewriteRule wp-content/uploads/(.*)$ wp-content/plugins/epfl-intranet/inc/protect-medias.php?file=$1 [QSA,L]
+    state: '{{ "present" if "Inside" in wp_site_categories else "absent" }}'
+  tags:
+    - plugins.intranet
+    - plugins.intranet.htaccess
+
 - name: epfl-emploi plugin
   wordpress_plugin:
     name: epfl-emploi
