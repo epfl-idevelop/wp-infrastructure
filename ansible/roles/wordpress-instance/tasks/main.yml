@@ -1,5 +1,5 @@
 - debug:
-    msg: "main.yml canary200715.0920"
+    msg: "main.yml canary200715.0928"
   tags: always
 
 
@@ -58,8 +58,8 @@
 - wordpress_facts:
   tags: always
 #zzz200715.0913  
-  debug:
-      var=ansible_date_time.date
+  # debug:
+  #     var=ansible_date_time.date
 
   
 - name: "{{ 'Recreate' if 'wipe' in ansible_run_tags else 'Create' }}"
