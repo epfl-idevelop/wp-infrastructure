@@ -1,5 +1,5 @@
 # Mes petits trucs à moi pour bien travailler ;-)
-#zf200709.1820
+#zf200716.1131
 
 <!-- TOC titleSize:2 tabSpaces:2 depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 skip:2 title:1 charForUnorderedList:* -->
 ## Table of Contents
@@ -17,8 +17,7 @@
     * [En travail lancer la petite fusée d'un template dans le GUI de AWX](#en-travail-lancer-la-petite-fusée-dun-template-dans-le-gui-de-awx)
       * [Puis récupérer les logs de la tâche (numéro) du template](#puis-récupérer-les-logs-de-la-tâche-numéro-du-template)
       * [Et enfin parser les logs avec le parser en python](#et-enfin-parser-les-logs-avec-le-parser-en-python)
-    * [En travail, refaire l'image du ansible runner](#en-travail-refaire-limage-du-ansible-runner)
-    * [En travail, si on veut rebuilder AWX](#en-travail-si-on-veut-rebuilder-awx)
+    * [En travail, si on veut refaire l'image du Ansible runner ET du container utilisé par AWX](#en-travail-si-on-veut-refaire-limage-du-ansible-runner-et-du-container-utilisé-par-awx)
   * [Se connecter en ssh dans un runner (pod)](#se-connecter-en-ssh-dans-un-runner-pod)
   * [Sur Grafana](#sur-grafana)
 <!-- /TOC -->
@@ -161,18 +160,13 @@ less awx_logs.txt
 
 
 
-### En travail, refaire l'image du ansible runner
-Dans sa console de sa machine
-```
-./wpsible -t awx --test
-```
-
-
-### En travail, si on veut rebuilder AWX
+### En travail, si on veut refaire l'image du Ansible runner ET du container utilisé par AWX
 Dans sa console de sa machine
 ```
 ./wpsible -t awx
 ```
+
+
 
 
 ## Se connecter en ssh dans un runner (pod)
