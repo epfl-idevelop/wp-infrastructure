@@ -1,4 +1,4 @@
-#canary200716.1507
+#canary200723.1542
 
 # Custom runner image with the `wp` command-line tool and a WordPress layout in /wp
 - include_vars: ../../../vars/image-vars.yml
@@ -32,10 +32,7 @@
 
       RUN yum -y install php-cli php-mysql python3
       
-      
-      #pour forcer le rebuild 200630.1205
-      
-      
+
       #zzz200518.1055
       # installation des packages manquants
       RUN yum -y install htop nano git
@@ -45,20 +42,22 @@
       RUN echo "www-data ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
       RUN echo "add sudoer canary200515.1030" >> /canary.txt
       
-      #zzz200518.1534
-      # Installation de la sonde Telegraf
-      RUN git clone https://github.com/zuzu59/telegraf.git && \
-      export dbflux_srv_host={{ lookup('env','dbflux_srv_host') }} && \
-      export dbflux_srv_port={{ lookup('env','dbflux_srv_port') }} && \
-      export dbflux_u_user={{ lookup('env','dbflux_u_user') }} && \
-      export dbflux_p_user={{ lookup('env','dbflux_p_user') }} && \
-      /runner/telegraf/install_docker_centos.sh
-
-      #zzz200519.1136
-      # Lance Telegraf au démarrage du container
-      RUN sed -i '$ i\/runner/telegraf/start_docker.sh' /usr/bin/entrypoint
-
-
+      # #zzz200518.1534
+      # # Installation de la sonde Telegraf
+      # RUN git clone https://github.com/zuzu59/telegraf.git && \
+      # export dbflux_srv_host={{ lookup('env','dbflux_srv_host') }} && \
+      # export dbflux_srv_port={{ lookup('env','dbflux_srv_port') }} && \
+      # export dbflux_u_user={{ lookup('env','dbflux_u_user') }} && \
+      # export dbflux_p_user={{ lookup('env','dbflux_p_user') }} && \
+      # /runner/telegraf/install_docker_centos.sh
+      # 
+      # #zzz200519.1136
+      # # Lance Telegraf au démarrage du container
+      # RUN sed -i '$ i\/runner/telegraf/start_docker.sh' /usr/bin/entrypoint
+      # 
+      # #zzz200723.1129
+      # RUN echo "telegraf install canary200723.1128" >> /canary.txt
+      #zzz200723.1129
 
 
       COPY --from=0 /usr/local/bin/wp /usr/local/bin/
@@ -121,11 +120,14 @@
       namespace: "{{ ansible_oc_namespace }}"
     dockerfile: |
       FROM docker-registry.default.svc:5000/{{ ansible_oc_namespace }}/{{ awx_web_base_image_name }}:latest
+      
+      #zzz200716.1427
+      # Modifie les autorisations pour le debug de python
       USER 0
       RUN id; chmod -R g+w /var/lib/awx/venv/awx/lib/python3.6/site-packages/awx/ || true
       
       #zzz200716.1427
-      RUN echo "chmod -R canary200716.1449" >> /canary.txt
+      RUN echo "chmod -R Python canary200723.1128" >> /canary.txt
 
       #zzz200716.1427
       # installation des packages manquants
@@ -145,7 +147,7 @@
       RUN sed -i '$ i\/home/awx/telegraf/start_docker.sh' /usr/bin/launch_awx.sh
 
       #zzz200716.1427
-      RUN echo "telegraf install canary200716.1523" >> /canary.txt
+      RUN echo "telegraf install canary200723.1542" >> /canary.txt
 
       USER 1000
       #zzz200716.1427

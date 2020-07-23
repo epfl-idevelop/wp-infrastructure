@@ -10,7 +10,7 @@ import sys
 import os
 import datetime
 
-version = "parse-ansible-out2.py  zf200714.1511 "
+version = "parse-ansible-out2.py  zf200716.1931 "
 
 """
 génération du fichier logs:
@@ -25,6 +25,7 @@ curl https://$ABC_DEF:$KLM_NOP@awx-poc-vpsi.epfl.ch/api/v2/jobs/1219/stdout/?for
 reset
 ./parse-ansible-out2.py awx_logs_2_sites_1_pods.txt
 ./parse-ansible-out2.py awx_logs_10_sites_1_pods.txt
+./parse-ansible-out2.py awx_logs_347_sites_1_pods.txt
 ./parse-ansible-out2.py awx_logs_347_sites_10_pods_1.txt
 
 
