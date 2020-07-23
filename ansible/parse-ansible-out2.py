@@ -10,7 +10,7 @@ import sys
 import os
 import datetime
 
-version = "parse-ansible-out2.py  zf200716.1931 "
+version = "parse-ansible-out2.py  zf200723.1630 "
 
 """
 génération du fichier logs:

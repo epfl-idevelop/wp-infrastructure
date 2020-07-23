@@ -147,7 +147,7 @@
       RUN sed -i '$ i\/home/awx/telegraf/start_docker.sh' /usr/bin/launch_awx.sh
 
       #zzz200716.1427
-      RUN echo "telegraf install canary200723.1542" >> /canary.txt
+      RUN echo "telegraf install canary200723.1630" >> /canary.txt
 
       USER 1000
       #zzz200716.1427

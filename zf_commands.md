@@ -1,10 +1,8 @@
 # Mes petits trucs à moi pour bien travailler ;-)
-#zf200716.1520
+#zf200723.1630
 
 <!-- TOC titleSize:2 tabSpaces:2 depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 skip:2 title:1 charForUnorderedList:* -->
 ## Table of Contents
-* [Problèmes actuels](#problèmes-actuels)
-  * [Erreur du DistutilsFileError: cannot copy tree '/var/lib/awx/projects/XXX_Project': not a directory](#erreur-du-distutilsfileerror-cannot-copy-tree-varlibawxprojectsxxxproject-not-a-directory)
 * [Mon ..., mais c'est si simple pour AWX](#mon--mais-cest-si-simple-pour-awx)
 * [Shortcuts pour Atom](#shortcuts-pour-atom)
 * [Go go go !](#go-go-go-)
@@ -21,25 +19,10 @@
       * [ATTENTION:](#attention)
   * [Se connecter en ssh dans un runner (pod)](#se-connecter-en-ssh-dans-un-runner-pod)
   * [Sur Grafana](#sur-grafana)
+* [Problèmes actuels](#problèmes-actuels)
+  * [Erreur du DistutilsFileError: cannot copy tree '/var/lib/awx/projects/XXX_Project': not a directory](#erreur-du-distutilsfileerror-cannot-copy-tree-varlibawxprojectsxxxproject-not-a-directory)
+* [Où en suis-je juste avant de partir en vacances zf200723.1641 ?](#où-en-suis-je-juste-avant-de-partir-en-vacances-zf2007231641-)
 <!-- /TOC -->
-
-# Problèmes actuels
-## Erreur du DistutilsFileError: cannot copy tree '/var/lib/awx/projects/XXX_Project': not a directory
-zf200629.1812
-En voulant utiliser les playbooks sur le disque du container AWX au lieu de Github, j'ai cette erreur:
-
-```
-Traceback (most recent call last): File "/var/lib/awx/venv/awx/lib/python3.6/site-packages/awx/main/tasks.py", line 1345, in run self.pre_run_hook(self.instance, private_data_dir) File "/var/lib/awx/venv/awx/lib/python3.6/site-packages/awx/main/tasks.py", line 1949, in pre_run_hook job.project.scm_type, job_revision File "/var/lib/awx/venv/awx/lib/python3.6/site-packages/awx/main/tasks.py", line 2342, in make_local_copy copy_tree(project_path, destination_folder, preserve_symlinks=1) File "/usr/lib64/python3.6/distutils/dir_util.py", line 124, in copy_tree "cannot copy tree '%s': not a directory" % src) distutils.errors.DistutilsFileError: cannot copy tree '/var/lib/awx/projects/wp-ops': not a directory
-```
-
-J'ai trouvé des infos sur:
-
-https://github.com/ansible/awx/issues/6213
-
-Mais je n'arrive pas à les interpréter :-(
-  
-https://www.google.com/search?q=awx+copy_tree+%22cannot+copy+tree+%27%25s%27%3A+not+a+directory%22+%25+src)&rlz=1C5CHFA_enCH890CH890&oq=awx+copy_tree+%22cannot+copy+tree+%27%25s%27%3A+not+a+directory%22+%25+src)&aqs=chrome..69i57.1395j1j4&sourceid=chrome&ie=UTF-8
-
 
 
 # Mon ..., mais c'est si simple pour AWX
@@ -224,9 +207,50 @@ source /Keybase/team/epfl_wwp_blue/influxdb_secrets.sh
 ```
 
 
-
-
-
 On peut importer le dashboard 928, qui permet déjà de voir une jolie vue
 https://grafana.com/grafana/dashboards/928
+
+
+# Problèmes actuels
+## Erreur du DistutilsFileError: cannot copy tree '/var/lib/awx/projects/XXX_Project': not a directory
+zf200629.1812
+En voulant utiliser les playbooks sur le disque du container AWX au lieu de Github, j'ai cette erreur:
+
+```
+Traceback (most recent call last): File "/var/lib/awx/venv/awx/lib/python3.6/site-packages/awx/main/tasks.py", line 1345, in run self.pre_run_hook(self.instance, private_data_dir) File "/var/lib/awx/venv/awx/lib/python3.6/site-packages/awx/main/tasks.py", line 1949, in pre_run_hook job.project.scm_type, job_revision File "/var/lib/awx/venv/awx/lib/python3.6/site-packages/awx/main/tasks.py", line 2342, in make_local_copy copy_tree(project_path, destination_folder, preserve_symlinks=1) File "/usr/lib64/python3.6/distutils/dir_util.py", line 124, in copy_tree "cannot copy tree '%s': not a directory" % src) distutils.errors.DistutilsFileError: cannot copy tree '/var/lib/awx/projects/wp-ops': not a directory
+```
+
+J'ai trouvé des infos sur:
+
+https://github.com/ansible/awx/issues/6213
+
+Mais je n'arrive pas à les interpréter :-(
+  
+https://www.google.com/search?q=awx+copy_tree+%22cannot+copy+tree+%27%25s%27%3A+not+a+directory%22+%25+src)&rlz=1C5CHFA_enCH890CH890&oq=awx+copy_tree+%22cannot+copy+tree+%27%25s%27%3A+not+a+directory%22+%25+src)&aqs=chrome..69i57.1395j1j4&sourceid=chrome&ie=UTF-8
+
+
+
+# Où en suis-je juste avant de partir en vacances zf200723.1641 ?
+Ici un petit carnet de laboratoire afin de me souvenir, quand je vais revenir de vacances, qu'elles étaient les dernières actions que j'ai faites ;-)
+
+- enlevé ma sonde Telegraf dans le container ansible-runner car je n'en n'ai plus besoin maintenant vu qu'elle se trouve dans le container awx-0
+
+- ajouté le monitoring du réseau dans la configuration de Telegraf, maintenant on arrive à voir les échanges réseau lors des déploiement Ansible
+
+- tout à coup, l'inventaire utilisé sur AWX me retourne 1'034 sites au lieu des 340 sites que j'avais pour les tests. Je précise, je n'ai absolument rien touché depuis vendredi passé, dernière fois où j'avais fait tourner des *templates* de tests sur AWX avec différentes configuration multi-pods et multi-forks pour l'optimisation
+
+- pour voir si c'est à cause que ma branche est trop vieille par rapport à wpveritas, synchronisé ma branche de test profiling/awx2 avec la master:
+```
+git pull https://github.com/epfl-si/wp-ops master
+```
+
+- rebuildé le container awx-web afin de pouvoir hériter du nouveau script d'inventaire:
+```
+./wpsible -t awx
+```
+
+- du coup, au lieu qu'Ansible ne tourne que sur le playbook AWX il tourne aussi sur les 340 sites de test, bien entendu avec un *skiped* comme erreur sur les 340 sites !
+
+- je décide donc d'arrêter les frais pour l'instant et de me préparer à partir en vacances. Je reprendrai tout cela à tête reposée à partir de la 2e semaine d'août ;-)
+
 
