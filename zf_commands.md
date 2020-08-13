@@ -1,5 +1,5 @@
 # Mes petits trucs à moi pour bien travailler ;-)
-#zf200812.1657
+#zf200813.1112
 
 <!-- TOC titleSize:2 tabSpaces:2 depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 skip:2 title:1 charForUnorderedList:* -->
 ## Table of Contents
@@ -24,7 +24,9 @@
 * [Où en suis-je juste avant de partir en vacances zf200723.1641 ?](#où-en-suis-je-juste-avant-de-partir-en-vacances-zf2007231641-)
 * [Idées à creuser](#idées-à-creuser)
   * [Mitogen](#mitogen)
-  * [Manual Ansible Runner (pour ses propres modules, page 26)](#manual-ansible-runner-pour-ses-propres-modules-page-26)
+  * [Manual Ansible Runner (pour ses propres modules, page 22)](#manual-ansible-runner-pour-ses-propres-modules-page-22)
+  * [Installer ses propres plugins](#installer-ses-propres-plugins)
+  * [ansible.cfg](#ansiblecfg)
 <!-- /TOC -->
 
 
@@ -261,5 +263,13 @@ git pull https://github.com/epfl-si/wp-ops master
 ## Mitogen
 https://www.toptechskills.com/ansible-tutorials-courses/speed-up-ansible-playbooks-pipelining-mitogen/
 
-## Manual Ansible Runner (pour ses propres modules, page 26)
+## Manual Ansible Runner (pour ses propres modules, page 22)
 https://ansible-runner.readthedocs.io/_/downloads/en/stable/pdf/
+https://ansible-runner.readthedocs.io/en/latest
+
+## Installer ses propres plugins
+https://docs.ansible.com/ansible/latest/dev_guide/developing_locally.html
+
+## ansible.cfg
+https://github.com/ansible/ansible/blob/devel/examples/ansible.cfg
+
