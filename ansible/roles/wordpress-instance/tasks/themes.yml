@@ -50,6 +50,7 @@
   wordpress_theme:
     name: wp-theme-light
     state: '{{ [ "symlinked", "active" ] if theme_wp_theme_light_active else "symlinked" }}'
+<<<<<<< HEAD
 
 
 #zzz200707.1112
@@ -75,3 +76,5 @@
     state: '{{ [ "symlinked", "active" ] if theme_epfl_blank_active else "symlinked" }}'
 
 
+=======
+>>>>>>> dc161d0dcc8cdde57c1fc8900effc322bc370170

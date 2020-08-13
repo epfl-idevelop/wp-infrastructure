@@ -1,5 +1,5 @@
 # Mes petits trucs à moi pour bien travailler ;-)
-#zf200723.1630
+#zf200812.1657
 
 <!-- TOC titleSize:2 tabSpaces:2 depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 skip:2 title:1 charForUnorderedList:* -->
 ## Table of Contents
@@ -22,6 +22,9 @@
 * [Problèmes actuels](#problèmes-actuels)
   * [Erreur du DistutilsFileError: cannot copy tree '/var/lib/awx/projects/XXX_Project': not a directory](#erreur-du-distutilsfileerror-cannot-copy-tree-varlibawxprojectsxxxproject-not-a-directory)
 * [Où en suis-je juste avant de partir en vacances zf200723.1641 ?](#où-en-suis-je-juste-avant-de-partir-en-vacances-zf2007231641-)
+* [Idées à creuser](#idées-à-creuser)
+  * [Mitogen](#mitogen)
+  * [Manual Ansible Runner (pour ses propres modules, page 26)](#manual-ansible-runner-pour-ses-propres-modules-page-26)
 <!-- /TOC -->
 
 
@@ -254,3 +257,9 @@ git pull https://github.com/epfl-si/wp-ops master
 - je décide donc d'arrêter les frais pour l'instant et de me préparer à partir en vacances. Je reprendrai tout cela à tête reposée à partir de la 2e semaine d'août ;-)
 
 
+# Idées à creuser
+## Mitogen
+https://www.toptechskills.com/ansible-tutorials-courses/speed-up-ansible-playbooks-pipelining-mitogen/
+
+## Manual Ansible Runner (pour ses propres modules, page 26)
+https://ansible-runner.readthedocs.io/_/downloads/en/stable/pdf/
