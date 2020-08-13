@@ -32,6 +32,13 @@
 
       RUN yum -y install php-cli php-mysql python3
       
+      ARG PATCH_URLS="https://patch-diff.githubusercontent.com/raw/ansible/ansible-runner/pull/445.patch"
+      RUN set -e -x; yum -y install patch;                                   \
+          for url in $PATCH_URLS; do                                         \
+              curl $url |                                                    \
+                  patch -d /usr/lib/python3.6/site-packages/ansible_runner;  \
+          done;                                                              \
+          yum -y history undo patch
 
       #zzz200518.1055
       # installation des packages manquants
