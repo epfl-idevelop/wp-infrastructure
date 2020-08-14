@@ -27,6 +27,8 @@
   * [Manual Ansible Runner (pour ses propres modules, page 22)](#manual-ansible-runner-pour-ses-propres-modules-page-22)
   * [Installer ses propres plugins](#installer-ses-propres-plugins)
   * [ansible.cfg](#ansiblecfg)
+* [debug python pour IntelliJ](#debug-python-pour-intellij)
+* [savoir qui on est dans un container OC](#savoir-qui-on-est-dans-un-container-oc)
 <!-- /TOC -->
 
 
@@ -273,3 +275,9 @@ https://docs.ansible.com/ansible/latest/dev_guide/developing_locally.html
 ## ansible.cfg
 https://github.com/ansible/ansible/blob/devel/examples/ansible.cfg
 
+
+# debug python pour IntelliJ
+import sys; sys.path.append("/Users/zuzu/Library/Application Support/JetBrains/IntelliJIdea2020.2/plugins/python/pydevd-pycharm.egg"); import pydevd; pydevd.settrace('localhost', port=12477, stdoutToServer=True, stderrToServer=True)
+
+# savoir qui on est dans un container OC
+oc whoami
