@@ -1,5 +1,5 @@
 # Mes petits trucs à moi pour bien travailler ;-)
-#zf200813.1112
+#zf200825.1617
 
 <!-- TOC titleSize:2 tabSpaces:2 depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 skip:2 title:1 charForUnorderedList:* -->
 ## Table of Contents
@@ -9,6 +9,7 @@
   * [Sur sa machine](#sur-sa-machine)
   * [Sur sa machine dans une console](#sur-sa-machine-dans-une-console)
     * [A faire au début du travail](#a-faire-au-début-du-travail)
+    * [Synchronisation de la branche master avec la branche de travail](#synchronisation-de-la-branche-master-avec-la-branche-de-travail)
     * [Accélération des tests du code Ansible](#accélération-des-tests-du-code-ansible)
       * [1ère solution](#1ère-solution)
       * [2ème solution](#2ème-solution)
@@ -16,6 +17,7 @@
       * [Puis récupérer les logs de la tâche (numéro) du template](#puis-récupérer-les-logs-de-la-tâche-numéro-du-template)
       * [Et enfin parser les logs avec le parser en python](#et-enfin-parser-les-logs-avec-le-parser-en-python)
     * [En travail, si on veut refaire l'image du Ansible runner ET du container utilisé par AWX](#en-travail-si-on-veut-refaire-limage-du-ansible-runner-et-du-container-utilisé-par-awx)
+    * [Juste pour un test du patch d'Ansible, on ne rebuild rien, c'est pour aller plus vite ;-)](#juste-pour-un-test-du-patch-dansible-on-ne-rebuild-rien-cest-pour-aller-plus-vite--)
       * [ATTENTION:](#attention)
   * [Se connecter en ssh dans un runner (pod)](#se-connecter-en-ssh-dans-un-runner-pod)
   * [Sur Grafana](#sur-grafana)
@@ -29,6 +31,7 @@
   * [ansible.cfg](#ansiblecfg)
 * [debug python pour IntelliJ](#debug-python-pour-intellij)
 * [savoir qui on est dans un container OC](#savoir-qui-on-est-dans-un-container-oc)
+* [voir la PR 324 pour les backups de WWP via awx](#voir-la-pr-324-pour-les-backups-de-wwp-via-awx)
 <!-- /TOC -->
 
 
@@ -63,6 +66,15 @@ oc login -u czufferey
 oc project wwp-test
 oc projects
 ```
+
+
+### Synchronisation de la branche master avec la branche de travail
+Après un certain temps, la branche de travail se *désynchronise* avec la branche master et on peut avoir des effets de bord avec *wp-veritas* par exemple.
+On peut très facilement resynchroniser la branche de travail avec la master ainsi:
+```
+git pull https://github.com/epfl-si/wp-ops master
+```
+
 
 
 ### Accélération des tests du code Ansible
@@ -156,6 +168,16 @@ Dans sa console de sa machine
 ```
 ./wpsible -t awx
 ```
+
+### Juste pour un test du patch d'Ansible, on ne rebuild rien, c'est pour aller plus vite ;-)
+```
+./wpsible -t awx -t toto1613
+```
+Et le résultat se trouve dans:
+```
+cat /tmp/debug-py.lo
+```
+
 
 #### ATTENTION:
 Si on a rebuildé AWX (donc le serveur AWX), après le *rebuild*, il faut *delete* à la main le *pod* **awx-0** sur OC afin qu'il utilise le dernier build !
@@ -279,5 +301,11 @@ https://github.com/ansible/ansible/blob/devel/examples/ansible.cfg
 # debug python pour IntelliJ
 import sys; sys.path.append("/Users/zuzu/Library/Application Support/JetBrains/IntelliJIdea2020.2/plugins/python/pydevd-pycharm.egg"); import pydevd; pydevd.settrace('localhost', port=12477, stdoutToServer=True, stderrToServer=True)
 
+
 # savoir qui on est dans un container OC
 oc whoami
+
+
+# voir la PR 324 pour les backups de WWP via awx
+https://github.com/epfl-si/wp-ops/pull/324
+Je dois faire des tests de sauvegardes de wwp avec awx

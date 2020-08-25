@@ -1,4 +1,4 @@
-#canary200723.1542
+#canary200825.1613
 
 # Custom runner image with the `wp` command-line tool and a WordPress layout in /wp
 - include_vars: ../../../vars/image-vars.yml
@@ -133,7 +133,10 @@
       name: "{{ awx_web_base_image_name }}"
       namespace: "{{ ansible_oc_namespace }}"
     from: "{{ awx_web_base_image_fullname }}"
-    tag: latest
+    tag:
+      - latest
+      #zzz200825.1613
+      - toto1613
 
 - name: "Build {{ awx_web_image_name }} in OpenShift"
   register: _awx_web_buildconfig
