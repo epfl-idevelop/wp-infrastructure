@@ -1,5 +1,5 @@
 # Mes petits trucs à moi pour bien travailler ;-)
-#zf200825.1617
+#zf200827.1725
 
 <!-- TOC titleSize:2 tabSpaces:2 depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 skip:2 title:1 charForUnorderedList:* -->
 ## Table of Contents
@@ -30,8 +30,11 @@
   * [Installer ses propres plugins](#installer-ses-propres-plugins)
   * [ansible.cfg](#ansiblecfg)
 * [debug python pour IntelliJ](#debug-python-pour-intellij)
+* [date & time sous Python](#date--time-sous-python)
 * [savoir qui on est dans un container OC](#savoir-qui-on-est-dans-un-container-oc)
 * [voir la PR 324 pour les backups de WWP via awx](#voir-la-pr-324-pour-les-backups-de-wwp-via-awx)
+* [test en python pour obtenir l'heure](#test-en-python-pour-obtenir-lheure)
+* [un mini logger](#un-mini-logger)
 <!-- /TOC -->
 
 
@@ -301,6 +304,8 @@ https://github.com/ansible/ansible/blob/devel/examples/ansible.cfg
 # debug python pour IntelliJ
 import sys; sys.path.append("/Users/zuzu/Library/Application Support/JetBrains/IntelliJIdea2020.2/plugins/python/pydevd-pycharm.egg"); import pydevd; pydevd.settrace('localhost', port=12477, stdoutToServer=True, stderrToServer=True)
 
+# date & time sous Python
+https://www.programiz.com/python-programming/datetime/current-datetime
 
 # savoir qui on est dans un container OC
 oc whoami
@@ -309,3 +314,19 @@ oc whoami
 # voir la PR 324 pour les backups de WWP via awx
 https://github.com/epfl-si/wp-ops/pull/324
 Je dois faire des tests de sauvegardes de wwp avec awx
+
+
+# test en python pour obtenir l'heure
+from datetime import datetime
+print(datetime.now())
+
+
+# un mini logger
+On peut se faire hyper facilement un mini *logger* pour *récupérer* des infos avec:
+```
+socat -u TCP4-LISTEN:55514,reuseaddr,fork OPEN:/tmp/toto.log,creat,append
+```
+
+Je décide de prendre comme port de logger le 55514, c'est 55'000+514 qui est le port habituel du syslog
+https://www.poftut.com/linux-logger-command-usage-tutorial-with-examples/#:~:text=Specify%20Remote%20Syslog%20Server%20Port,by%20providing%20the%20port%20number.
+
