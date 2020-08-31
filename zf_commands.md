@@ -1,5 +1,5 @@
 # Mes petits trucs à moi pour bien travailler ;-)
-#zf200827.1725
+#zf200831.0740
 
 <!-- TOC titleSize:2 tabSpaces:2 depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 skip:2 title:1 charForUnorderedList:* -->
 ## Table of Contents
@@ -32,6 +32,7 @@
 * [debug python pour IntelliJ](#debug-python-pour-intellij)
 * [date & time sous Python](#date--time-sous-python)
 * [savoir qui on est dans un container OC](#savoir-qui-on-est-dans-un-container-oc)
+* [pour voir quels pods tournent sur quels nodes](#pour-voir-quels-pods-tournent-sur-quels-nodes)
 * [voir la PR 324 pour les backups de WWP via awx](#voir-la-pr-324-pour-les-backups-de-wwp-via-awx)
 * [test en python pour obtenir l'heure](#test-en-python-pour-obtenir-lheure)
 * [un mini logger](#un-mini-logger)
@@ -310,6 +311,8 @@ https://www.programiz.com/python-programming/datetime/current-datetime
 # savoir qui on est dans un container OC
 oc whoami
 
+# pour voir quels pods tournent sur quels nodes
+oc get pods -o wide -n wwp
 
 # voir la PR 324 pour les backups de WWP via awx
 https://github.com/epfl-si/wp-ops/pull/324
@@ -324,7 +327,7 @@ print(datetime.now())
 # un mini logger
 On peut se faire hyper facilement un mini *logger* pour *récupérer* des infos avec:
 ```
-socat -u TCP4-LISTEN:55514,reuseaddr,fork OPEN:/tmp/toto.log,creat,append
+socat TCP4-LISTEN:55514,reuseaddr,fork OPEN:/tmp/toto.log,creat,append
 ```
 
 Je décide de prendre comme port de logger le 55514, c'est 55'000+514 qui est le port habituel du syslog
