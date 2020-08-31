@@ -90,12 +90,7 @@
   # debug:
   #     var=ansible_date_time.date
 
-<<<<<<< HEAD
-  
-- name: "{{ 'Recreate' if 'wipe' in ansible_run_tags else 'Create' }}"
-=======
 - name: "{{ 'Recreate' if 'wp.wipe' in ansible_run_tags else 'Create' }}"
->>>>>>> a3e01eb6f64cb471daed6e1775d2246fc6dcb5a5
   tags:
     - wp
     - wp.restore
