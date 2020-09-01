@@ -161,38 +161,42 @@ if (__name__ == "__main__"):
             ztask_time = zline[p1 + len(zstr_find1):p2]
             if zverbose_vv: print(str(i) + " ztask_time: [" + ztask_time + "]")
             
-            # Récupération du ztask_time_start
+            # Est-ce un start ?
             if zline.find('log start') != -1:
                 if zverbose_vv: print("c'est un start")
                 if zverbose_vv: print("ztask_number :" + str(ztask_number))
 
-                # test si le dictionnaire est vide ?
+                # Test si le dictionnaire est vide ?
                 if ztask_number == 0:
                     if zverbose_vv: print("le dictionnaire est vide, on crée la première tâche")
                     ztask_number = 1
-                    db_logs[ztask_number] = {"ztask_name": {}}
+                    db_logs[ztask_number] = {}
                     db_logs[ztask_number].update({"ztask_name": ztask_name})
                     db_logs[ztask_number].update({"ztask_path": ztask_path})
+                    print(db_logs)
                     
-                if zverbose_vv: print("on cherche où se trouve la tâche dans le dictionnaire")
+                # On cherche où se trouve la tâche dans le dictionnaire
                 ztask_id = 0
-                for j in range(1, ztask_number):
+                for j in range(1, ztask_number+1):
+                    print("j: " + str(i))
                     if db_logs[j]["ztask_path"] == ztask_path and db_logs[j]["ztask_name"] == ztask_name:
                         ztask_id = j
-                        if zverbose_vv: print("ztask_id :" + str(ztask_id))
+                        if zverbose_vv: print("ztask_id 1740:" + str(ztask_id))
                         break
+                # Avons-nous trouvé la tâche dans le dictionnaire ?
                 if ztask_id == 0:
-                    if zverbose_vv: print("la tâche n'existe pas encore on la crée")
+                    if zverbose_vv: print("la tâche n'existe pas encore, on la crée")
                     ztask_number = ztask_number + 1
                     ztask_id = ztask_number
-                    if zverbose_vv: print("ztask_id :" + str(ztask_id))
+                    if zverbose_vv: print("ztask_id 1739:" + str(ztask_id))
 
-                    db_logs[ztask_id] = {"ztask_name": {}}
+                    db_logs[ztask_id] = {}
                     db_logs[ztask_id].update({"ztask_name": ztask_name})
                     db_logs[ztask_id].update({"ztask_path": ztask_path})
-                        
-                db_logs[ztask_id] = {"zsite_name": {}}
-                db_logs[ztask_id]["zsite_name"].update({ztask_site: {}})
+                
+                # On crée un nouveau site et écrit le task_time_start   
+                db_logs[ztask_id] = {"zsite_name": {}}     
+                db_logs[ztask_id]["zsite_name"].update(ztask_site)
                 db_logs[ztask_id]["zsite_name"][ztask_site].update({"ztask_time_start": ztask_time})
                 
             # Récupération du ztask_time_end
