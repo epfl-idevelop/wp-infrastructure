@@ -11,7 +11,7 @@ import sys
 import os
 import datetime
 
-version = "parse-ansible-out3.py  zf200901.1729 "
+version = "parse-ansible-out3.py  zf200901.1830 "
 
 """
 ATTENTION: il ne faut pas oublier, avant de lancer la *petite fusée* d'effacer le fichier de log de reclog !
@@ -48,6 +48,8 @@ zsend_grafana = False
 db_logs = {}
 ztask_number = 0        # le zéro est important car on l'utilise pour savoir si on est au début du dictionnaire !
 ztask_id = 0
+ztask_site_number = 0
+ztask_site_id = 0
 ztask_line = 0
 ztask_name = ""
 ztask_path = ""
@@ -69,25 +71,28 @@ ztask_unix_time_2 = 0
 # index: 1
 #     task_name: toto1
 #     task_path: tutu1
-#     site_name: tata1
-#             time_start: 123
-#             time_end: 234
-#             time_duree: 12
-#     site_name: tata2
-#             time_start: 345
-#             time_end: 456
-#             time_duree: 23
+#     index: 1
+#         site_name: tata1
+#         time_start: 123
+#         time_end: 234
+#         time_duree: 12
+#     index: 2
+#         site_name: tata2
+#         time_start: 345
+#         time_end: 456
+#         time_duree: 23
 # index: 2
 #     task_name: toto2
 #     task_path: tutu2
-#     site_name: tata1
-#             time_start: 123
-#             time_end: 234
-#             time_duree: 12
-#     site_name: tata2
-#             time_start: 345
-#             time_end: 456
-#             time_duree: 23
+#     index: 1
+#         site_name: tata1
+#         time_start: 123
+#         time_end: 234
+#         time_duree: 12
+#     index: 2
+#         site_name: tata2
+#         time_start: 345
+#         time_end: 456
 
 
 def signal_handler(signal, frame):
@@ -161,6 +166,8 @@ if (__name__ == "__main__"):
             ztask_time = zline[p1 + len(zstr_find1):p2]
             if zverbose_vv: print(str(i) + " ztask_time: [" + ztask_time + "]")
             
+            
+            
             # Est-ce un start ?
             if zline.find('log start') != -1:
                 if zverbose_vv: print("c'est un start")
@@ -171,8 +178,8 @@ if (__name__ == "__main__"):
                     if zverbose_vv: print("le dictionnaire est vide, on crée la première tâche")
                     ztask_number = 1
                     db_logs[ztask_number] = {}
-                    db_logs[ztask_number].update({"ztask_name": ztask_name})
-                    db_logs[ztask_number].update({"ztask_path": ztask_path})
+                    db_logs[ztask_number]["ztask_name"] = ztask_name
+                    db_logs[ztask_number]["ztask_path"] = ztask_path
                     print(db_logs)
                     
                 # On cherche où se trouve la tâche dans le dictionnaire
@@ -191,13 +198,19 @@ if (__name__ == "__main__"):
                     if zverbose_vv: print("ztask_id 1739:" + str(ztask_id))
 
                     db_logs[ztask_id] = {}
-                    db_logs[ztask_id].update({"ztask_name": ztask_name})
-                    db_logs[ztask_id].update({"ztask_path": ztask_path})
+                    db_logs[ztask_id]["ztask_name"] = ztask_name
+                    db_logs[ztask_id]["ztask_path"] = ztask_path
                 
-                # On crée un nouveau site et écrit le task_time_start   
-                db_logs[ztask_id] = {"zsite_name": {}}     
-                db_logs[ztask_id]["zsite_name"].update(ztask_site)
-                db_logs[ztask_id]["zsite_name"][ztask_site].update({"ztask_time_start": ztask_time})
+                # chercher l'index du site dans le dictionnaire
+                ztask_site_number = len(db_logs[1]) - 2
+                ztask_site_number = ztask_site_number + 1
+                if zverbose_vv: print("ztask_site_number:" + str(ztask_site_number))
+
+                # On crée un nouveau site et écrit le task_time_start
+                db_logs[ztask_number][ztask_site_number] = {}
+                db_logs[ztask_number][ztask_site_number]["ztask_site_name"] = ztask_site
+                db_logs[ztask_number][ztask_site_number]["ztask_time_start"] = ztask_time
+
                 
             # Récupération du ztask_time_end
             if zline.find('log end') != -1:

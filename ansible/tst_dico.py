@@ -3,7 +3,7 @@
 #
 # Petit script pour tester la création de dictionnaires en Python
 
-version = "tst_dico.py  zf200901.1827 "
+version = "tst_dico.py  zf200901.1837 "
 
 db_logs = {}
 ztask_number = 0        # le zéro est important car on l'utilise pour savoir si on est au début du dictionnaire !
@@ -51,11 +51,12 @@ if (__name__ == "__main__"):
     print("\n" + version + "\n")
 
 
-    ztask_number = 1
-    ztask_site_number = 1
     
-    ztask_name = "toto"
-    ztask_path = "tutu"
+    ztask_name1 = "toto"
+    ztask_path1 = "tutu"
+    ztask_name2 = "titi"
+    ztask_path2 = "tata"
+    
     ztask_site1 = "site1"
     ztask_time1 = "1234"
     ztask_site2 = "site2"
@@ -63,9 +64,37 @@ if (__name__ == "__main__"):
     ztask_site3 = "site3"
     ztask_time3 = "3456"
 
+    ztask_number = 1
+    ztask_site_number = 1
+
     db_logs[ztask_number] = {}
-    db_logs[ztask_number]["ztask_name"] = ztask_name
-    db_logs[ztask_number]["ztask_path"] = ztask_path
+    db_logs[ztask_number]["ztask_name"] = ztask_name1
+    db_logs[ztask_number]["ztask_path"] = ztask_path1
+    print(len(db_logs[ztask_number]))
+    
+    db_logs[ztask_number][ztask_site_number] = {}
+    db_logs[ztask_number][ztask_site_number]["ztask_site_name"] = ztask_site1
+    db_logs[ztask_number][ztask_site_number]["ztask_time"] = ztask_time1
+    print(len(db_logs[ztask_number]))
+    
+    ztask_site_number = ztask_site_number + 1
+
+    db_logs[ztask_number][ztask_site_number] = {}
+    db_logs[ztask_number][ztask_site_number]["ztask_site_name"] = ztask_site2
+    db_logs[ztask_number][ztask_site_number]["ztask_time"] = ztask_time2
+
+    ztask_site_number = ztask_site_number + 1
+
+    db_logs[ztask_number][ztask_site_number] = {}
+    db_logs[ztask_number][ztask_site_number]["ztask_site_name"] = ztask_site3
+    db_logs[ztask_number][ztask_site_number]["ztask_time"] = ztask_time3
+
+    ztask_number = ztask_number + 1
+    ztask_site_number = 1
+
+    db_logs[ztask_number] = {}
+    db_logs[ztask_number]["ztask_name"] = ztask_name1
+    db_logs[ztask_number]["ztask_path"] = ztask_path1
     
     db_logs[ztask_number][ztask_site_number] = {}
     db_logs[ztask_number][ztask_site_number]["ztask_site_name"] = ztask_site1
@@ -76,12 +105,11 @@ if (__name__ == "__main__"):
     db_logs[ztask_number][ztask_site_number]["ztask_site_name"] = ztask_site2
     db_logs[ztask_number][ztask_site_number]["ztask_time"] = ztask_time2
 
-    ztask_site_number = ztask_site_number + 1
-    db_logs[ztask_number][ztask_site_number] = {}
-    db_logs[ztask_number][ztask_site_number]["ztask_site_name"] = ztask_site3
-    db_logs[ztask_number][ztask_site_number]["ztask_time"] = ztask_time3
 
     print(db_logs)
+    print(len(db_logs))
+    print(len(db_logs[1]))
+    print(len(db_logs[2]))
     
     ztask_number = 1
     ztask_site_number = 2
