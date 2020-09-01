@@ -11,7 +11,7 @@ import sys
 import os
 import datetime
 
-version = "parse-ansible-out3.py  zf200901.1146 "
+version = "parse-ansible-out3.py  zf200901.1518 "
 
 """
 ATTENTION: il ne faut pas oublier, avant de lancer la *petite fusée* d'effacer le fichier de log de reclog !
@@ -46,12 +46,13 @@ zprint_curl = True
 zsend_grafana = False
 
 db_logs = {}
-ztask_number = 0
+ztask_number = 1
 ztask_line = 0
 ztask_name = ""
 ztask_path = ""
 ztask_site = ""
-ztask_time = ""
+ztask_time_start = ""
+ztask_time_end = ""
 ztask_duration = 0
 
 ztask_time_1 = ""
@@ -123,13 +124,70 @@ if (__name__ == "__main__"):
         # Est-ce une ligne de Task ?
         if zline.find(': TASK:') != -1:            
             if zverbose_vv: print("coucou c'est une task")
-            # Récupération du path de la Task
+            
+            # Récupération du task_site
+            zstr_find1 = 'by zuzu, '
+            p1 = zline.find(zstr_find1)
+            zstr_find2 = ': TASK:'            
+            p2 = zline.find(zstr_find2, p1)
+            ztask_site = zline[p1 + len(zstr_find1):p2]
+            if zverbose_vv: print(str(i) + " ztask_site: [" + ztask_site + "]")
+            
+            # Récupération du task_path
             zstr_find1 = ': TASK: '
             p1 = zline.find(zstr_find1)
             zstr_find2 = ' : '            
             p2 = zline.find(zstr_find2, p1)
             ztask_path = zline[p1 + len(zstr_find1):p2]
             if zverbose_vv: print(str(i) + " ztask_path: [" + ztask_path + "]")
+
+            # Récupération du task_name
+            zstr_find1 = ' : '
+            p1 = zline.find(zstr_find1)
+            zstr_find2 = ' at 2020'            
+            p2 = zline.find(zstr_find2, p1)
+            ztask_name = zline[p1 + len(zstr_find1):p2]
+            if zverbose_vv: print(str(i) + " ztask_name: [" + ztask_name + "]")
+            
+            # Récupération du ztask_time start ou end
+            zstr_find1 = ' at '
+            p1 = zline.find(zstr_find1)
+            # zstr_find2 = ''            
+            # p2 = zline.find(zstr_find2, p1)
+            p2 = -1
+            
+            # Récupération du ztask_time_start
+            if zline.find('log start') != -1:
+                if zverbose_vv: print("c'est un start")
+                if zverbose_vv: print("ztask_number :" + str(ztask_number))
+
+                ztask_time_start = zline[p1 + len(zstr_find1):p2]
+                if zverbose_vv: print(str(i) + " ztask_time_start: [" + ztask_time_start + "]")
+                
+                db_logs[ztask_number] = {"zsite_name": {}}
+                db_logs[ztask_number].update({"ztask_name": ztask_name})
+                db_logs[ztask_number].update({"ztask_path": ztask_path})
+                db_logs[ztask_number]["zsite_name"].update({ztask_site: {}})
+                db_logs[ztask_number]["zsite_name"][ztask_site].update({"ztask_time_start": ztask_time_start})
+                ztask_number = ztask_number + 1
+                
+            # Récupération du ztask_time_end
+            if zline.find('log end') != -1:
+                if zverbose_vv: print("c'est un end")
+                if zverbose_vv: print("ztask_number :" + str(ztask_number))
+
+
+                ztask_time_end = zline[p1 + len(zstr_find1):p2]
+                if zverbose_vv: print(str(i) + " ztask_time_end: [" + ztask_time_end + "]")
+            
+                for j in range(1, ztask_number):
+                    if db_logs[j]["ztask_path"] == ztask_path and db_logs[j]["ztask_name"] == ztask_name:
+                        if zverbose_vv: print("ztask_number_j :" + str(j))
+
+                        db_logs[j]["zsite_name"][ztask_site].update({"ztask_time_end": ztask_time_end})
+                        break
+                
+            
             
             # zpath = "/project/ansible/roles/wordpress-instance/tasks/"
             # ztask_path = zline[zline.find(zpath) + len(zpath):-1]
