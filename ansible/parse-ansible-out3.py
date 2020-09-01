@@ -11,7 +11,7 @@ import sys
 import os
 import datetime
 
-version = "parse-ansible-out3.py  zf200901.1830 "
+version = "parse-ansible-out3.py  zf200901.1914 "
 
 """
 ATTENTION: il ne faut pas oublier, avant de lancer la *petite fusée* d'effacer le fichier de log de reclog !
@@ -94,6 +94,22 @@ ztask_unix_time_2 = 0
 #         time_start: 345
 #         time_end: 456
 
+
+def zprint_db_log():
+    for i in range(1, ztask_number+1): 
+        print("------------")
+        print("ztask_name: " + str(i) + ", " + db_logs[i]["ztask_name"])
+        print("ztask_path: " + db_logs[i]["ztask_path"])
+        ztask_site_number = len(db_logs[1]) - 2
+        for j in range(1, ztask_site_number+1):
+            print("ztask_site_name: " + str(j) + ", " + db_logs[i][j]["ztask_site_name"])
+            print("ztask_time_start: " + db_logs[i][j]["ztask_time_start"])
+            print("ztask_time_end: " + db_logs[i][j]["ztask_time_end"])
+
+
+
+            
+        
 
 def signal_handler(signal, frame):
     print("oups il y a eu un CTRL-C !")
@@ -213,22 +229,33 @@ if (__name__ == "__main__"):
 
                 
             # Récupération du ztask_time_end
-            if zline.find('log end') != -1:
-                
-                print(db_logs)            
-                exit()
-                
+            if zline.find('log end') != -1:                
                 if zverbose_vv: print("c'est un end")
                 if zverbose_vv: print("ztask_number :" + str(ztask_number))
 
-                if zverbose_vv: print("on cherche elle se trouve")
+                # On cherche la tâche
                 ztask_id = 0
-                for j in range(1, ztask_number):
+                for j in range(1, ztask_number + 1):
                     if db_logs[j]["ztask_path"] == ztask_path and db_logs[j]["ztask_name"] == ztask_name:
                         ztask_id = j
                         if zverbose_vv: print("ztask_id :" + str(ztask_id))
                         break
-                db_logs[ztask_id]["zsite_name"][ztask_site].update({"ztask_time_end": ztask_time})
+                
+                # On cherche le site
+                ztask_site_number = len(db_logs[1]) - 2
+                ztask_site_id = 0
+                for j in range(1, ztask_site_number + 1):
+                    # print("j: " + str(j))
+                    # #print(db_logs)
+                    # print(db_logs[ztask_id][j]["ztask_site_name"])
+                    # print(ztask_site)
+                    
+                    if db_logs[ztask_id][j]["ztask_site_name"] == ztask_site:
+                        ztask_site_id = j
+                        if zverbose_vv: print("ztask_site_id :" + str(ztask_site_id))
+                        break
+                
+                db_logs[ztask_id][ztask_site_id]["ztask_time_end"] = ztask_time
             
                 
             
@@ -237,7 +264,9 @@ if (__name__ == "__main__"):
         print("")
         i = i + 1
         # On évite la boucle infinie ;-)
-        if i > 20:
+        if i > 40:
+            # print(db_logs)
+            zprint_db_log()
             quit()
 
     zfile.close()
