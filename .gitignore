@@ -10,3 +10,4 @@ node_modules/
 .DS_Store
 ansible-deps-cache
 awx_logs*.txt
+ansible/archives/*

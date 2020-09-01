@@ -1,5 +1,5 @@
 # Mes petits trucs à moi pour bien travailler ;-)
-#zf200831.0740
+#zf200901.1128
 
 <!-- TOC titleSize:2 tabSpaces:2 depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 skip:2 title:1 charForUnorderedList:* -->
 ## Table of Contents
@@ -17,8 +17,8 @@
       * [Puis récupérer les logs de la tâche (numéro) du template](#puis-récupérer-les-logs-de-la-tâche-numéro-du-template)
       * [Et enfin parser les logs avec le parser en python](#et-enfin-parser-les-logs-avec-le-parser-en-python)
     * [En travail, si on veut refaire l'image du Ansible runner ET du container utilisé par AWX](#en-travail-si-on-veut-refaire-limage-du-ansible-runner-et-du-container-utilisé-par-awx)
-    * [Juste pour un test du patch d'Ansible, on ne rebuild rien, c'est pour aller plus vite ;-)](#juste-pour-un-test-du-patch-dansible-on-ne-rebuild-rien-cest-pour-aller-plus-vite--)
-      * [ATTENTION:](#attention)
+      * [ATTENTION 1er:](#attention-1er)
+      * [ATTENTION 2e:](#attention-2e)
   * [Se connecter en ssh dans un runner (pod)](#se-connecter-en-ssh-dans-un-runner-pod)
   * [Sur Grafana](#sur-grafana)
 * [Problèmes actuels](#problèmes-actuels)
@@ -173,19 +173,11 @@ Dans sa console de sa machine
 ./wpsible -t awx
 ```
 
-### Juste pour un test du patch d'Ansible, on ne rebuild rien, c'est pour aller plus vite ;-)
-```
-./wpsible -t awx -t toto1613
-```
-Et le résultat se trouve dans:
-```
-cat /tmp/debug-py.lo
-```
+#### ATTENTION 1er:
+**Si on a rebuildé AWX (donc le serveur AWX), après le *rebuild*, il faut *delete* à la main le *pod* awx-0 sur OC afin qu'il se relance et utilise le dernier build !**
 
-
-#### ATTENTION:
-Si on a rebuildé AWX (donc le serveur AWX), après le *rebuild*, il faut *delete* à la main le *pod* **awx-0** sur OC afin qu'il utilise le dernier build !
-
+#### ATTENTION 2e:
+**Si on a modifié le code Ansible, il faut *forcer* le rebuild en changeant la date dans le dockerfile du ansible-runner (roles/awx-instance/templates/Dockerfile.wp-ansible-runner) afin que le *patch* puisse s'appliquer !**
 
 
 ## Se connecter en ssh dans un runner (pod)

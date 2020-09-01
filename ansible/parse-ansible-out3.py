@@ -1,32 +1,30 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 #
-# Petit script pour parser les logs de Ansible dans ce project
+# Petit script pour parser les logs de Ansible (reclog) dans ce project
 # version qui calcul la durée de chaque Task !
 # sources: https://janakiev.com/blog/python-shell-commands/
+# sources: https://github.com/zuzu59/reclog
 
 import signal
 import sys
 import os
 import datetime
 
-version = "parse-ansible-out2.py  zf200723.1630 "
+version = "parse-ansible-out3.py  zf200901.1146 "
 
 """
+ATTENTION: il ne faut pas oublier, avant de lancer la *petite fusée* d'effacer le fichier de log de reclog !
+rm /Users/zuzu/dev-zf/reclog/file.log
+
 génération du fichier logs:
 Le faire avec la petite fusée du template dans l'interface WEB de AWX !
 
 usage:
-source /keybase/team/epfl_wwp_blue/influxdb_secrets.sh
-source /keybase/private/zuzu59/tequila_zf_secrets.sh
-cd /Users/zuzu/dev-vpsi/wp-ops/ansible
-curl https://$ABC_DEF:$KLM_NOP@awx-poc-vpsi.epfl.ch/api/v2/jobs/1219/stdout/?format=txt > awx_logs.txt
+cp /Users/zuzu/dev-zf/reclog/file.log awx_logs_x_sites_y_forks_z_pods.txt
 
 reset
-./parse-ansible-out2.py awx_logs_2_sites_1_pods.txt
-./parse-ansible-out2.py awx_logs_10_sites_1_pods.txt
-./parse-ansible-out2.py awx_logs_347_sites_1_pods.txt
-./parse-ansible-out2.py awx_logs_347_sites_10_pods_1.txt
+./parse-ansible-out3.py awx_logs_10_sites_5_forks_1_pods.txt
 
 
 Puis voir le résultat dans un browser
@@ -43,9 +41,9 @@ curl -i -XPOST "$dbflux_srv_host:$dbflux_srv_port/query?u=$dbflux_u_admin&p=$dbf
 
 # True False
 zverbose_v = True
-zverbose_vv = False
+zverbose_vv = True
 zprint_curl = True
-zsend_grafana = True
+zsend_grafana = False
 
 db_logs = {}
 ztask_number = 0
@@ -92,7 +90,7 @@ if (__name__ == "__main__"):
         sys.exit()
 
     zfile = open(sys.argv[1], "r")
-    i = 0
+    i = 1
 
 
 # ALT+CMD+F bascule du code au terminal
@@ -120,93 +118,114 @@ if (__name__ == "__main__"):
     # On parse le fichier de logs
     while True:
         zline = zfile.readline()
+        if zverbose_vv: print("nouvelle ligne: " + str(i) + " " + zline[:-1])
+
+        # Est-ce une ligne de Task ?
+        if zline.find(': TASK:') != -1:            
+            if zverbose_vv: print("coucou c'est une task")
+            # Récupération du path de la Task
+            zstr_find1 = ': TASK: '
+            p1 = zline.find(zstr_find1)
+            zstr_find2 = ' : '            
+            p2 = zline.find(zstr_find2, p1)
+            ztask_path = zline[p1 + len(zstr_find1):p2]
+            if zverbose_vv: print(str(i) + " ztask_path: [" + ztask_path + "]")
+            
+            # zpath = "/project/ansible/roles/wordpress-instance/tasks/"
+            # ztask_path = zline[zline.find(zpath) + len(zpath):-1]
+            # if zverbose_vv: print(str(i) + " ztask_path: [" + ztask_path + "]")
+            # db_logs[ztask_number].update({"ztask_path": ztask_path})
+
+
+
+        #     # Est-ce une ligne de Task ?
+        #     if zline.find(": debug") != -1:
+        #         if zverbose_vv: print(str(i) + " " + zline)
+        #         ztask_number = ztask_number + 1
+        #         db_logs[ztask_number] = {"zsite_name": {}}
+        # 
+        #         # On passe à la ligne suivante
+        #         zline = zfile.readline()
+        #         i = i + 1
+        #         if zverbose_vv: print(str(i) + " " + zline)
+        # 
+        #         # Récupération du path de la Task
+        #         zpath = "/project/ansible/roles/wordpress-instance/tasks/"
+        #         ztask_path = zline[zline.find(zpath) + len(zpath):-1]
+        #         if zverbose_vv: print(str(i) + " ztask_path: [" + ztask_path + "]")
+        #         db_logs[ztask_number].update({"ztask_path": ztask_path})
+        # 
+        #         while True:
+        #             # On évite la boucle infinie ;-)
+        #             if i > 20:
+        #                 quit()
+        # 
+        #             # On passe à la ligne suivante
+        #             zline = zfile.readline()
+        #             i = i + 1
+        #             if zverbose_vv: print(str(i) + " " + zline)
+        # 
+        #             # Est-ce une ligne ok: [site name] ?
+        #             if zline.find("ok: [") != -1:
+        # 
+        #                 # Récupération du nom du site
+        #                 ztask_site = zline[1 + zline.find("["):zline.find("]")]
+        #                 if zverbose_vv: print(str(i) + " ztask_site: [" + ztask_site + "]")
+        #                 db_logs[ztask_number]["zsite_name"].update({ztask_site: {}})
+        # 
+        #                 # On passe à la ligne suivante
+        #                 zline = zfile.readline()
+        #                 i = i + 1
+        #                 if zverbose_vv: print(str(i) + " " + zline)
+        # 
+        #                 # Est-ce la ligne 'ztime' ?
+        #                 if zline.find("ztime, ") != -1:
+        #                     if zverbose_vv: print("c'est une ligne ztime............")
+        # 
+        #                     # Récupération de la position dans le logs
+        #                     ztask_line = i
+        #                     db_logs[ztask_number]["zsite_name"][ztask_site].update({"ztask_line": ztask_line})
+        # 
+        #                     # Récupération du nom de la Task
+        #                     ztask_name = zline[1 + zline.find("/"):zline.find("/", 1 + zline.find("/"))]
+        #                     if zverbose_vv: print(str(i) + " ztask_name: [" + ztask_name + "]")
+        #                     db_logs[ztask_number].update({"ztask_name": ztask_name})
+        # 
+        #                     # Récupération du time de la Task
+        #                     ztask_time = zline[2 + zline.find("/ "):-2]
+        #                     if zverbose_vv: print(str(i) + " ztask_time: [" + ztask_time + "]")
+        #                     db_logs[ztask_number]["zsite_name"][ztask_site].update({"ztask_time": ztask_time})
+        # 
+        #                     if zverbose_vv: print("..................................................")
+        #                     # print(str(db_logs[ztask_number]))
+        #                     if zverbose_vv: print("Task number: " + str(ztask_number))
+        #                     if zverbose_vv: print("Task line: " + str(db_logs[ztask_number]["zsite_name"][ztask_site]["ztask_line"]))
+        #                     if zverbose_vv: print("Task name: " + db_logs[ztask_number]["ztask_name"])
+        #                     if zverbose_vv: print("Path path: " + db_logs[ztask_number]["ztask_path"])
+        #                     if zverbose_vv: print("Site name: " + ztask_site)
+        #                     if zverbose_vv: print("Timestamp: " + db_logs[ztask_number]["zsite_name"][ztask_site]["ztask_time"])
+        #                     if zverbose_vv: print("..................................................")
+        # 
+        #                     # On passe à la ligne suivante
+        #                     zline = zfile.readline()
+        #                     i = i + 1
+        #                     if zverbose_vv: print(str(i) + " " + zline)
+        #                 else:
+        #                     # Ce n'est pas une task debug avec un ztime, on recule donc le pointeur du dictionnaire
+        #                     ztask_number = ztask_number - 1
+        # 
+        #             else:
+        #                 break
+        # 
+        # if zline == "":
+        #     break
+
+        print("")
         i = i + 1
+        # On évite la boucle infinie ;-)
+        if i > 20:
+            quit()
 
-        # Est-ce une TASK ?
-        a = 'TASK ['
-        if zline[0:len(a)] == a:
-
-            # Est-ce la Task 'debug' ?
-            if zline.find(": debug") != -1:
-                if zverbose_vv: print(str(i) + " " + zline)
-                ztask_number = ztask_number + 1
-                db_logs[ztask_number] = {"zsite_name": {}}
-
-                # On passe à la ligne suivante
-                zline = zfile.readline()
-                i = i + 1
-                if zverbose_vv: print(str(i) + " " + zline)
-
-                # Récupération du path de la Task
-                zpath = "/project/ansible/roles/wordpress-instance/tasks/"
-                ztask_path = zline[zline.find(zpath) + len(zpath):-1]
-                if zverbose_vv: print(str(i) + " ztask_path: [" + ztask_path + "]")
-                db_logs[ztask_number].update({"ztask_path": ztask_path})
-
-                while True:
-                    # On évite la boucle infinie ;-)
-                    if i > 200000000:
-                        quit()
-
-                    # On passe à la ligne suivante
-                    zline = zfile.readline()
-                    i = i + 1
-                    if zverbose_vv: print(str(i) + " " + zline)
-
-                    # Est-ce une ligne ok: [site name] ?
-                    if zline.find("ok: [") != -1:
-
-                        # Récupération du nom du site
-                        ztask_site = zline[1 + zline.find("["):zline.find("]")]
-                        if zverbose_vv: print(str(i) + " ztask_site: [" + ztask_site + "]")
-                        db_logs[ztask_number]["zsite_name"].update({ztask_site: {}})
-
-                        # On passe à la ligne suivante
-                        zline = zfile.readline()
-                        i = i + 1
-                        if zverbose_vv: print(str(i) + " " + zline)
-
-                        # Est-ce la ligne 'ztime' ?
-                        if zline.find("ztime, ") != -1:
-                            if zverbose_vv: print("c'est une ligne ztime............")
-
-                            # Récupération de la position dans le logs
-                            ztask_line = i
-                            db_logs[ztask_number]["zsite_name"][ztask_site].update({"ztask_line": ztask_line})
-
-                            # Récupération du nom de la Task
-                            ztask_name = zline[1 + zline.find("/"):zline.find("/", 1 + zline.find("/"))]
-                            if zverbose_vv: print(str(i) + " ztask_name: [" + ztask_name + "]")
-                            db_logs[ztask_number].update({"ztask_name": ztask_name})
-
-                            # Récupération du time de la Task
-                            ztask_time = zline[2 + zline.find("/ "):-2]
-                            if zverbose_vv: print(str(i) + " ztask_time: [" + ztask_time + "]")
-                            db_logs[ztask_number]["zsite_name"][ztask_site].update({"ztask_time": ztask_time})
-
-                            if zverbose_vv: print("..................................................")
-                            # print(str(db_logs[ztask_number]))
-                            if zverbose_vv: print("Task number: " + str(ztask_number))
-                            if zverbose_vv: print("Task line: " + str(db_logs[ztask_number]["zsite_name"][ztask_site]["ztask_line"]))
-                            if zverbose_vv: print("Task name: " + db_logs[ztask_number]["ztask_name"])
-                            if zverbose_vv: print("Path path: " + db_logs[ztask_number]["ztask_path"])
-                            if zverbose_vv: print("Site name: " + ztask_site)
-                            if zverbose_vv: print("Timestamp: " + db_logs[ztask_number]["zsite_name"][ztask_site]["ztask_time"])
-                            if zverbose_vv: print("..................................................")
-
-                            # On passe à la ligne suivante
-                            zline = zfile.readline()
-                            i = i + 1
-                            if zverbose_vv: print(str(i) + " " + zline)
-                        else:
-                            # Ce n'est pas une task debug avec un ztime, on recule donc le pointeur du dictionnaire
-                            ztask_number = ztask_number - 1
-
-                    else:
-                        break
-
-        if zline == "":
-            break
 
     zfile.close()
 
