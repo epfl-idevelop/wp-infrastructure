@@ -1,80 +1,17 @@
-- debug:
-    msg: "themes.yml canary200707.1133"
-  tags: always
-
-
-#zzz200707.1112
-- debug:
-    msg: "ztime, /include_vars/ {{ lookup('pipe','TZ=Europe/Paris date \"+%Y-%m-%d %H:%M:%S.%N\"') }}"
-  tags: always
-
 - include_vars: wp-destructive.yml   # For wp_can
-
-
-#zzz200707.1112
-- debug:
-    msg: "ztime, /assert/ {{ lookup('pipe','TZ=Europe/Paris date \"+%Y-%m-%d %H:%M:%S.%N\"') }}"
-  tags: always
-
 - assert:
     that: wp_can.configure or ansible_check_mode
-
-
-#zzz200707.1112
-- debug:
-    msg: "ztime, /include_vars/ {{ lookup('pipe','TZ=Europe/Paris date \"+%Y-%m-%d %H:%M:%S.%N\"') }}"
-  tags: always
 
 - include_vars: theme-vars.yml
 
 ### 2018 Themes
-
-
-#zzz200707.1112
-- debug:
-    msg: "ztime, /WordPress theme 2018/ {{ lookup('pipe','TZ=Europe/Paris date \"+%Y-%m-%d %H:%M:%S.%N\"') }}"
-  tags: always
-
 - name: WordPress theme 2018
   wordpress_theme:
     name: wp-theme-2018
     state: '{{ [ "symlinked", "active" ] if theme_wp_theme_2018_active else "symlinked" }}'
 
-
-#zzz200707.1112
-- debug:
-    msg: "ztime, /WordPress theme 2018 (light)/ {{ lookup('pipe','TZ=Europe/Paris date \"+%Y-%m-%d %H:%M:%S.%N\"') }}"
-  tags: always
-
 - name: WordPress theme 2018 (light)
   wordpress_theme:
     name: wp-theme-light
     state: '{{ [ "symlinked", "active" ] if theme_wp_theme_light_active else "symlinked" }}'
-<<<<<<< HEAD
-
-
-#zzz200707.1112
-- debug:
-    msg: "ztime, /WordPress theme 2010/ {{ lookup('pipe','TZ=Europe/Paris date \"+%Y-%m-%d %H:%M:%S.%N\"') }}"
-  tags: always
-
-### 2010 Themes
-- name: WordPress theme 2010
-  wordpress_theme:
-    name: epfl-master
-    state: '{{ [ "symlinked", "active" ] if theme_epfl_master_active else "symlinked" }}'
-
-
-#zzz200707.1112
-- debug:
-    msg: "ztime, /WordPress theme 2010 (blank)/ {{ lookup('pipe','TZ=Europe/Paris date \"+%Y-%m-%d %H:%M:%S.%N\"') }}"
-  tags: always
-
-- name: WordPress theme 2010 (blank)
-  wordpress_theme:
-    name: epfl-blank
-    state: '{{ [ "symlinked", "active" ] if theme_epfl_blank_active else "symlinked" }}'
-
-
-=======
->>>>>>> dc161d0dcc8cdde57c1fc8900effc322bc370170
+    
