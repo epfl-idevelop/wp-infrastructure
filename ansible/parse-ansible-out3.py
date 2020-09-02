@@ -11,7 +11,7 @@ import sys
 import os
 import datetime
 
-version = "parse-ansible-out3.py  zf200902.1223 "
+version = "parse-ansible-out3.py  zf200902.1417 "
 
 """
 ATTENTION: il ne faut pas oublier, avant de lancer la *petite fusée* d'effacer le fichier de log de reclog !
@@ -104,10 +104,15 @@ def zprint_db_log():
         for j in range(1, ztask_site_number+1):
             print("ztask_site_name: " + str(j) + ", " + db_logs[i][j]["ztask_site_name"])
             print("ztask_time_start: " + db_logs[i][j]["ztask_time_start"])
+            print("ztask_line_start: " + str(db_logs[i][j]["ztask_line_start"]))
             try:
                 print("ztask_time_end: " + db_logs[i][j]["ztask_time_end"])
             except:
-                print("oups y'a pas de end")
+                print("************************************************************************oups y'a pas de ztask_time_end")
+            try:
+                print("ztask_line_end: " + str(db_logs[i][j]["ztask_line_end"]))
+            except:
+                print("************************************************************************oups y'a pas de ztask_line_end")
 
 
             
@@ -145,6 +150,10 @@ if (__name__ == "__main__"):
     # On parse le fichier de logs
     while True:
         zline = zfile.readline()
+        # est-ce la fin du fichier de logs ?
+        if zline == "":
+            break
+
         if zverbose_vv: print("nouvelle ligne: " + str(i) + " " + zline[:-1])
 
         # Est-ce une ligne de Task ?
@@ -228,6 +237,7 @@ if (__name__ == "__main__"):
                 db_logs[ztask_number][ztask_site_number] = {}
                 db_logs[ztask_number][ztask_site_number]["ztask_site_name"] = ztask_site
                 db_logs[ztask_number][ztask_site_number]["ztask_time_start"] = ztask_time
+                db_logs[ztask_number][ztask_site_number]["ztask_line_start"] = i
 
                 
             # Récupération du ztask_time_end
@@ -257,9 +267,11 @@ if (__name__ == "__main__"):
                         ztask_site_id = j
                         if zverbose_vv: print("ztask_site_id :" + str(ztask_site_id))
                         break
-                
+                                
+                # On écrit le task_time_end
                 db_logs[ztask_id][ztask_site_id]["ztask_time_end"] = ztask_time
-            
+                db_logs[ztask_id][ztask_site_id]["ztask_line_end"] = i
+
                 
             
             
@@ -267,14 +279,16 @@ if (__name__ == "__main__"):
         print("")
         i = i + 1
         # On évite la boucle infinie ;-)
-        if i > 40:
-            #print(db_logs)
-            zprint_db_log()
-            quit()
+        if i > 4000:
+            break
 
     zfile.close()
 
-
+    #print(db_logs)
+    zprint_db_log()
+    quit()
+    
+    
     # Calcul les durations pour chaque sites
     for i in range(1, ztask_number):
         if zverbose_vv: print(str(i))
