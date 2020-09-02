@@ -11,7 +11,7 @@ import sys
 import os
 import datetime
 
-version = "parse-ansible-out3.py  zf200901.1914 "
+version = "parse-ansible-out3.py  zf200902.1054 "
 
 """
 ATTENTION: il ne faut pas oublier, avant de lancer la *petite fusée* d'effacer le fichier de log de reclog !
@@ -104,8 +104,10 @@ def zprint_db_log():
         for j in range(1, ztask_site_number+1):
             print("ztask_site_name: " + str(j) + ", " + db_logs[i][j]["ztask_site_name"])
             print("ztask_time_start: " + db_logs[i][j]["ztask_time_start"])
-            print("ztask_time_end: " + db_logs[i][j]["ztask_time_end"])
-
+            try:
+                print("ztask_time_end: " + db_logs[i][j]["ztask_time_end"])
+            except:
+                print("oups y'a pas de end")
 
 
             
@@ -245,8 +247,9 @@ if (__name__ == "__main__"):
                 ztask_site_number = len(db_logs[1]) - 2
                 ztask_site_id = 0
                 for j in range(1, ztask_site_number + 1):
-                    # print("j: " + str(j))
-                    # #print(db_logs)
+                    print("j 1059: " + str(j))
+                    # print(db_logs)
+                    # zprint_db_log()
                     # print(db_logs[ztask_id][j]["ztask_site_name"])
                     # print(ztask_site)
                     
@@ -264,9 +267,9 @@ if (__name__ == "__main__"):
         print("")
         i = i + 1
         # On évite la boucle infinie ;-)
-        if i > 40:
-            # print(db_logs)
-            zprint_db_log()
+        if i > 22:
+            print(db_logs)
+            #zprint_db_log()
             quit()
 
     zfile.close()
