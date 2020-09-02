@@ -11,7 +11,7 @@ import sys
 import os
 import datetime
 
-version = "parse-ansible-out3.py  zf200902.1054 "
+version = "parse-ansible-out3.py  zf200902.1223 "
 
 """
 ATTENTION: il ne faut pas oublier, avant de lancer la *petite fusée* d'effacer le fichier de log de reclog !
@@ -100,7 +100,7 @@ def zprint_db_log():
         print("------------")
         print("ztask_name: " + str(i) + ", " + db_logs[i]["ztask_name"])
         print("ztask_path: " + db_logs[i]["ztask_path"])
-        ztask_site_number = len(db_logs[1]) - 2
+        ztask_site_number = len(db_logs[i]) - 2
         for j in range(1, ztask_site_number+1):
             print("ztask_site_name: " + str(j) + ", " + db_logs[i][j]["ztask_site_name"])
             print("ztask_time_start: " + db_logs[i][j]["ztask_time_start"])
@@ -220,7 +220,7 @@ if (__name__ == "__main__"):
                     db_logs[ztask_id]["ztask_path"] = ztask_path
                 
                 # chercher l'index du site dans le dictionnaire
-                ztask_site_number = len(db_logs[1]) - 2
+                ztask_site_number = len(db_logs[ztask_number]) - 2
                 ztask_site_number = ztask_site_number + 1
                 if zverbose_vv: print("ztask_site_number:" + str(ztask_site_number))
 
@@ -244,7 +244,7 @@ if (__name__ == "__main__"):
                         break
                 
                 # On cherche le site
-                ztask_site_number = len(db_logs[1]) - 2
+                ztask_site_number = len(db_logs[ztask_id]) - 2
                 ztask_site_id = 0
                 for j in range(1, ztask_site_number + 1):
                     print("j 1059: " + str(j))
@@ -267,9 +267,9 @@ if (__name__ == "__main__"):
         print("")
         i = i + 1
         # On évite la boucle infinie ;-)
-        if i > 22:
-            print(db_logs)
-            #zprint_db_log()
+        if i > 40:
+            #print(db_logs)
+            zprint_db_log()
             quit()
 
     zfile.close()
