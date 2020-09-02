@@ -1,5 +1,5 @@
 # Mes petits trucs à moi pour bien travailler ;-)
-#zf200901.1128
+#zf200902.1647
 
 <!-- TOC titleSize:2 tabSpaces:2 depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 skip:2 title:1 charForUnorderedList:* -->
 ## Table of Contents
@@ -171,6 +171,7 @@ less awx_logs.txt
 Dans sa console de sa machine
 ```
 ./wpsible -t awx
+./wpsible -t awx --check
 ```
 
 #### ATTENTION 1er:
