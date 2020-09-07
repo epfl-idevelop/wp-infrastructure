@@ -11,7 +11,7 @@ import sys
 import os
 import datetime
 
-version = "parse-ansible-out4.py  zf200907.1048 "
+version = "parse-ansible-out4.py  zf200907.1346 "
 
 """
 ATTENTION: il ne faut pas oublier, avant de lancer la *petite fusée* d'effacer le fichier de log de reclog !
@@ -102,13 +102,23 @@ def zprint_db_log():
         print("ztask_path: " + db_logs[i]["ztask_path"])
         ztask_site_number = len(db_logs[i]) - 2
         for j in range(1, ztask_site_number+1):
+            print("----")
             print("ztask_site_name: " + str(j) + ", " + db_logs[i][j]["ztask_site_name"])
-            print("ztask_time_start: " + db_logs[i][j]["ztask_time_start"])
-            print("ztask_line_start: " + str(db_logs[i][j]["ztask_line_start"]))
+            try:
+                print("ztask_time_start: " + db_logs[i][j]["ztask_time_start"])
+            except:
+                print("************************************************************************oups y'a pas de ztask_time_start")
+
+            try:
+                print("ztask_line_start: " + str(db_logs[i][j]["ztask_line_start"]))
+            except:
+                print("************************************************************************oups y'a pas de ztask_line_start")
+
             try:
                 print("ztask_time_end: " + db_logs[i][j]["ztask_time_end"])
             except:
                 print("************************************************************************oups y'a pas de ztask_time_end")
+
             try:
                 print("ztask_line_end: " + str(db_logs[i][j]["ztask_line_end"]))
             except:
@@ -252,14 +262,16 @@ if (__name__ == "__main__"):
                         ztask_id = j
                         if zverbose_vv: print("ztask_id :" + str(ztask_id))
                         break
-                
+                if ztask_id == 0:
+                    print("oups, y'a pas de tâche ici 133759")
+                    exit()
                 # On cherche le site
                 ztask_site_number = len(db_logs[ztask_id]) - 2
                 if zverbose_vv: print("ztask_site_number 1135:" + str(ztask_site_number))
 
                 ztask_site_id = 0
-                print(db_logs)
-                zprint_db_log()
+                # print(db_logs)
+                #zprint_db_log()
                 for j in range(1, ztask_site_number + 1):
                     print("j 1059: " + str(j))
                     # print(db_logs[ztask_id][j]["ztask_site_name"])
@@ -270,7 +282,19 @@ if (__name__ == "__main__"):
                         ztask_site_id = j
                         if zverbose_vv: print("ztask_site_id 1133:" + str(ztask_site_id))
                         break
-                                
+
+                if ztask_site_id == 0:
+                    print("oups, y'a pas de site ici 133935")
+                    
+                    # on cherche l'index du site dans le dictionnaire
+                    ztask_site_id = len(db_logs[ztask_id]) - 2
+                    ztask_site_id = ztask_site_id + 1
+                    if zverbose_vv: print("ztask_site_id 1346:" + str(ztask_site_id))
+
+                    # On crée un nouveau site
+                    db_logs[ztask_id][ztask_site_id] = {}
+                    db_logs[ztask_id][ztask_site_id]["ztask_site_name"] = ztask_site
+                
                 # On écrit le task_time_end
                 db_logs[ztask_id][ztask_site_id]["ztask_time_end"] = ztask_time
                 db_logs[ztask_id][ztask_site_id]["ztask_line_end"] = i
