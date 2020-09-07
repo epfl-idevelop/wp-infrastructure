@@ -11,7 +11,7 @@ import sys
 import os
 import datetime
 
-version = "parse-ansible-out3.py  zf200902.1417 "
+version = "parse-ansible-out4.py  zf200907.1048 "
 
 """
 ATTENTION: il ne faut pas oublier, avant de lancer la *petite fusée* d'effacer le fichier de log de reclog !
@@ -24,7 +24,7 @@ usage:
 cp /Users/zuzu/dev-zf/reclog/file.log awx_logs_x_sites_y_forks_z_pods.txt
 
 reset
-./parse-ansible-out3.py awx_logs_10_sites_5_forks_1_pods.txt
+./parse-ansible-out4.py awx_logs_10_sites_5_forks_1_pods.txt
 
 
 Puis voir le résultat dans un browser
@@ -141,7 +141,7 @@ if (__name__ == "__main__"):
     signal.signal(signal.SIGINT, signal_handler)
 
     if len(sys.argv) == 1:
-        print("Usage: ./parse-ansible-out3.py fichier_log_a_parser\n\n")
+        print("Usage: ./parse-ansible-out4.py fichier_log_a_parser\n\n")
         sys.exit()
 
     zfile = open(sys.argv[1], "r")
@@ -157,21 +157,21 @@ if (__name__ == "__main__"):
         if zverbose_vv: print("nouvelle ligne: " + str(i) + " " + zline[:-1])
 
         # Est-ce une ligne de Task ?
-        if zline.find(': TASK:') != -1:            
+        if zline.find(', TASK:') != -1:            
             if zverbose_vv: print("coucou c'est une task")
             
             # Récupération du task_site
-            zstr_find1 = 'by zuzu, '
+            zstr_find1 = ' by zuzu, '
             p1 = zline.find(zstr_find1)
-            zstr_find2 = ': TASK:'            
+            zstr_find2 = ': PATH: '            
             p2 = zline.find(zstr_find2, p1)
             ztask_site = zline[p1 + len(zstr_find1):p2]
             if zverbose_vv: print(str(i) + " ztask_site: [" + ztask_site + "]")
             
             # Récupération du task_path
-            zstr_find1 = ': TASK: '
+            zstr_find1 = ': PATH: '
             p1 = zline.find(zstr_find1)
-            zstr_find2 = ' : '            
+            zstr_find2 = ', TASK: '            
             p2 = zline.find(zstr_find2, p1)
             ztask_path = zline[p1 + len(zstr_find1):p2]
             if zverbose_vv: print(str(i) + " ztask_path: [" + ztask_path + "]")
@@ -255,17 +255,20 @@ if (__name__ == "__main__"):
                 
                 # On cherche le site
                 ztask_site_number = len(db_logs[ztask_id]) - 2
+                if zverbose_vv: print("ztask_site_number 1135:" + str(ztask_site_number))
+
                 ztask_site_id = 0
+                print(db_logs)
+                zprint_db_log()
                 for j in range(1, ztask_site_number + 1):
                     print("j 1059: " + str(j))
-                    # print(db_logs)
-                    # zprint_db_log()
                     # print(db_logs[ztask_id][j]["ztask_site_name"])
                     # print(ztask_site)
-                    
+                    if zverbose_vv: print("ztask_site_name 1135:" + str(db_logs[ztask_id][j]["ztask_site_name"]))
+                    if zverbose_vv: print("ztask_site 1135:" + str(ztask_site))
                     if db_logs[ztask_id][j]["ztask_site_name"] == ztask_site:
                         ztask_site_id = j
-                        if zverbose_vv: print("ztask_site_id :" + str(ztask_site_id))
+                        if zverbose_vv: print("ztask_site_id 1133:" + str(ztask_site_id))
                         break
                                 
                 # On écrit le task_time_end
@@ -279,11 +282,12 @@ if (__name__ == "__main__"):
         print("")
         i = i + 1
         # On évite la boucle infinie ;-)
-        if i > 4000:
+        if i > 2000:
             break
 
     zfile.close()
 
+    print("coucou 1057")
     #print(db_logs)
     zprint_db_log()
     quit()

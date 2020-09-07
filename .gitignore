@@ -11,3 +11,5 @@ node_modules/
 ansible-deps-cache
 awx_logs*.txt
 ansible/archives/*
+ansible_log*.txt
+toto*

@@ -1,5 +1,5 @@
 # Mes petits trucs à moi pour bien travailler ;-)
-#zf200902.1647
+#zf200907.1043
 
 <!-- TOC titleSize:2 tabSpaces:2 depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 skip:2 title:1 charForUnorderedList:* -->
 ## Table of Contents
@@ -19,6 +19,7 @@
     * [En travail, si on veut refaire l'image du Ansible runner ET du container utilisé par AWX](#en-travail-si-on-veut-refaire-limage-du-ansible-runner-et-du-container-utilisé-par-awx)
       * [ATTENTION 1er:](#attention-1er)
       * [ATTENTION 2e:](#attention-2e)
+  * [Voir les résultats des logs avec *reclog*](#voir-les-résultats-des-logs-avec-reclog)
   * [Se connecter en ssh dans un runner (pod)](#se-connecter-en-ssh-dans-un-runner-pod)
   * [Sur Grafana](#sur-grafana)
 * [Problèmes actuels](#problèmes-actuels)
@@ -171,6 +172,7 @@ less awx_logs.txt
 Dans sa console de sa machine
 ```
 ./wpsible -t awx
+# si c'est juste pour faire un check on peut faire ceci:
 ./wpsible -t awx --check
 ```
 
@@ -179,6 +181,17 @@ Dans sa console de sa machine
 
 #### ATTENTION 2e:
 **Si on a modifié le code Ansible, il faut *forcer* le rebuild en changeant la date dans le dockerfile du ansible-runner (roles/awx-instance/templates/Dockerfile.wp-ansible-runner) afin que le *patch* puisse s'appliquer !**
+
+
+## Voir les résultats des logs avec *reclog*
+On peut utiliser *reclog* pour enregistrer les logs de profilage d'Ansible:
+https://github.com/zuzu59/reclog
+
+Quand le *reclog* tourne, il ne faut pas oublier, avant de lancer Ansible, d'effacer les anciens logs:
+```
+rm ../../../dev-zf/reclog/file.log
+tail -f ../../../dev-zf/reclog/file.log
+```
 
 
 ## Se connecter en ssh dans un runner (pod)
