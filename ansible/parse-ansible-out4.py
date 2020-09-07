@@ -11,7 +11,7 @@ import sys
 import os
 import datetime
 
-version = "parse-ansible-out4.py  zf200907.1346 "
+version = "parse-ansible-out4.py  zf200907.1505 "
 
 """
 ATTENTION: il ne faut pas oublier, avant de lancer la *petite fusée* d'effacer le fichier de log de reclog !
@@ -41,7 +41,7 @@ curl -i -XPOST "$dbflux_srv_host:$dbflux_srv_port/query?u=$dbflux_u_admin&p=$dbf
 
 # True False
 zverbose_v = True
-zverbose_vv = True
+zverbose_vv = False
 zprint_curl = True
 zsend_grafana = False
 
@@ -313,23 +313,26 @@ if (__name__ == "__main__"):
 
     print("coucou 1057")
     #print(db_logs)
-    zprint_db_log()
-    quit()
+    # zprint_db_log()
+    # quit()
     
     
     # Calcul les durations pour chaque sites
-    for i in range(1, ztask_number):
-        if zverbose_vv: print(str(i))
+    for i in range(1, ztask_number+1): 
+        if zverbose_vv: print("i: " + str(i))        
+        ztask_site_number = len(db_logs[i]) - 2
+        for j in range(1, ztask_site_number+1):
+            if zverbose_vv: print("ztask_site_name: " + str(j) + ", " + db_logs[i][j]["ztask_site_name"])
 
-        for j in db_logs[i]["zsite_name"]:
-            if zverbose_vv: print(j + ": " + db_logs[i]["zsite_name"][j]["ztask_time"])
-
-            ztask_time_1 = db_logs[i]["zsite_name"][j]["ztask_time"][0:-3]
+            ztask_time_1 = db_logs[i][j]["ztask_time_start"][0:-6]
+            if zverbose_vv: print("ztask_time_1: " + str(ztask_time_1))
             ztask_time_obj_1 = datetime.datetime.strptime(ztask_time_1, '%Y-%m-%d %H:%M:%S.%f')
             ztask_unix_time_1 = zget_unix_time(ztask_time_obj_1).total_seconds()
             if zverbose_vv: print("ztask_unix_time_1: " + str(ztask_unix_time_1))
 
-            ztask_time_2 = db_logs[i + 1]["zsite_name"][j]["ztask_time"][0:-3]
+            ztask_time_2 = db_logs[i][j]["ztask_time_end"][0:-6]
+            if zverbose_vv: print("ztask_time_2: " + str(ztask_time_2))
+
             ztask_time_obj_2 = datetime.datetime.strptime(ztask_time_2, '%Y-%m-%d %H:%M:%S.%f')
             ztask_unix_time_2 = zget_unix_time(ztask_time_obj_2).total_seconds()
             if zverbose_vv: print("ztask_unix_time_2: " + str(ztask_unix_time_2))
@@ -337,54 +340,55 @@ if (__name__ == "__main__"):
             ztask_duration = ztask_unix_time_2 - ztask_unix_time_1
             if zverbose_vv: print("Durée: " + str(ztask_duration))
             
-            db_logs[i]["zsite_name"][j].update({"ztask_duration": ztask_duration})
-
-            if zverbose_v: print("..................................................")
-            # print(str(db_logs[ztask_number]))
+            db_logs[i][j]["ztask_duration"] = ztask_duration
+            
+            if zverbose_v: print("..................................................")                        
             if zverbose_v: print("Task number: " + str(i))
-            if zverbose_v: print("Task line: " + str(db_logs[i]["zsite_name"][j]["ztask_line"]))
-            if zverbose_v: print("Task name: " + db_logs[i]["ztask_name"])
-            if zverbose_v: print("Path path: " + db_logs[i]["ztask_path"])
-            if zverbose_v: print("Site name: " + j)
-            if zverbose_v: print("Timestamp: " + db_logs[i]["zsite_name"][j]["ztask_time"])
-            if zverbose_v: print("Duration: " + str(db_logs[i]["zsite_name"][j]["ztask_duration"]))
+            if zverbose_v: print("ztask_name: " + str(i) + ", " + db_logs[i]["ztask_name"])
+            if zverbose_v: print("ztask_path: " + db_logs[i]["ztask_path"])
+            if zverbose_v: print("ztask_site_name: " + str(j) + ", " + db_logs[i][j]["ztask_site_name"])
+            if zverbose_v: print("ztask_time_start: " + db_logs[i][j]["ztask_time_start"])
+            if zverbose_v: print("ztask_line_start: " + str(db_logs[i][j]["ztask_line_start"]))
+            if zverbose_v: print("ztask_time_end: " + db_logs[i][j]["ztask_time_end"])
+            if zverbose_v: print("ztask_line_end: " + str(db_logs[i][j]["ztask_line_end"]))
+            if zverbose_v: print("ztask_duration: " + str(db_logs[i][j]["ztask_duration"]))
             if zverbose_v: print("..................................................")
 
             
-            ztable = "awx_logs1"
-            ztask_name_1 = db_logs[i]["ztask_name"]
-            ztask_line_1 = db_logs[i]["zsite_name"][j]["ztask_line"]
-            ztask_path_1 = db_logs[i]["ztask_path"]
-            ztask_site_1 = j
-            
-            ztask_name = ztask_name_1.replace(" ", "_") + "_" + str(ztask_line_1)
-            ztask_name = ztask_name_1.replace(" ", "_")
-            ztask_path = ztask_path_1.replace(" ", "_")
-            ztask_path = ztask_path.replace(":", "_")
-            ztask_path = ztask_path.replace(".", "_")
-            ztask_site = ztask_site_1
-            
-            ztask_time_1 = db_logs[i]["zsite_name"][j]["ztask_time"][0:-3]
-            ztask_time_obj_1 = datetime.datetime.strptime(ztask_time_1, '%Y-%m-%d %H:%M:%S.%f')
-            ztask_unix_time_1 = zget_unix_time(ztask_time_obj_1).total_seconds()
-            ztask_unix_time_nano = ztask_unix_time_1 * 1000000000
-            
-            ztask_duration = db_logs[i]["zsite_name"][j]["ztask_duration"]
-
-            # zcmd = 'curl -i -XPOST "$dbflux_srv_host:$dbflux_srv_port/write?db=$dbflux_db&u=$dbflux_u_user&p=$dbflux_p_user"  --data-binary "' + ztable + ',action=' + ztask_path + ',task=' + ztask_name + ' duration=' + str(ztask_duration) + ' ' + '%0.0f' % (ztask_unix_time_nano) + '"'
-
-            zcmd = 'curl -i -XPOST "$dbflux_srv_host:$dbflux_srv_port/write?db=$dbflux_db&u=$dbflux_u_user&p=$dbflux_p_user"  --data-binary "' + ztable
-            # zcmd = zcmd + ',path=' + ztask_path + ',task=' + ztask_name + ',site=' + ztask_site + ' duration=' + str(ztask_duration) + ' ' + '%0.0f' % (ztask_unix_time_nano) + '"'
-            zcmd = zcmd + ',task=' + ztask_name + '_/_' + ztask_path + ',site=' + ztask_site + ' duration=' + str(ztask_duration) + ' ' + '%0.0f' % (ztask_unix_time_nano) + '"'
-
-
-
-            if zprint_curl: print(zcmd)
-            
-            if zsend_grafana:
-                zerr = os.system(zcmd)
-                if zerr != 0:
-                    print(zerr)
+            # ztable = "awx_logs1"
+            # ztask_name_1 = db_logs[i]["ztask_name"]
+            # ztask_line_1 = db_logs[i]["zsite_name"][j]["ztask_line"]
+            # ztask_path_1 = db_logs[i]["ztask_path"]
+            # ztask_site_1 = j
+            # 
+            # ztask_name = ztask_name_1.replace(" ", "_") + "_" + str(ztask_line_1)
+            # ztask_name = ztask_name_1.replace(" ", "_")
+            # ztask_path = ztask_path_1.replace(" ", "_")
+            # ztask_path = ztask_path.replace(":", "_")
+            # ztask_path = ztask_path.replace(".", "_")
+            # ztask_site = ztask_site_1
+            # 
+            # ztask_time_1 = db_logs[i]["zsite_name"][j]["ztask_time"][0:-3]
+            # ztask_time_obj_1 = datetime.datetime.strptime(ztask_time_1, '%Y-%m-%d %H:%M:%S.%f')
+            # ztask_unix_time_1 = zget_unix_time(ztask_time_obj_1).total_seconds()
+            # ztask_unix_time_nano = ztask_unix_time_1 * 1000000000
+            # 
+            # ztask_duration = db_logs[i]["zsite_name"][j]["ztask_duration"]
+            # 
+            # # zcmd = 'curl -i -XPOST "$dbflux_srv_host:$dbflux_srv_port/write?db=$dbflux_db&u=$dbflux_u_user&p=$dbflux_p_user"  --data-binary "' + ztable + ',action=' + ztask_path + ',task=' + ztask_name + ' duration=' + str(ztask_duration) + ' ' + '%0.0f' % (ztask_unix_time_nano) + '"'
+            # 
+            # zcmd = 'curl -i -XPOST "$dbflux_srv_host:$dbflux_srv_port/write?db=$dbflux_db&u=$dbflux_u_user&p=$dbflux_p_user"  --data-binary "' + ztable
+            # # zcmd = zcmd + ',path=' + ztask_path + ',task=' + ztask_name + ',site=' + ztask_site + ' duration=' + str(ztask_duration) + ' ' + '%0.0f' % (ztask_unix_time_nano) + '"'
+            # zcmd = zcmd + ',task=' + ztask_name + '_/_' + ztask_path + ',site=' + ztask_site + ' duration=' + str(ztask_duration) + ' ' + '%0.0f' % (ztask_unix_time_nano) + '"'
+            # 
+            # 
+            # 
+            # if zprint_curl: print(zcmd)
+            # 
+            # if zsend_grafana:
+            #     zerr = os.system(zcmd)
+            #     if zerr != 0:
+            #         print(zerr)
 
 
 
