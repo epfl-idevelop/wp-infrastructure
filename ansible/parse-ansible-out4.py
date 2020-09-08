@@ -11,7 +11,7 @@ import sys
 import os
 import datetime
 
-version = "parse-ansible-out4.py  zf200908.0919 "
+version = "parse-ansible-out4.py  zf200908.0958 "
 
 """
 ATTENTION: il ne faut pas oublier, avant de lancer la *petite fusée* d'effacer le fichier de log de reclog !
@@ -306,7 +306,7 @@ if (__name__ == "__main__"):
         print("")
         i = i + 1
         # On évite la boucle infinie ;-)
-        if i > 2000:
+        if i > 2000000:
             break
 
     zfile.close()
@@ -361,6 +361,10 @@ if (__name__ == "__main__"):
             ztask_path_1 = db_logs[i]["ztask_path"]
             ztask_site_1 = db_logs[i][j]["ztask_site_name"]
             
+            # on raccourci le task_path à cause de l'affichage dans Grafana
+            ztask_path_1 = ztask_path_1[ztask_path_1.find("project/ansible")+16:-1]
+            
+            # on change tous les caractères *system* utilisés par InfluxDB
             ztask_name = ztask_name_1.replace(" ", "_") + "_" + str(ztask_line_1)
             ztask_name = ztask_name_1.replace(" ", "_")
             ztask_path = ztask_path_1.replace(" ", "_")
@@ -368,6 +372,7 @@ if (__name__ == "__main__"):
             ztask_path = ztask_path.replace(".", "_")
             ztask_site = ztask_site_1
             
+            # on transforme en nano secondes pour InfluxDB
             ztask_time_1 = db_logs[i][j]["ztask_time_start"][0:-6]
             ztask_time_obj_1 = datetime.datetime.strptime(ztask_time_1, '%Y-%m-%d %H:%M:%S.%f')
             ztask_unix_time_1 = zget_unix_time(ztask_time_obj_1).total_seconds()
@@ -381,8 +386,6 @@ if (__name__ == "__main__"):
             # zcmd = zcmd + ',path=' + ztask_path + ',task=' + ztask_name + ',site=' + ztask_site + ' duration=' + str(ztask_duration) + ' ' + '%0.0f' % (ztask_unix_time_nano) + '"'
             zcmd = zcmd + ',task=' + ztask_name + '_/_' + ztask_path + ',site=' + ztask_site + ' duration=' + str(ztask_duration) + ' ' + '%0.0f' % (ztask_unix_time_nano) + '"'
             
-            
-            
             if zprint_curl: print(zcmd)
             
             if zsend_grafana:
@@ -392,7 +395,7 @@ if (__name__ == "__main__"):
 
         # On évite la boucle infinie ;-)
         print("toto:" + str(i))
-        if i > 100000:
+        if i > 1000000:
             break
             
 
