@@ -11,7 +11,7 @@ import sys
 import os
 import datetime
 
-version = "parse-ansible-out4.py  zf200908.1330 "
+version = "parse-ansible-out4.py  zf200908.1904 "
 
 """
 ATTENTION: il ne faut pas oublier, avant de lancer la *petite fusée* d'effacer le fichier de log de reclog !
@@ -25,10 +25,15 @@ cp /Users/zuzu/dev-zf/reclog/file.log awx_logs_x_sites_y_forks_z_pods.txt
 
 cp /Users/zuzu/dev-zf/reclog/file.log awx_logs_10_sites_5_forks_1_pods.txt2
 cp /Users/zuzu/dev-zf/reclog/file.log awx_logs_1033_sites_5_forks_1_pods.txt2
+cp /Users/zuzu/dev-zf/reclog/file.log awx_logs_100_sites_5_forks_1_pods.txt2
+cp /Users/zuzu/dev-zf/reclog/file.log awx_logs_100_sites_30_forks_1_pods.txt
+cp /Users/zuzu/dev-zf/reclog/file.log awx_logs_100_sites_50_forks_1_pods.txt
+cp /Users/zuzu/dev-zf/reclog/file.log awx_logs_100_sites_5_forks_10_pods.txt
 
 reset
 ./parse-ansible-out4.py awx_logs_10_sites_5_forks_1_pods.txt
 ./parse-ansible-out4.py awx_logs_1033_sites_5_forks_1_pods.txt
+./parse-ansible-out4.py awx_logs_100_sites_5_forks_1_pods.txt
 
 
 Puis voir le résultat dans un browser
@@ -46,7 +51,8 @@ curl -i -XPOST "$dbflux_srv_host:$dbflux_srv_port/query?u=$dbflux_u_admin&p=$dbf
 # True False
 zverbose_v = False
 zverbose_vv = False
-zprint_curl = True
+zverbose_curl = True
+zverbose_grafana = False
 zsend_grafana = True
 
 db_logs = {}
@@ -142,7 +148,7 @@ def zget_unix_time(zdate):
     zdate_time_obj = zdate
     if zverbose_vv: print("zdate_time_obj: [" + str(zdate_time_obj) + "]")
     zdate_time_1970_obj = datetime.datetime.strptime(
-        "1970-01-01 01:00:00", '%Y-%m-%d %H:%M:%S')  # Astuce pour faire UTC-1 à cause de Grafana !
+        "1970-01-01 02:00:00", '%Y-%m-%d %H:%M:%S')  # Astuce pour faire UTC-2 à cause de Grafana !
     if zverbose_vv: print("zdate_time_1970_obj: [" + str(zdate_time_1970_obj) + "]")
     zdate_time_unix_obj = (zdate_time_obj - zdate_time_1970_obj)
     if zverbose_vv: print("zdate_time_unix_obj: [" + str(zdate_time_unix_obj) + "]")
@@ -394,12 +400,12 @@ if (__name__ == "__main__"):
             # zcmd = zcmd + ',path=' + ztask_path + ',task=' + ztask_name + ',site=' + ztask_site + ' duration=' + str(ztask_duration) + ' ' + '%0.0f' % (ztask_unix_time_nano) + '"'
             zcmd = zcmd + ',task=' + ztask_name + '_/_' + ztask_path + ',site=' + ztask_site + ' duration=' + str(ztask_duration) + ' ' + '%0.0f' % (ztask_unix_time_nano) + '"'
             
-            if zprint_curl: print(zcmd)
+            if zverbose_curl: print(zcmd)
             
             if zsend_grafana:
                 zerr = os.system(zcmd)
                 if zerr != 0:
-                    print(zerr)
+                    if zverbose_grafana(): print(zerr)
 
         # On évite la boucle infinie ;-)
         print("toto:" + str(i))
