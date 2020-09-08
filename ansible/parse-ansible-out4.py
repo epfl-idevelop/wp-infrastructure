@@ -11,7 +11,7 @@ import sys
 import os
 import datetime
 
-version = "parse-ansible-out4.py  zf200907.1505 "
+version = "parse-ansible-out4.py  zf200908.0919 "
 
 """
 ATTENTION: il ne faut pas oublier, avant de lancer la *petite fusée* d'effacer le fichier de log de reclog !
@@ -40,10 +40,10 @@ curl -i -XPOST "$dbflux_srv_host:$dbflux_srv_port/query?u=$dbflux_u_admin&p=$dbf
 
 
 # True False
-zverbose_v = True
+zverbose_v = False
 zverbose_vv = False
 zprint_curl = True
-zsend_grafana = False
+zsend_grafana = True
 
 db_logs = {}
 ztask_number = 0        # le zéro est important car on l'utilise pour savoir si on est au début du dictionnaire !
@@ -355,43 +355,44 @@ if (__name__ == "__main__"):
             if zverbose_v: print("..................................................")
 
             
-            # ztable = "awx_logs1"
-            # ztask_name_1 = db_logs[i]["ztask_name"]
-            # ztask_line_1 = db_logs[i]["zsite_name"][j]["ztask_line"]
-            # ztask_path_1 = db_logs[i]["ztask_path"]
-            # ztask_site_1 = j
-            # 
-            # ztask_name = ztask_name_1.replace(" ", "_") + "_" + str(ztask_line_1)
-            # ztask_name = ztask_name_1.replace(" ", "_")
-            # ztask_path = ztask_path_1.replace(" ", "_")
-            # ztask_path = ztask_path.replace(":", "_")
-            # ztask_path = ztask_path.replace(".", "_")
-            # ztask_site = ztask_site_1
-            # 
-            # ztask_time_1 = db_logs[i]["zsite_name"][j]["ztask_time"][0:-3]
-            # ztask_time_obj_1 = datetime.datetime.strptime(ztask_time_1, '%Y-%m-%d %H:%M:%S.%f')
-            # ztask_unix_time_1 = zget_unix_time(ztask_time_obj_1).total_seconds()
-            # ztask_unix_time_nano = ztask_unix_time_1 * 1000000000
-            # 
-            # ztask_duration = db_logs[i]["zsite_name"][j]["ztask_duration"]
-            # 
-            # # zcmd = 'curl -i -XPOST "$dbflux_srv_host:$dbflux_srv_port/write?db=$dbflux_db&u=$dbflux_u_user&p=$dbflux_p_user"  --data-binary "' + ztable + ',action=' + ztask_path + ',task=' + ztask_name + ' duration=' + str(ztask_duration) + ' ' + '%0.0f' % (ztask_unix_time_nano) + '"'
-            # 
-            # zcmd = 'curl -i -XPOST "$dbflux_srv_host:$dbflux_srv_port/write?db=$dbflux_db&u=$dbflux_u_user&p=$dbflux_p_user"  --data-binary "' + ztable
-            # # zcmd = zcmd + ',path=' + ztask_path + ',task=' + ztask_name + ',site=' + ztask_site + ' duration=' + str(ztask_duration) + ' ' + '%0.0f' % (ztask_unix_time_nano) + '"'
-            # zcmd = zcmd + ',task=' + ztask_name + '_/_' + ztask_path + ',site=' + ztask_site + ' duration=' + str(ztask_duration) + ' ' + '%0.0f' % (ztask_unix_time_nano) + '"'
-            # 
-            # 
-            # 
-            # if zprint_curl: print(zcmd)
-            # 
-            # if zsend_grafana:
-            #     zerr = os.system(zcmd)
-            #     if zerr != 0:
-            #         print(zerr)
+            ztable = "awx_logs1"
+            ztask_name_1 = db_logs[i]["ztask_name"]
+            ztask_line_1 = db_logs[i][j]["ztask_line_start"]
+            ztask_path_1 = db_logs[i]["ztask_path"]
+            ztask_site_1 = db_logs[i][j]["ztask_site_name"]
+            
+            ztask_name = ztask_name_1.replace(" ", "_") + "_" + str(ztask_line_1)
+            ztask_name = ztask_name_1.replace(" ", "_")
+            ztask_path = ztask_path_1.replace(" ", "_")
+            ztask_path = ztask_path.replace(":", "_")
+            ztask_path = ztask_path.replace(".", "_")
+            ztask_site = ztask_site_1
+            
+            ztask_time_1 = db_logs[i][j]["ztask_time_start"][0:-6]
+            ztask_time_obj_1 = datetime.datetime.strptime(ztask_time_1, '%Y-%m-%d %H:%M:%S.%f')
+            ztask_unix_time_1 = zget_unix_time(ztask_time_obj_1).total_seconds()
+            ztask_unix_time_nano = ztask_unix_time_1 * 1000000000
 
+            ztask_duration = db_logs[i][j]["ztask_duration"]
+            
+            # zcmd = 'curl -i -XPOST "$dbflux_srv_host:$dbflux_srv_port/write?db=$dbflux_db&u=$dbflux_u_user&p=$dbflux_p_user"  --data-binary "' + ztable + ',action=' + ztask_path + ',task=' + ztask_name + ' duration=' + str(ztask_duration) + ' ' + '%0.0f' % (ztask_unix_time_nano) + '"'
+            
+            zcmd = 'curl -i -XPOST "$dbflux_srv_host:$dbflux_srv_port/write?db=$dbflux_db&u=$dbflux_u_user&p=$dbflux_p_user"  --data-binary "' + ztable
+            # zcmd = zcmd + ',path=' + ztask_path + ',task=' + ztask_name + ',site=' + ztask_site + ' duration=' + str(ztask_duration) + ' ' + '%0.0f' % (ztask_unix_time_nano) + '"'
+            zcmd = zcmd + ',task=' + ztask_name + '_/_' + ztask_path + ',site=' + ztask_site + ' duration=' + str(ztask_duration) + ' ' + '%0.0f' % (ztask_unix_time_nano) + '"'
+            
+            
+            
+            if zprint_curl: print(zcmd)
+            
+            if zsend_grafana:
+                zerr = os.system(zcmd)
+                if zerr != 0:
+                    print(zerr)
 
-
-
-
+        # On évite la boucle infinie ;-)
+        print("toto:" + str(i))
+        if i > 100000:
+            break
+            
 
