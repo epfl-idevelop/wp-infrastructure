@@ -11,7 +11,7 @@ import sys
 import os
 import datetime
 
-version = "parse-ansible-out4.py  zf200908.0958 "
+version = "parse-ansible-out4.py  zf200908.1330 "
 
 """
 ATTENTION: il ne faut pas oublier, avant de lancer la *petite fusée* d'effacer le fichier de log de reclog !
@@ -23,8 +23,12 @@ Le faire avec la petite fusée du template dans l'interface WEB de AWX !
 usage:
 cp /Users/zuzu/dev-zf/reclog/file.log awx_logs_x_sites_y_forks_z_pods.txt
 
+cp /Users/zuzu/dev-zf/reclog/file.log awx_logs_10_sites_5_forks_1_pods.txt2
+cp /Users/zuzu/dev-zf/reclog/file.log awx_logs_1033_sites_5_forks_1_pods.txt2
+
 reset
 ./parse-ansible-out4.py awx_logs_10_sites_5_forks_1_pods.txt
+./parse-ansible-out4.py awx_logs_1033_sites_5_forks_1_pods.txt
 
 
 Puis voir le résultat dans un browser
@@ -222,7 +226,7 @@ if (__name__ == "__main__"):
                 # On cherche où se trouve la tâche dans le dictionnaire
                 ztask_id = 0
                 for j in range(1, ztask_number+1):
-                    print("j: " + str(i))
+                    if zverbose_vv: print("j: " + str(j))
                     if db_logs[j]["ztask_path"] == ztask_path and db_logs[j]["ztask_name"] == ztask_name:
                         ztask_id = j
                         if zverbose_vv: print("ztask_id 1740:" + str(ztask_id))
@@ -273,7 +277,7 @@ if (__name__ == "__main__"):
                 # print(db_logs)
                 #zprint_db_log()
                 for j in range(1, ztask_site_number + 1):
-                    print("j 1059: " + str(j))
+                    if zverbose_vv: print("j 1059: " + str(j))
                     # print(db_logs[ztask_id][j]["ztask_site_name"])
                     # print(ztask_site)
                     if zverbose_vv: print("ztask_site_name 1135:" + str(db_logs[ztask_id][j]["ztask_site_name"]))
@@ -284,7 +288,7 @@ if (__name__ == "__main__"):
                         break
 
                 if ztask_site_id == 0:
-                    print("oups, y'a pas de site ici 133935")
+                    print("oups, y'a pas de site ici 133935: " + str(i))
                     
                     # on cherche l'index du site dans le dictionnaire
                     ztask_site_id = len(db_logs[ztask_id]) - 2
@@ -303,7 +307,7 @@ if (__name__ == "__main__"):
             
             
 
-        print("")
+        if zverbose_vv: print("next: " + str(i))
         i = i + 1
         # On évite la boucle infinie ;-)
         if i > 2000000:
@@ -324,7 +328,10 @@ if (__name__ == "__main__"):
         for j in range(1, ztask_site_number+1):
             if zverbose_vv: print("ztask_site_name: " + str(j) + ", " + db_logs[i][j]["ztask_site_name"])
 
-            ztask_time_1 = db_logs[i][j]["ztask_time_start"][0:-6]
+            try:
+                ztask_time_1 = db_logs[i][j]["ztask_time_start"][0:-6]
+            except:
+                break
             if zverbose_vv: print("ztask_time_1: " + str(ztask_time_1))
             ztask_time_obj_1 = datetime.datetime.strptime(ztask_time_1, '%Y-%m-%d %H:%M:%S.%f')
             ztask_unix_time_1 = zget_unix_time(ztask_time_obj_1).total_seconds()
@@ -365,7 +372,8 @@ if (__name__ == "__main__"):
             ztask_path_1 = ztask_path_1[ztask_path_1.find("project/ansible")+16:-1]
             
             # on change tous les caractères *system* utilisés par InfluxDB
-            ztask_name = ztask_name_1.replace(" ", "_") + "_" + str(ztask_line_1)
+            # ztask_name = ztask_name_1.replace(" ", "_") + "_" + str(ztask_line_1)
+            ztask_name = ztask_name_1.replace(" ", "_")
             ztask_name = ztask_name_1.replace(" ", "_")
             ztask_path = ztask_path_1.replace(" ", "_")
             ztask_path = ztask_path.replace(":", "_")
