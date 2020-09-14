@@ -11,7 +11,7 @@ import sys
 import os
 import datetime
 
-version = "parse-ansible-out4.py  zf200914.1153 "
+version = "parse-ansible-out4.py  zf200914.1637 "
 
 """
 ATTENTION: il ne faut pas oublier, avant de lancer la *petite fusée* d'effacer le fichier de log de reclog !
@@ -52,9 +52,11 @@ curl -i -XPOST "$dbflux_srv_host:$dbflux_srv_port/query?u=$dbflux_u_admin&p=$dbf
 
 
 # True False
+zloop_parse = 40
 zverbose_v = True
 zverbose_vv = True
 zverbose_dico = True
+zloop_curl = 1
 zverbose_curl = False
 zverbose_grafana = False
 zsend_grafana = False
@@ -118,7 +120,14 @@ def zprint_db_log():
         ztask_site_number = len(db_logs[i]) - 2
         for j in range(1, ztask_site_number+1):
             print("----")
+            
+            
+            print("ztask_name: " + str(i) + ", " + db_logs[i]["ztask_name"])
+            print("ztask_path: " + db_logs[i]["ztask_path"])
+
+
             print("ztask_site_name: " + str(j) + ", " + db_logs[i][j]["ztask_site_name"])
+            print("ztask_pod: " + db_logs[i][j]["ztask_pod"])
             try:
                 print("ztask_time_start: " + db_logs[i][j]["ztask_time_start"])
             except:
@@ -267,10 +276,15 @@ if (__name__ == "__main__"):
                 if zverbose_vv: print("ztask_site_number:" + str(ztask_site_number))
 
                 # On crée un nouveau site et écrit le task_time_start
+                if zverbose_vv: print("On crée un nouveau site et écrit le task_time_start")
+                if zverbose_vv: print("ztask_site_name:" + str(ztask_site_name))
+
                 db_logs[ztask_number][ztask_site_number] = {}
-                db_logs[ztask_number][ztask_site_number]["ztask_site_name"] = ztask_site
+                db_logs[ztask_number][ztask_site_number]["ztask_site_name"] = ztask_site_name
+                db_logs[ztask_number][ztask_site_number]["ztask_pod"] = ztask_pod                
                 db_logs[ztask_number][ztask_site_number]["ztask_time_start"] = ztask_time
                 db_logs[ztask_number][ztask_site_number]["ztask_line_start"] = i
+                if zverbose_vv: print("On a terminé de créer un nouveau site et d'écrire le task_time_start")
 
                 
             # Récupération du ztask_time_end
@@ -317,6 +331,7 @@ if (__name__ == "__main__"):
                     # On crée un nouveau site
                     db_logs[ztask_id][ztask_site_id] = {}
                     db_logs[ztask_id][ztask_site_id]["ztask_site_name"] = ztask_site
+                    db_logs[ztask_id][ztask_site_id]["ztask_pod"] = ztask_pod                
                 
                 # On écrit le task_time_end
                 db_logs[ztask_id][ztask_site_id]["ztask_time_end"] = ztask_time
@@ -329,12 +344,12 @@ if (__name__ == "__main__"):
         if zverbose_vv: print("next: " + str(i))
         i = i + 1
         # On évite la boucle infinie ;-)
-        if i > 20:
+        if i > zloop_parse:
             break
 
     zfile.close()
 
-    print("coucou 1057")
+    print("\n\non a terminé de parser les logs 161447\n\n")
     #print(db_logs)
     if zverbose_dico: zprint_db_log()
     # quit()
@@ -390,9 +405,9 @@ if (__name__ == "__main__"):
             ztask_path_1 = db_logs[i]["ztask_path"]
             ztask_site_1 = db_logs[i][j]["ztask_site_name"]
             
-            # on raccourci le task_path à cause de l'affichage dans Grafana
-            ztask_path_1 = ztask_path_1[ztask_path_1.find("project/ansible")+16:]
-            if zverbose_v: print("ztask_path_short: " + ztask_path_1)
+            # # on raccourci le task_path à cause de l'affichage dans Grafana
+            # ztask_path_1 = ztask_path_1[ztask_path_1.find("project/ansible")+16:]
+            # if zverbose_v: print("ztask_path_short: " + ztask_path_1)
 
             
             # on change tous les caractères *system* utilisés par InfluxDB
@@ -428,7 +443,7 @@ if (__name__ == "__main__"):
 
         # On évite la boucle infinie ;-)
         if zverbose_v: print("toto:" + str(i))
-        if i > 1000000:
+        if i > zloop_curl:
             break
             
 
