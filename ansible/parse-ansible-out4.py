@@ -6,21 +6,12 @@
 # sources: https://janakiev.com/blog/python-shell-commands/
 # sources: https://github.com/zuzu59/reclog
 
-
-
-
-# zf200914.0945
-# il faut regarder pourquoi il manque le dernier caractère au task_path ?
-
-
-
-
 import signal
 import sys
 import os
 import datetime
 
-version = "parse-ansible-out4.py  zf200914.0945 "
+version = "parse-ansible-out4.py  zf200914.1153 "
 
 """
 ATTENTION: il ne faut pas oublier, avant de lancer la *petite fusée* d'effacer le fichier de log de reclog !
@@ -61,8 +52,8 @@ curl -i -XPOST "$dbflux_srv_host:$dbflux_srv_port/query?u=$dbflux_u_admin&p=$dbf
 
 
 # True False
-zverbose_v = False
-zverbose_vv = False
+zverbose_v = True
+zverbose_vv = True
 zverbose_dico = True
 zverbose_curl = False
 zverbose_grafana = False
@@ -75,6 +66,7 @@ ztask_site_number = 0
 ztask_site_id = 0
 ztask_line = 0
 ztask_name = ""
+ztask_pod = ""
 ztask_path = ""
 ztask_site = ""
 ztask_time = ""
@@ -200,9 +192,17 @@ if (__name__ == "__main__"):
             p2 = zline.find(zstr_find2, p1)
             ztask_site = zline[p1 + len(zstr_find1):p2]
             if zverbose_vv: print(str(i) + " ztask_site: [" + ztask_site + "]")
-            
+
+            # Récupération du task_pod
+            zstr_find1 = 'PATH: /tmp/awx_'
+            p1 = zline.find(zstr_find1)
+            zstr_find2 = '_'            
+            p2 = zline.find(zstr_find2, p1 + len(zstr_find1))
+            ztask_pod = zline[p1 + len(zstr_find1):p2]
+            if zverbose_vv: print(str(i) + " ztask_pod: [" + ztask_pod + "]")
+
             # Récupération du task_path
-            zstr_find1 = ': PATH: '
+            zstr_find1 = 'project/ansible/'
             p1 = zline.find(zstr_find1)
             zstr_find2 = ', TASK: '            
             p2 = zline.find(zstr_find2, p1)
@@ -329,7 +329,7 @@ if (__name__ == "__main__"):
         if zverbose_vv: print("next: " + str(i))
         i = i + 1
         # On évite la boucle infinie ;-)
-        if i > 2000000:
+        if i > 20:
             break
 
     zfile.close()
