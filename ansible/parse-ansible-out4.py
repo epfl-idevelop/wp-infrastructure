@@ -11,7 +11,7 @@ import sys
 import os
 import datetime
 
-version = "parse-ansible-out4.py  zf200915.0942 "
+version = "parse-ansible-out4.py  zf200915.1116 "
 
 """
 ATTENTION: il ne faut pas oublier, avant de lancer la *petite fusée* d'effacer le fichier de log de reclog !
@@ -52,12 +52,12 @@ curl -i -XPOST "$dbflux_srv_host:$dbflux_srv_port/query?u=$dbflux_u_admin&p=$dbf
 
 
 # True False
-zloop_parse = 40
-zverbose_v = True
-zverbose_vv = True
-zverbose_dico = True
-zloop_curl = 1
-zverbose_curl = False
+zloop_parse = 40000000
+zverbose_v = False
+zverbose_vv = False
+zverbose_dico = False
+zloop_curl = 100000000
+zverbose_curl = True
 zverbose_grafana = False
 zsend_grafana = False
 
@@ -240,27 +240,33 @@ if (__name__ == "__main__"):
                     
                 # on cherche où se trouve la tâche dans le dictionnaire
                 ztask_id = 0
+                if zverbose_vv: print("on cherche où se trouve la tâche dans le dictionnaire 114819")
+                if zverbose_vv: print("ztask_id_len 114441: " + str(len(db_logs)))
                 for j in range(1, len(db_logs)+1):
                     if zverbose_vv: print("j: " + str(j))
                     if db_logs[j]["ztask_path"] == ztask_path and db_logs[j]["ztask_name"] == ztask_name:
                         ztask_id = j
-                        if zverbose_vv: print("ztask_id 1740:" + str(ztask_id))
+                        if zverbose_vv: print("ztask_id 114543:" + str(ztask_id))
                         break
+
+                if zverbose_vv: print("ztask_id 102011: " + str(ztask_id))
 
                 # avons-nous trouvé la tâche dans le dictionnaire ?
                 if ztask_id == 0:
                     # La tâche n'existe pas encore, on la crée
                     if zverbose_vv: print("la tâche n'existe pas encore, on la crée")
                     ztask_id = len(db_logs) + 1
-                    if zverbose_vv: print("ztask_id 1739:" + str(ztask_id))
+                    if zverbose_vv: print("ztask_id 1739: " + str(ztask_id))
                     db_logs[ztask_id] = {}
                     db_logs[ztask_id]["ztask_name"] = ztask_name
                     db_logs[ztask_id]["ztask_path"] = ztask_path
                                 
                 # on calcul l'index du site dans le dictionnaire
-                ztask_site_id = (len(db_logs[len(db_logs)]) - 2) + 1
-                if zverbose_vv: print("ztask_id 180818:" + str(ztask_id))
-                if zverbose_vv: print("ztask_site_id 180818:" + str(ztask_site_id))
+                ztask_site_id = (len(db_logs[ztask_id]) - 2) + 1
+                
+                if zverbose_vv: print("ztask_id 180818: " + str(ztask_id))
+                if zverbose_vv: print("ztask_site_id_len 111632: " + str((len(db_logs[ztask_id]) - 2)))
+                if zverbose_vv: print("ztask_site_id 180818: " + str(ztask_site_id))
 
                 # on crée un nouveau site et écrit le task_time_start
                 if zverbose_vv: print("On crée un nouveau site et écrit le task_time_start")
@@ -270,6 +276,7 @@ if (__name__ == "__main__"):
                 db_logs[ztask_id][ztask_site_id]["ztask_pod"] = ztask_pod                
                 db_logs[ztask_id][ztask_site_id]["ztask_time_start"] = ztask_time
                 db_logs[ztask_id][ztask_site_id]["ztask_line_start"] = i
+                if zverbose_vv: print("ztask_site_id_len 112027: " + str((len(db_logs[ztask_id]) - 2)))
                 if zverbose_vv: print("On a terminé de créer un nouveau site et d'écrire le task_time_start")
 
 
@@ -280,25 +287,29 @@ if (__name__ == "__main__"):
 
                 # on cherche où se trouve la tâche dans le dictionnaire
                 ztask_id = 0
+                if zverbose_vv: print("on cherche où se trouve la tâche dans le dictionnaire 114844")                
+                print("ztask_id_len 114225: " + str(len(db_logs)))
                 for j in range(1, len(db_logs) + 1):
-                    if zverbose_vv: print("j: " + str(j))
+                    if zverbose_vv: print("j 115336: " + str(j))
                     if db_logs[j]["ztask_path"] == ztask_path and db_logs[j]["ztask_name"] == ztask_name:
                         ztask_id = j
                         if zverbose_vv: print("ztask_id 093236:" + str(ztask_id))
-                        break
+                        break         
+                                   
+                if zverbose_vv: print("ztask_id 114634: " + str(ztask_id))
                     
-                    # avons-nous trouvé la tâche dans le dictionnaire ?
-                    if ztask_id == 0:
-                        print("oups, y'a pas de tâche ici 133759")
-                        print("et on doit s'arrêter !")
-                        exit()
+                # avons-nous trouvé la tâche dans le dictionnaire ?
+                if ztask_id == 0:
+                    print("oups, y'a pas de tâche ici 133759")
+                    print("et on doit s'arrêter !")
+                    exit()
                 
                 # chercher l'index du site dans le dictionnaire
                 ztask_site_id = 0
                 for j in range(1, (len(db_logs[ztask_id]) - 2) + 1):
                     if zverbose_vv: print("j 093501: " + str(j))
-                    if zverbose_vv: print("ztask_site_name 1 093547:" + str(db_logs[ztask_id][j]["ztask_site_name"]))
-                    if zverbose_vv: print("ztask_site_name 2 093547:" + str(ztask_site_name))
+                    if zverbose_vv: print("ztask_site_name 1 093547: " + str(db_logs[ztask_id][j]["ztask_site_name"]))
+                    if zverbose_vv: print("ztask_site_name 2 093547: " + str(ztask_site_name))
                     if db_logs[ztask_id][j]["ztask_site_name"] == ztask_site_name:
                         ztask_site_id = j
                         if zverbose_vv: print("ztask_site_id 1133:" + str(ztask_site_id))
@@ -309,6 +320,7 @@ if (__name__ == "__main__"):
                     print("oups, y'a pas de site ici 133935: " + str(i))
                     print("on s'arrête pour savoir pourquoi il n'y a pas de site ?")
                     print(db_logs)
+                    zprint_db_log()
                     exit()
                     
                     # on calcul l'index du site dans le dictionnaire
