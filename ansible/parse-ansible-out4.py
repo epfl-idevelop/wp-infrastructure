@@ -11,7 +11,7 @@ import sys
 import os
 import datetime
 
-version = "parse-ansible-out4.py  zf200915.1220 "
+version = "parse-ansible-out4.py  zf200915.1417 "
 
 """
 ATTENTION: il ne faut pas oublier, avant de lancer la *petite fusée* d'effacer le fichier de log de reclog !
@@ -56,9 +56,10 @@ zloop_parse = 40000000
 zverbose_v = False
 zverbose_vv = False
 zverbose_dico = True
-zloop_curl = 1
 zverbose_curl = True
 zverbose_grafana = True
+zloop_curl = 10000000
+zmake_curl = True
 zsend_grafana = False
 
 zinfluxdb_table = "awx_logs1"
@@ -114,7 +115,7 @@ ztask_unix_time_2 = 0
 
 def zprint_db_log():
     for i in range(1, len(db_logs)+1): 
-        print("------------")
+        print("\n++++++++++++++++")
         print("ztask_name: " + str(i) + ", " + db_logs[i]["ztask_name"])
         print("ztask_path: " + db_logs[i]["ztask_path"])
         for j in range(1, (len(db_logs[i]) - 2) + 1):
@@ -147,6 +148,11 @@ def zprint_db_log():
             except:
                 print("************************************************************************oups y'a pas de ztask_line_end")
 
+            try:
+                print("ztask_duration: " + str(db_logs[i][j]["ztask_duration"]))
+            except:
+                pass
+                # print("************************************************************************oups y'a pas de ztask_line_end")
 
             
         
@@ -366,7 +372,7 @@ if (__name__ == "__main__"):
                 ztask_time_1 = db_logs[i][j]["ztask_time_start"][0:-6]
             except:
                 print("oups, c'est pas bon ici 121313")
-                break
+                exit()
             if zverbose_vv: print("ztask_time_1: " + str(ztask_time_1))
             ztask_time_obj_1 = datetime.datetime.strptime(ztask_time_1, '%Y-%m-%d %H:%M:%S.%f')
             ztask_unix_time_1 = zget_unix_time(ztask_time_obj_1).total_seconds()
@@ -376,7 +382,7 @@ if (__name__ == "__main__"):
                 ztask_time_2 = db_logs[i][j]["ztask_time_end"][0:-6]
             except:
                 print("oups, c'est pas bon ici 121330")
-                break
+                exit()
             if zverbose_vv: print("ztask_time_2: " + str(ztask_time_2))
 
             ztask_time_obj_2 = datetime.datetime.strptime(ztask_time_2, '%Y-%m-%d %H:%M:%S.%f')
@@ -400,63 +406,57 @@ if (__name__ == "__main__"):
             if zverbose_v: print("ztask_duration: " + str(db_logs[i][j]["ztask_duration"]))
             if zverbose_v: print("..................................................")
 
-            
-            
-            
-            
-    # on envoie les données à la db influxdb/grafana
-    
-
-    for i in range(1, len(db_logs)+1): 
-        if zverbose_vv: print("ztask_path_id 121552: " + str(i) + db_logs[i]["ztask_path"])
-        for j in range(1, (len(db_logs[i]) - 2) + 1):
-            if zverbose_vv: print("ztask_site_name: " + str(j) + ", " + db_logs[i][j]["ztask_site_name"])
-
-
-
-
-            ztask_name_1 = db_logs[i]["ztask_name"]
-            ztask_line_1 = db_logs[i][j]["ztask_line_start"]
-            ztask_path_1 = db_logs[i]["ztask_path"]
-            ztask_site_name_1 = db_logs[i][j]["ztask_site_name"]
-            
-            # # on raccourci le task_path à cause de l'affichage dans Grafana
-            # ztask_path_1 = ztask_path_1[ztask_path_1.find("project/ansible")+16:]
-            # if zverbose_v: print("ztask_path_short: " + ztask_path_1)
+    print("\n\non a terminé de calculer les durations 141249\n\n")
+    #print(db_logs)
+    if zverbose_dico: zprint_db_log()
+    # quit()
 
             
-            # on change tous les caractères *system* utilisés par InfluxDB
-            # ztask_name = ztask_name_1.replace(" ", "_") + "_" + str(ztask_line_1)
-            ztask_name = ztask_name_1.replace(" ", "_")
-            ztask_name = ztask_name_1.replace(" ", "_")
-            ztask_path = ztask_path_1.replace(" ", "_")
-            ztask_path = ztask_path.replace(":", "_")
-            ztask_path = ztask_path.replace(".", "_")
-            ztask_site_name = ztask_site_name
             
-            # on transforme en nano secondes pour InfluxDB
-            ztask_time_1 = db_logs[i][j]["ztask_time_start"][0:-6]
-            if zverbose_v: print("ztask_time_1: " + ztask_time_1)
+    # on envoie les données à la db influxdb/grafana    
+    if zmake_curl:
+        for i in range(1, len(db_logs)+1): 
+            if zverbose_vv: print("ztask_path_id 121552: " + str(i) + db_logs[i]["ztask_path"])
+            for j in range(1, (len(db_logs[i]) - 2) + 1):
+                if zverbose_vv: print("ztask_site_name: " + str(j) + ", " + db_logs[i][j]["ztask_site_name"])
 
-            ztask_time_obj_1 = datetime.datetime.strptime(ztask_time_1, '%Y-%m-%d %H:%M:%S.%f')
-            ztask_unix_time_1 = zget_unix_time(ztask_time_obj_1).total_seconds()
-            ztask_unix_time_nano = ztask_unix_time_1 * 1000000000
+                ztask_name_1 = db_logs[i]["ztask_name"]
+                ztask_path_1 = db_logs[i]["ztask_path"]
+                ztask_line_1 = db_logs[i][j]["ztask_line_start"]
+                ztask_site_name_1 = db_logs[i][j]["ztask_site_name"]
+                                
+                # on change tous les caractères *system* utilisés par InfluxDB
+                # ztask_name = ztask_name_1.replace(" ", "_") + "_" + str(ztask_line_1)
+                ztask_name = ztask_name_1.replace(" ", "_")
+                ztask_name = ztask_name_1.replace(" ", "_")
+                ztask_path = ztask_path_1.replace(" ", "_")
+                ztask_path = ztask_path.replace(":", "_")
+                ztask_path = ztask_path.replace(".", "_")
+                ztask_site_name = ztask_site_name_1
+                
+                # on transforme en nano secondes pour InfluxDB
+                ztask_time_1 = db_logs[i][j]["ztask_time_start"][0:-6]
+                if zverbose_v: print("ztask_time_1: " + ztask_time_1)
 
-            ztask_duration = db_logs[i][j]["ztask_duration"]
-                        
-            zcmd = 'curl -i -XPOST "$dbflux_srv_host:$dbflux_srv_port/write?db=$dbflux_db&u=$dbflux_u_user&p=$dbflux_p_user"  --data-binary "' + zinfluxdb_table
-            zcmd = zcmd + ',task=' + ztask_name + '_/_' + ztask_path + ',site=' + ztask_site_name + ' duration=' + str(ztask_duration) + ' ' + '%0.0f' % (ztask_unix_time_nano) + '"'
-            
-            if zverbose_curl: print(zcmd)
-            
-            if zsend_grafana:
-                zerr = os.system(zcmd)
-                if zerr != 0:
-                    if zverbose_grafana(): print(zerr)
+                ztask_time_obj_1 = datetime.datetime.strptime(ztask_time_1, '%Y-%m-%d %H:%M:%S.%f')
+                ztask_unix_time_1 = zget_unix_time(ztask_time_obj_1).total_seconds()
+                ztask_unix_time_nano = ztask_unix_time_1 * 1000000000
 
-        # on évite la boucle infinie ;-)
-        if zverbose_v: print("toto:" + str(i))
-        if i > zloop_curl:
-            break
+                ztask_duration = db_logs[i][j]["ztask_duration"]
+                            
+                zcmd = 'curl -i -XPOST "$dbflux_srv_host:$dbflux_srv_port/write?db=$dbflux_db&u=$dbflux_u_user&p=$dbflux_p_user"  --data-binary "' + zinfluxdb_table
+                zcmd = zcmd + ',task=' + ztask_name + '_/_' + ztask_path + ',site=' + ztask_site_name + ' duration=' + str(ztask_duration) + ' ' + '%0.0f' % (ztask_unix_time_nano) + '"'
+                
+                if zverbose_curl: print(zcmd)
+                
+                if zsend_grafana:
+                    zerr = os.system(zcmd)
+                    if zerr != 0:
+                        if zverbose_grafana(): print(zerr)
+
+            # on évite la boucle infinie ;-)
+            if zverbose_v: print("toto:" + str(i))
+            if i > zloop_curl:
+                break
                 
 
