@@ -31,12 +31,13 @@ cp /Users/zuzu/dev-zf/reclog/file.log awx_logs_100_sites_50_forks_1_pods.txt2
 cp /Users/zuzu/dev-zf/reclog/file.log awx_logs_100_sites_5_forks_10_pods.txt2
 
 reset
-./parse-ansible-out4.py awx_logs_10_sites_5_forks_1_pods.txt
-./parse-ansible-out4.py awx_logs_1033_sites_5_forks_1_pods.txt
-./parse-ansible-out4.py awx_logs_100_sites_5_forks_1_pods.txt
-./parse-ansible-out4.py awx_logs_100_sites_30_forks_1_pods.txt
-./parse-ansible-out4.py awx_logs_100_sites_50_forks_1_pods.txt
-./parse-ansible-out4.py awx_logs_100_sites_5_forks_10_pods.txt
+./parse-ansible-out4.py awx_logs_10_sites_5_forks_1_pods.txt > toto.txt
+./parse-ansible-out4.py awx_logs_1033_sites_5_forks_1_pods.txt > toto.txt
+
+./parse-ansible-out4.py awx_logs_100_sites_5_forks_1_pods.txt > toto.txt
+./parse-ansible-out4.py awx_logs_100_sites_30_forks_1_pods.txt > toto.txt
+./parse-ansible-out4.py awx_logs_100_sites_50_forks_1_pods.txt > toto.txt
+./parse-ansible-out4.py awx_logs_100_sites_5_forks_10_pods.txt > toto.txt
 
 
 Puis voir le résultat dans un browser
@@ -56,10 +57,10 @@ zloop_parse = 40000000
 zverbose_v = False
 zverbose_vv = False
 zverbose_dico = True
-zverbose_curl = True
+zverbose_curl = False
 zverbose_grafana = True
 zloop_curl = 10000000
-zmake_curl = True
+zmake_curl = False
 zsend_grafana = False
 
 zinfluxdb_table = "awx_logs1"
@@ -326,9 +327,12 @@ if (__name__ == "__main__"):
                 # est-ce qu'il y a un site ?
                 if ztask_site_id == 0:
                     print("oups, y'a pas de site ici 133935: " + str(i))
+                    break
+                    raw_input('Enter your input:')
                     print("on s'arrête pour savoir pourquoi il n'y a pas de site ?")
-                    print(db_logs)
-                    zprint_db_log()
+                    # print(db_logs)
+                    # zprint_db_log()
+                    print("boum on s'est arrêté ! 142745")
                     exit()
                     
                     # on calcul l'index du site dans le dictionnaire
@@ -367,44 +371,37 @@ if (__name__ == "__main__"):
         if zverbose_vv: print("i: " + str(i))
         for j in range(1, (len(db_logs[i]) - 2) + 1):
             if zverbose_vv: print("ztask_site_name: " + str(j) + ", " + db_logs[i][j]["ztask_site_name"])
-
             try:
                 ztask_time_1 = db_logs[i][j]["ztask_time_start"][0:-6]
+                if zverbose_vv: print("ztask_time_1: " + str(ztask_time_1))
+                ztask_time_obj_1 = datetime.datetime.strptime(ztask_time_1, '%Y-%m-%d %H:%M:%S.%f')
+                ztask_unix_time_1 = zget_unix_time(ztask_time_obj_1).total_seconds()
+                if zverbose_vv: print("ztask_unix_time_1: " + str(ztask_unix_time_1))
+                try:
+                    ztask_time_2 = db_logs[i][j]["ztask_time_end"][0:-6]
+                    if zverbose_vv: print("ztask_time_2: " + str(ztask_time_2))
+                    ztask_time_obj_2 = datetime.datetime.strptime(ztask_time_2, '%Y-%m-%d %H:%M:%S.%f')
+                    ztask_unix_time_2 = zget_unix_time(ztask_time_obj_2).total_seconds()
+                    if zverbose_vv: print("ztask_unix_time_2: " + str(ztask_unix_time_2))
+                    ztask_duration = ztask_unix_time_2 - ztask_unix_time_1
+                    if zverbose_vv: print("Durée: " + str(ztask_duration))
+                    db_logs[i][j]["ztask_duration"] = ztask_duration
+                    if zverbose_v: print(".................................................. 110232")                        
+                    if zverbose_v: print("Task number: " + str(i))
+                    if zverbose_v: print("ztask_name: " + str(i) + ", " + db_logs[i]["ztask_name"])
+                    if zverbose_v: print("ztask_path: " + db_logs[i]["ztask_path"])
+                    if zverbose_v: print("ztask_site_name: " + str(j) + ", " + db_logs[i][j]["ztask_site_name"])
+                    if zverbose_v: print("ztask_time_start: " + db_logs[i][j]["ztask_time_start"])
+                    if zverbose_v: print("ztask_line_start: " + str(db_logs[i][j]["ztask_line_start"]))
+                    if zverbose_v: print("ztask_time_end: " + db_logs[i][j]["ztask_time_end"])
+                    if zverbose_v: print("ztask_line_end: " + str(db_logs[i][j]["ztask_line_end"]))
+                    if zverbose_v: print("ztask_duration: " + str(db_logs[i][j]["ztask_duration"]))
+                    if zverbose_v: print("..................................................")                    
+                except:
+                    print("oups, c'est pas bon ici 121330")
             except:
                 print("oups, c'est pas bon ici 121313")
-                exit()
-            if zverbose_vv: print("ztask_time_1: " + str(ztask_time_1))
-            ztask_time_obj_1 = datetime.datetime.strptime(ztask_time_1, '%Y-%m-%d %H:%M:%S.%f')
-            ztask_unix_time_1 = zget_unix_time(ztask_time_obj_1).total_seconds()
-            if zverbose_vv: print("ztask_unix_time_1: " + str(ztask_unix_time_1))
 
-            try:
-                ztask_time_2 = db_logs[i][j]["ztask_time_end"][0:-6]
-            except:
-                print("oups, c'est pas bon ici 121330")
-                exit()
-            if zverbose_vv: print("ztask_time_2: " + str(ztask_time_2))
-
-            ztask_time_obj_2 = datetime.datetime.strptime(ztask_time_2, '%Y-%m-%d %H:%M:%S.%f')
-            ztask_unix_time_2 = zget_unix_time(ztask_time_obj_2).total_seconds()
-            if zverbose_vv: print("ztask_unix_time_2: " + str(ztask_unix_time_2))
-
-            ztask_duration = ztask_unix_time_2 - ztask_unix_time_1
-            if zverbose_vv: print("Durée: " + str(ztask_duration))
-            
-            db_logs[i][j]["ztask_duration"] = ztask_duration
-            
-            if zverbose_v: print(".................................................. 110232")                        
-            if zverbose_v: print("Task number: " + str(i))
-            if zverbose_v: print("ztask_name: " + str(i) + ", " + db_logs[i]["ztask_name"])
-            if zverbose_v: print("ztask_path: " + db_logs[i]["ztask_path"])
-            if zverbose_v: print("ztask_site_name: " + str(j) + ", " + db_logs[i][j]["ztask_site_name"])
-            if zverbose_v: print("ztask_time_start: " + db_logs[i][j]["ztask_time_start"])
-            if zverbose_v: print("ztask_line_start: " + str(db_logs[i][j]["ztask_line_start"]))
-            if zverbose_v: print("ztask_time_end: " + db_logs[i][j]["ztask_time_end"])
-            if zverbose_v: print("ztask_line_end: " + str(db_logs[i][j]["ztask_line_end"]))
-            if zverbose_v: print("ztask_duration: " + str(db_logs[i][j]["ztask_duration"]))
-            if zverbose_v: print("..................................................")
 
     print("\n\non a terminé de calculer les durations 141249\n\n")
     #print(db_logs)
@@ -442,17 +439,21 @@ if (__name__ == "__main__"):
                 ztask_unix_time_1 = zget_unix_time(ztask_time_obj_1).total_seconds()
                 ztask_unix_time_nano = ztask_unix_time_1 * 1000000000
 
-                ztask_duration = db_logs[i][j]["ztask_duration"]
-                            
-                zcmd = 'curl -i -XPOST "$dbflux_srv_host:$dbflux_srv_port/write?db=$dbflux_db&u=$dbflux_u_user&p=$dbflux_p_user"  --data-binary "' + zinfluxdb_table
-                zcmd = zcmd + ',task=' + ztask_name + '_/_' + ztask_path + ',site=' + ztask_site_name + ' duration=' + str(ztask_duration) + ' ' + '%0.0f' % (ztask_unix_time_nano) + '"'
-                
-                if zverbose_curl: print(zcmd)
-                
-                if zsend_grafana:
-                    zerr = os.system(zcmd)
-                    if zerr != 0:
-                        if zverbose_grafana(): print(zerr)
+                try:
+                    ztask_duration = db_logs[i][j]["ztask_duration"]
+                    zcmd = 'curl -i -XPOST "$dbflux_srv_host:$dbflux_srv_port/write?db=$dbflux_db&u=$dbflux_u_user&p=$dbflux_p_user"  --data-binary "' + zinfluxdb_table
+                    zcmd = zcmd + ',task=' + ztask_name + '_/_' + ztask_path + ',site=' + ztask_site_name + ' duration=' + str(ztask_duration) + ' ' + '%0.0f' % (ztask_unix_time_nano) + '"'
+                    
+                    if zverbose_curl: print(zcmd)
+                    
+                    if zsend_grafana:
+                        zerr = os.system(zcmd)
+                        if zerr != 0:
+                            if zverbose_grafana(): print(zerr)
+                except:
+                    print("oups, y'a pas de duration ici 144852")
+                    
+
 
             # on évite la boucle infinie ;-)
             if zverbose_v: print("toto:" + str(i))
