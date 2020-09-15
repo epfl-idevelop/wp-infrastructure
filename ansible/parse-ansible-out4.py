@@ -11,7 +11,7 @@ import sys
 import os
 import datetime
 
-version = "parse-ansible-out4.py  zf200915.2218 "
+version = "parse-ansible-out4.py  zf200915.2253 "
 
 """
 ATTENTION: il ne faut pas oublier, avant de lancer la *petite fusée* d'effacer le fichier de log de reclog !
@@ -63,7 +63,7 @@ zverbose_parsing = False
 zverbose_duration = False
 zverbose_curl = False
 zverbose_grafana = False
-zverbose_profiling = True
+zverbose_profiling = False
 
 zmake_curl = False
 zsend_grafana = False
@@ -190,6 +190,7 @@ if (__name__ == "__main__"):
         print("Usage: ./parse-ansible-out4.py fichier_log_a_parser\n\n")
         sys.exit()
 
+    print("File: " + sys.argv[1])
     zfile = open(sys.argv[1], "r")
     i = 1
 
@@ -484,64 +485,40 @@ if (__name__ == "__main__"):
             if i > zloop_curl:
                 break
                 
-    zverbose_profiling = False
     # on calcul le résumé du profiling    
     if zmake_profiling:
         print("Tasks ".ljust(80, '*'))
         ztask_duration_total = 0
         for i in range(1, len(db_logs)+1):
-            
-            
             ztask_time_start = db_logs[i][3]["ztask_time_start"][0:-6]
             ztask_time_end = db_logs[i][len(db_logs[i]) - 2]["ztask_time_end"][0:-6]
             if zverbose_profiling: print("ztask_time_start: " + ztask_time_start)
             if zverbose_profiling: print("ztask_time_end: " + ztask_time_end)
             
             ztask_time_1 = db_logs[i][3]["ztask_time_start"][0:-6]
-            # if zverbose_profiling: print("ztask_time_1: " + str(ztask_time_1))
+            if zverbose_profiling: print("ztask_time_1: " + str(ztask_time_1))
             ztask_time_obj_1 = datetime.datetime.strptime(ztask_time_1, '%Y-%m-%d %H:%M:%S.%f')
             ztask_unix_time_1 = zget_unix_time(ztask_time_obj_1).total_seconds()
-            # if zverbose_profiling: print("ztask_unix_time_1: " + str(ztask_unix_time_1))
+            if zverbose_profiling: print("ztask_unix_time_1: " + str(ztask_unix_time_1))
+
             ztask_time_2 = db_logs[i][len(db_logs[i]) - 2]["ztask_time_end"][0:-6]
-            # if zverbose_profiling: print("ztask_time_2: " + str(ztask_time_2))
+            if zverbose_profiling: print("ztask_time_2: " + str(ztask_time_2))
             ztask_time_obj_2 = datetime.datetime.strptime(ztask_time_2, '%Y-%m-%d %H:%M:%S.%f')
             ztask_unix_time_2 = zget_unix_time(ztask_time_obj_2).total_seconds()
-            # if zverbose_profiling: print("ztask_unix_time_2: " + str(ztask_unix_time_2))
+            if zverbose_profiling: print("ztask_unix_time_2: " + str(ztask_unix_time_2))
+
             ztask_duration = ztask_unix_time_2 - ztask_unix_time_1
             if zverbose_profiling: print("Durée: " + str(ztask_duration))
 
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            # 
-            # ztask_duration_sum = 0
-            # # if zverbose_profiling: print("ztask_path_id 162646: " + str(i) + ", " + db_logs[i]["ztask_path"])
-            # for j in range(1, (len(db_logs[i]) - 2) + 1):
-            #     # if zverbose_profiling: print("ztask_site_name: " + str(j) + ", " + db_logs[i][j]["ztask_site_name"])
-            #     try:
-            #         ztask_duration_sum = ztask_duration_sum + db_logs[i][j]["ztask_duration"]
-            #     except:
-            #         # print("oups, y'a pas de duration ici 162842")
-            #         pass
             zstring = db_logs[i]["ztask_path"] + ", " + db_logs[i]["ztask_name"]
-            # 
-            # print(zstring)
             print(zstring.ljust(80, '-') + str('{:.2f}'.format(ztask_duration)).rjust(9, " "))
             ztask_duration_total = ztask_duration_total + ztask_duration
-            # # print("ztask_duration: 162952: " + str(ztask_duration_sum))    
 
 
             # on évite la boucle infinie ;-)
             # if zverbose_profiling: print("toto:" + str(i))
             if i > zloop_profiling:
                 break
-        print("Total".ljust(80, '*') + str('{:.2f}'.format(ztask_duration_total)).rjust(9, " "))
+        print("Total".ljust(80, '*') + str('{:.2f}'.format(ztask_duration_total)).rjust(9, " ") + "\n")
         
 
