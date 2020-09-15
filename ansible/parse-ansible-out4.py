@@ -11,7 +11,7 @@ import sys
 import os
 import datetime
 
-version = "parse-ansible-out4.py  zf200915.1417 "
+version = "parse-ansible-out4.py  zf200915.1552 "
 
 """
 ATTENTION: il ne faut pas oublier, avant de lancer la *petite fusée* d'effacer le fichier de log de reclog !
@@ -56,12 +56,12 @@ curl -i -XPOST "$dbflux_srv_host:$dbflux_srv_port/query?u=$dbflux_u_admin&p=$dbf
 zloop_parse = 40000000
 zverbose_v = False
 zverbose_vv = False
-zverbose_dico = True
-zverbose_curl = False
+zverbose_dico = False
+zverbose_curl = True
 zverbose_grafana = True
 zloop_curl = 10000000
-zmake_curl = False
-zsend_grafana = False
+zmake_curl = True
+zsend_grafana = True
 
 zinfluxdb_table = "awx_logs1"
 
@@ -327,13 +327,13 @@ if (__name__ == "__main__"):
                 # est-ce qu'il y a un site ?
                 if ztask_site_id == 0:
                     print("oups, y'a pas de site ici 133935: " + str(i))
-                    break
-                    raw_input('Enter your input:')
-                    print("on s'arrête pour savoir pourquoi il n'y a pas de site ?")
-                    # print(db_logs)
-                    # zprint_db_log()
-                    print("boum on s'est arrêté ! 142745")
-                    exit()
+                    # break
+                    # raw_input('Enter your input:')
+                    # print("on s'arrête pour savoir pourquoi il n'y a pas de site ?")
+                    # # print(db_logs)
+                    # # zprint_db_log()
+                    # print("boum on s'est arrêté ! 142745")
+                    # exit()
                     
                     # on calcul l'index du site dans le dictionnaire
                     ztask_site_id = (len(db_logs[ztask_id]) - 2) + 1
@@ -417,42 +417,46 @@ if (__name__ == "__main__"):
             for j in range(1, (len(db_logs[i]) - 2) + 1):
                 if zverbose_vv: print("ztask_site_name: " + str(j) + ", " + db_logs[i][j]["ztask_site_name"])
 
-                ztask_name_1 = db_logs[i]["ztask_name"]
-                ztask_path_1 = db_logs[i]["ztask_path"]
-                ztask_line_1 = db_logs[i][j]["ztask_line_start"]
-                ztask_site_name_1 = db_logs[i][j]["ztask_site_name"]
-                                
-                # on change tous les caractères *system* utilisés par InfluxDB
-                # ztask_name = ztask_name_1.replace(" ", "_") + "_" + str(ztask_line_1)
-                ztask_name = ztask_name_1.replace(" ", "_")
-                ztask_name = ztask_name_1.replace(" ", "_")
-                ztask_path = ztask_path_1.replace(" ", "_")
-                ztask_path = ztask_path.replace(":", "_")
-                ztask_path = ztask_path.replace(".", "_")
-                ztask_site_name = ztask_site_name_1
-                
-                # on transforme en nano secondes pour InfluxDB
-                ztask_time_1 = db_logs[i][j]["ztask_time_start"][0:-6]
-                if zverbose_v: print("ztask_time_1: " + ztask_time_1)
-
-                ztask_time_obj_1 = datetime.datetime.strptime(ztask_time_1, '%Y-%m-%d %H:%M:%S.%f')
-                ztask_unix_time_1 = zget_unix_time(ztask_time_obj_1).total_seconds()
-                ztask_unix_time_nano = ztask_unix_time_1 * 1000000000
-
                 try:
-                    ztask_duration = db_logs[i][j]["ztask_duration"]
-                    zcmd = 'curl -i -XPOST "$dbflux_srv_host:$dbflux_srv_port/write?db=$dbflux_db&u=$dbflux_u_user&p=$dbflux_p_user"  --data-binary "' + zinfluxdb_table
-                    zcmd = zcmd + ',task=' + ztask_name + '_/_' + ztask_path + ',site=' + ztask_site_name + ' duration=' + str(ztask_duration) + ' ' + '%0.0f' % (ztask_unix_time_nano) + '"'
+                    ztask_name_1 = db_logs[i]["ztask_name"]
+                    ztask_path_1 = db_logs[i]["ztask_path"]
+                    ztask_line_1 = db_logs[i][j]["ztask_line_start"]
+                    ztask_site_name_1 = db_logs[i][j]["ztask_site_name"]
+                                    
+                    # on change tous les caractères *system* utilisés par InfluxDB
+                    # ztask_name = ztask_name_1.replace(" ", "_") + "_" + str(ztask_line_1)
+                    ztask_name = ztask_name_1.replace(" ", "_")
+                    ztask_name = ztask_name_1.replace(" ", "_")
+                    ztask_path = ztask_path_1.replace(" ", "_")
+                    ztask_path = ztask_path.replace(":", "_")
+                    ztask_path = ztask_path.replace(".", "_")
+                    ztask_site_name = ztask_site_name_1
                     
-                    if zverbose_curl: print(zcmd)
-                    
-                    if zsend_grafana:
-                        zerr = os.system(zcmd)
-                        if zerr != 0:
-                            if zverbose_grafana(): print(zerr)
+                    # on transforme en nano secondes pour InfluxDB
+                    ztask_time_1 = db_logs[i][j]["ztask_time_start"][0:-6]
+                    if zverbose_v: print("ztask_time_1: " + ztask_time_1)
+
+                    ztask_time_obj_1 = datetime.datetime.strptime(ztask_time_1, '%Y-%m-%d %H:%M:%S.%f')
+                    ztask_unix_time_1 = zget_unix_time(ztask_time_obj_1).total_seconds()
+                    ztask_unix_time_nano = ztask_unix_time_1 * 1000000000
+
+                    try:
+                        ztask_duration = db_logs[i][j]["ztask_duration"]
+                        zcmd = 'curl -i -XPOST "$dbflux_srv_host:$dbflux_srv_port/write?db=$dbflux_db&u=$dbflux_u_user&p=$dbflux_p_user"  --data-binary "' + zinfluxdb_table
+                        zcmd = zcmd + ',task=' + ztask_name + '_/_' + ztask_path + ',site=' + ztask_site_name + ' duration=' + str(ztask_duration) + ' ' + '%0.0f' % (ztask_unix_time_nano) + '"'
+                        
+                        if zverbose_curl: print(zcmd)
+                        
+                        if zsend_grafana:
+                            zerr = os.system(zcmd)
+                            if zerr != 0:
+                                if zverbose_grafana(): print(zerr)
+                    except:
+                        print("oups, y'a pas de duration ici 144852")
                 except:
-                    print("oups, y'a pas de duration ici 144852")
+                    print("oups, y'a pas de start ici 154446")
                     
+                
 
 
             # on évite la boucle infinie ;-)
