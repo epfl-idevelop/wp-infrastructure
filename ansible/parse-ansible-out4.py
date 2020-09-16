@@ -11,7 +11,7 @@ import sys
 import os
 import datetime
 
-version = "parse-ansible-out4.py  zf200916.1437 "
+version = "parse-ansible-out4.py  zf200916.1541 "
 
 """
 ATTENTION: il ne faut pas oublier, avant de lancer la *petite fusée* d'effacer le fichier de log de reclog !
@@ -41,11 +41,19 @@ cp /Users/zuzu/dev-zf/reclog/file.log awx_logs_100_sites_5_forks_10_pods.txt2
 
 *******************
 Tests de charges avec le modèle 'align' des sites
-cp /Users/zuzu/dev-zf/reclog/file.log awx_logs_align_10_sites_2_forks_1_pods.txt
+cp /Users/zuzu/dev-zf/reclog/file.log awx_logs_align_10_sites_1_forks_1_pods.txt2
 cp /Users/zuzu/dev-zf/reclog/file.log awx_logs_align_10_sites_5_forks_1_pods.txt2
+cp /Users/zuzu/dev-zf/reclog/file.log awx_logs_align_10_sites_5_forks_2_pods.txt2
+cp /Users/zuzu/dev-zf/reclog/file.log awx_logs_align_10_sites_5_forks_2_pods_parll.txt2
+cp /Users/zuzu/dev-zf/reclog/file.log awx_logs_align_10_sites_5_forks_2_pods_cache.txt
+cp /Users/zuzu/dev-zf/reclog/file.log awx_logs_align_10_sites_2_forks_5_pods.txt2
 
-./parse-ansible-out4.py awx_logs_align_10_sites_2_forks_1_pods.txt > toto.txt
+./parse-ansible-out4.py awx_logs_align_10_sites_1_forks_1_pods.txt > toto.txt
 ./parse-ansible-out4.py awx_logs_align_10_sites_5_forks_1_pods.txt > toto.txt
+./parse-ansible-out4.py awx_logs_align_10_sites_5_forks_2_pods.txt > toto.txt
+./parse-ansible-out4.py awx_logs_align_10_sites_5_forks_2_pods_parll.txt > toto.txt
+./parse-ansible-out4.py awx_logs_align_10_sites_5_forks_2_pods_cache.txt > toto.txt
+./parse-ansible-out4.py awx_logs_align_10_sites_2_forks_5_pods.txt > toto.txt
 
 
 
@@ -75,8 +83,8 @@ zverbose_curl = False
 zverbose_grafana = False
 zverbose_profiling = False
 
-zmake_curl = True
-zsend_grafana = True
+zmake_curl = False
+zsend_grafana = False
 zmake_profiling = True
 
 zinfluxdb_table = "awx_logs1"
@@ -538,13 +546,28 @@ if (__name__ == "__main__"):
             print(zstring.ljust(100, '-') + str('{:.2f}'.format(ztask_duration)).rjust(9, " "))
             ztask_duration_total = ztask_duration_total + ztask_duration
 
-
             # on évite la boucle infinie ;-)
             # if zverbose_profiling: print("toto:" + str(i))
             if i > zloop_profiling:
                 break
         # print("Total".ljust(100, '*') + str('{:.2f}'.format(ztask_duration_total)).rjust(9, " ") + "\n")
     print("".ljust(100, '*'))
+        
+    ztask_time_1 = db_logs[1][1]["ztask_time_start"][0:-6]
+    if zverbose_profiling: print("ztask_time_1: " + str(ztask_time_1))
+    ztask_time_obj_1 = datetime.datetime.strptime(ztask_time_1, '%Y-%m-%d %H:%M:%S.%f')
+    ztask_unix_time_1 = zget_unix_time(ztask_time_obj_1).total_seconds()
+    if zverbose_profiling: print("ztask_unix_time_1: " + str(ztask_unix_time_1))
+
+    i = len(db_logs)
+    ztask_time_2 = db_logs[i][len(db_logs[i]) - 2]["ztask_time_end"][0:-6]
+    if zverbose_profiling: print("ztask_time_2: " + str(ztask_time_2))
+    ztask_time_obj_2 = datetime.datetime.strptime(ztask_time_2, '%Y-%m-%d %H:%M:%S.%f')
+    ztask_unix_time_2 = zget_unix_time(ztask_time_obj_2).total_seconds()
+    if zverbose_profiling: print("ztask_unix_time_2: " + str(ztask_unix_time_2))
+    
+    ztask_duration_total = ztask_unix_time_2 - ztask_unix_time_1
+
     print("Playbook run took: " + str(datetime.timedelta(seconds=round(ztask_duration_total))) + "\n")
         
 
