@@ -11,7 +11,7 @@ import sys
 import os
 import datetime
 
-version = "parse-ansible-out4.py  zf200915.2253 "
+version = "parse-ansible-out4.py  zf200916.1350 "
 
 """
 ATTENTION: il ne faut pas oublier, avant de lancer la *petite fusée* d'effacer le fichier de log de reclog !
@@ -30,7 +30,6 @@ cp /Users/zuzu/dev-zf/reclog/file.log awx_logs_100_sites_30_forks_1_pods.txt2
 cp /Users/zuzu/dev-zf/reclog/file.log awx_logs_100_sites_50_forks_1_pods.txt2
 cp /Users/zuzu/dev-zf/reclog/file.log awx_logs_100_sites_5_forks_10_pods.txt2
 
-reset
 ./parse-ansible-out4.py awx_logs_10_sites_5_forks_1_pods.txt > toto.txt
 ./parse-ansible-out4.py awx_logs_1033_sites_5_forks_1_pods.txt > toto.txt
 
@@ -38,6 +37,15 @@ reset
 ./parse-ansible-out4.py awx_logs_100_sites_30_forks_1_pods.txt
 ./parse-ansible-out4.py awx_logs_100_sites_50_forks_1_pods.txt
 ./parse-ansible-out4.py awx_logs_100_sites_5_forks_10_pods.txt
+
+
+*******************
+Tests de charges avec le modèle 'align' des sites
+cp /Users/zuzu/dev-zf/reclog/file.log awx_logs_align_10_sites_5_forks_1_pods.txt
+
+./parse-ansible-out4.py awx_logs_align_10_sites_5_forks_1_pods.txt > toto.txt
+
+
 
 
 Puis voir le résultat dans un browser
@@ -449,8 +457,6 @@ if (__name__ == "__main__"):
                     ztask_site_name_1 = db_logs[i][j]["ztask_site_name"]
                                     
                     # on change tous les caractères *system* utilisés par InfluxDB
-                    # ztask_name = ztask_name_1.replace(" ", "_") + "_" + str(ztask_line_1)
-                    ztask_name = ztask_name_1.replace(" ", "_")
                     ztask_name = ztask_name_1.replace(" ", "_")
                     ztask_path = ztask_path_1.replace(" ", "_")
                     ztask_path = ztask_path.replace(":", "_")
@@ -487,15 +493,24 @@ if (__name__ == "__main__"):
                 
     # on calcul le résumé du profiling    
     if zmake_profiling:
-        print("Tasks ".ljust(80, '*'))
+        print("Tasks ".ljust(100, '*'))
         ztask_duration_total = 0
         for i in range(1, len(db_logs)+1):
-            ztask_time_start = db_logs[i][3]["ztask_time_start"][0:-6]
+            if zverbose_profiling: print("i 115711: " + str(i))
+            # if i == 9:
+                # print(db_logs[i])
+                # zprint_db_log()
+                # # print("toto")
+                # # import numpy as np
+                # # print(np.matrix(db_logs[i]))
+                # # print("tutu")
+                # # print(db_logs[i].__str__())
+            ztask_time_start = db_logs[i][1]["ztask_time_start"][0:-6]
             ztask_time_end = db_logs[i][len(db_logs[i]) - 2]["ztask_time_end"][0:-6]
             if zverbose_profiling: print("ztask_time_start: " + ztask_time_start)
             if zverbose_profiling: print("ztask_time_end: " + ztask_time_end)
             
-            ztask_time_1 = db_logs[i][3]["ztask_time_start"][0:-6]
+            ztask_time_1 = db_logs[i][1]["ztask_time_start"][0:-6]
             if zverbose_profiling: print("ztask_time_1: " + str(ztask_time_1))
             ztask_time_obj_1 = datetime.datetime.strptime(ztask_time_1, '%Y-%m-%d %H:%M:%S.%f')
             ztask_unix_time_1 = zget_unix_time(ztask_time_obj_1).total_seconds()
@@ -511,7 +526,11 @@ if (__name__ == "__main__"):
             if zverbose_profiling: print("Durée: " + str(ztask_duration))
 
             zstring = db_logs[i]["ztask_path"] + ", " + db_logs[i]["ztask_name"]
-            print(zstring.ljust(80, '-') + str('{:.2f}'.format(ztask_duration)).rjust(9, " "))
+            # enlève les guillemets typographiques à la con
+            zstring = zstring.replace("“", '"')
+            zstring = zstring.replace("”", '"')
+            zstring = zstring[0:95] + " "
+            print(zstring.ljust(100, '-') + str('{:.2f}'.format(ztask_duration)).rjust(9, " "))
             ztask_duration_total = ztask_duration_total + ztask_duration
 
 
@@ -519,6 +538,6 @@ if (__name__ == "__main__"):
             # if zverbose_profiling: print("toto:" + str(i))
             if i > zloop_profiling:
                 break
-        print("Total".ljust(80, '*') + str('{:.2f}'.format(ztask_duration_total)).rjust(9, " ") + "\n")
+        print("Total".ljust(100, '*') + str('{:.2f}'.format(ztask_duration_total)).rjust(9, " ") + "\n")
         
 
