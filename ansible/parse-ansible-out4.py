@@ -11,7 +11,7 @@ import sys
 import os
 import datetime
 
-version = "parse-ansible-out4.py  zf200916.1541 "
+version = "parse-ansible-out4.py  zf200916.1654 "
 
 """
 ATTENTION: il ne faut pas oublier, avant de lancer la *petite fusée* d'effacer le fichier de log de reclog !
@@ -45,7 +45,10 @@ cp /Users/zuzu/dev-zf/reclog/file.log awx_logs_align_10_sites_1_forks_1_pods.txt
 cp /Users/zuzu/dev-zf/reclog/file.log awx_logs_align_10_sites_5_forks_1_pods.txt2
 cp /Users/zuzu/dev-zf/reclog/file.log awx_logs_align_10_sites_5_forks_2_pods.txt2
 cp /Users/zuzu/dev-zf/reclog/file.log awx_logs_align_10_sites_5_forks_2_pods_parll.txt2
-cp /Users/zuzu/dev-zf/reclog/file.log awx_logs_align_10_sites_5_forks_2_pods_cache.txt
+cp /Users/zuzu/dev-zf/reclog/file.log awx_logs_align_10_sites_5_forks_2_pods_cache.txt2
+cp /Users/zuzu/dev-zf/reclog/file.log awx_logs_align_10_sites_10_forks_1_pods.txt2
+cp /Users/zuzu/dev-zf/reclog/file.log awx_logs_align_10_sites_10_forks_1_pods_pipe.txt2
+cp /Users/zuzu/dev-zf/reclog/file.log awx_logs_align_10_sites_10_forks_1_pods_debug4.txt
 cp /Users/zuzu/dev-zf/reclog/file.log awx_logs_align_10_sites_2_forks_5_pods.txt2
 
 ./parse-ansible-out4.py awx_logs_align_10_sites_1_forks_1_pods.txt > toto.txt
@@ -53,6 +56,9 @@ cp /Users/zuzu/dev-zf/reclog/file.log awx_logs_align_10_sites_2_forks_5_pods.txt
 ./parse-ansible-out4.py awx_logs_align_10_sites_5_forks_2_pods.txt > toto.txt
 ./parse-ansible-out4.py awx_logs_align_10_sites_5_forks_2_pods_parll.txt > toto.txt
 ./parse-ansible-out4.py awx_logs_align_10_sites_5_forks_2_pods_cache.txt > toto.txt
+./parse-ansible-out4.py awx_logs_align_10_sites_10_forks_1_pods.txt > toto.txt
+./parse-ansible-out4.py awx_logs_align_10_sites_10_forks_1_pods_pipe.txt > toto.txt
+./parse-ansible-out4.py awx_logs_align_10_sites_10_forks_1_pods_debug4.txt > toto.txt
 ./parse-ansible-out4.py awx_logs_align_10_sites_2_forks_5_pods.txt > toto.txt
 
 

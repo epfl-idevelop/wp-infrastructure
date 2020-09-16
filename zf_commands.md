@@ -1,5 +1,5 @@
 # Mes petits trucs à moi pour bien travailler ;-)
-#zf200908.1834
+#zf200916.1611
 
 <!-- TOC titleSize:2 tabSpaces:2 depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 skip:2 title:1 charForUnorderedList:* -->
 ## Table of Contents
@@ -30,6 +30,7 @@
   * [test en python pour obtenir l'heure](#test-en-python-pour-obtenir-lheure)
   * [un mini logger](#un-mini-logger)
   * [comment modifier directement le contenu d'un groupe d'inventaire sur AWX ?](#comment-modifier-directement-le-contenu-dun-groupe-dinventaire-sur-awx-)
+  * [essais d'optimisation de AWX avec le pipelining (zf200916.1610)](#essais-doptimisation-de-awx-avec-le-pipelining-zf2009161610)
 <!-- /TOC -->
 
 
@@ -191,6 +192,19 @@ https://www.poftut.com/linux-logger-command-usage-tutorial-with-examples/#:~:tex
 https://confluence.epfl.ch:8443/display/SIAC/Ansible+et+Ansible+Tower+-+PRJ0011294
 
 
+## essais d'optimisation de AWX avec le pipelining (zf200916.1610)
+**ATTENTION:** ce n'est PAS persistant aux rebuilds des images awx !
+J'ai mis ceci:
+```
+{
+ "HOME": "/var/lib/awx",
+ "ANSIBLE_PIPELINING": "True",
+ "ANSIBLE_SSH_PIPELINING": "True"
+}
+```
+
+dans (dans variables d'environnements supplémentaires):
+https://awx-poc-vpsi.epfl.ch/#/settings/jobs
 
 
 

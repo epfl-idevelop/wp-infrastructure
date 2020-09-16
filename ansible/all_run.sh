@@ -2,17 +2,22 @@
 #Petit script pour lancer le post traitement des logs pour une batterie de tests
 
 echo -e "
-all_run.sh  zf200915.2252
+all_run.sh  zf200916.1649
 
 Utilisation:
 
 ./all_run.sh > toto.txt
 "
 
-./parse-ansible-out4.py awx_logs_100_sites_5_forks_1_pods.txt
-./parse-ansible-out4.py awx_logs_100_sites_30_forks_1_pods.txt
-./parse-ansible-out4.py awx_logs_100_sites_50_forks_1_pods.txt
-./parse-ansible-out4.py awx_logs_100_sites_5_forks_10_pods.txt
+./parse-ansible-out4.py awx_logs_align_10_sites_1_forks_1_pods.txt
+./parse-ansible-out4.py awx_logs_align_10_sites_5_forks_1_pods.txt
+./parse-ansible-out4.py awx_logs_align_10_sites_5_forks_2_pods.txt
+./parse-ansible-out4.py awx_logs_align_10_sites_5_forks_2_pods_parll.txt
+./parse-ansible-out4.py awx_logs_align_10_sites_5_forks_2_pods_cache.txt
+./parse-ansible-out4.py awx_logs_align_10_sites_10_forks_1_pods.txt
+./parse-ansible-out4.py awx_logs_align_10_sites_10_forks_1_pods_pipe.txt
+./parse-ansible-out4.py awx_logs_align_10_sites_10_forks_1_pods_debug4.txt
+./parse-ansible-out4.py awx_logs_align_10_sites_2_forks_5_pods.txt
 
 
 
