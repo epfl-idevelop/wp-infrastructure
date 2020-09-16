@@ -11,7 +11,7 @@ import sys
 import os
 import datetime
 
-version = "parse-ansible-out4.py  zf200916.1415 "
+version = "parse-ansible-out4.py  zf200916.1437 "
 
 """
 ATTENTION: il ne faut pas oublier, avant de lancer la *petite fusée* d'effacer le fichier de log de reclog !
@@ -41,8 +41,10 @@ cp /Users/zuzu/dev-zf/reclog/file.log awx_logs_100_sites_5_forks_10_pods.txt2
 
 *******************
 Tests de charges avec le modèle 'align' des sites
-cp /Users/zuzu/dev-zf/reclog/file.log awx_logs_align_10_sites_5_forks_1_pods.txt
+cp /Users/zuzu/dev-zf/reclog/file.log awx_logs_align_10_sites_2_forks_1_pods.txt
+cp /Users/zuzu/dev-zf/reclog/file.log awx_logs_align_10_sites_5_forks_1_pods.txt2
 
+./parse-ansible-out4.py awx_logs_align_10_sites_2_forks_1_pods.txt > toto.txt
 ./parse-ansible-out4.py awx_logs_align_10_sites_5_forks_1_pods.txt > toto.txt
 
 
@@ -73,8 +75,8 @@ zverbose_curl = False
 zverbose_grafana = False
 zverbose_profiling = False
 
-zmake_curl = False
-zsend_grafana = False
+zmake_curl = True
+zsend_grafana = True
 zmake_profiling = True
 
 zinfluxdb_table = "awx_logs1"
@@ -456,6 +458,9 @@ if (__name__ == "__main__"):
                     ztask_site_name_1 = db_logs[i][j]["ztask_site_name"]
                                     
                     # on change tous les caractères *system* utilisés par InfluxDB
+                    ztask_name = ztask_name_1.replace("“", "")
+                    ztask_name = ztask_name_1.replace("”", "")
+                    ztask_name = ztask_name_1.replace('"', "")
                     ztask_name = ztask_name_1.replace(" ", "_")
                     ztask_path = ztask_path_1.replace(" ", "_")
                     ztask_path = ztask_path.replace(":", "_")
