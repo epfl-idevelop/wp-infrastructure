@@ -11,7 +11,7 @@ import sys
 import os
 import datetime
 
-version = "parse-ansible-out4.py  zf200916.1350 "
+version = "parse-ansible-out4.py  zf200916.1415 "
 
 """
 ATTENTION: il ne faut pas oublier, avant de lancer la *petite fusée* d'effacer le fichier de log de reclog !
@@ -198,7 +198,6 @@ if (__name__ == "__main__"):
         print("Usage: ./parse-ansible-out4.py fichier_log_a_parser\n\n")
         sys.exit()
 
-    print("File: " + sys.argv[1])
     zfile = open(sys.argv[1], "r")
     i = 1
 
@@ -493,7 +492,8 @@ if (__name__ == "__main__"):
                 
     # on calcul le résumé du profiling    
     if zmake_profiling:
-        print("Tasks ".ljust(100, '*'))
+        print(sys.argv[1]) + " start at " + db_logs[1][1]["ztask_time_start"][0:-6]
+        print("".ljust(100, '*'))
         ztask_duration_total = 0
         for i in range(1, len(db_logs)+1):
             if zverbose_profiling: print("i 115711: " + str(i))
@@ -525,7 +525,7 @@ if (__name__ == "__main__"):
             ztask_duration = ztask_unix_time_2 - ztask_unix_time_1
             if zverbose_profiling: print("Durée: " + str(ztask_duration))
 
-            zstring = db_logs[i]["ztask_path"] + ", " + db_logs[i]["ztask_name"]
+            zstring = "../" + db_logs[i]["ztask_path"] + ", " + db_logs[i]["ztask_name"]
             # enlève les guillemets typographiques à la con
             zstring = zstring.replace("“", '"')
             zstring = zstring.replace("”", '"')
@@ -538,6 +538,8 @@ if (__name__ == "__main__"):
             # if zverbose_profiling: print("toto:" + str(i))
             if i > zloop_profiling:
                 break
-        print("Total".ljust(100, '*') + str('{:.2f}'.format(ztask_duration_total)).rjust(9, " ") + "\n")
+        # print("Total".ljust(100, '*') + str('{:.2f}'.format(ztask_duration_total)).rjust(9, " ") + "\n")
+    print("".ljust(100, '*'))
+    print("Playbook run took: " + str(datetime.timedelta(seconds=round(ztask_duration_total))) + "\n")
         
 
