@@ -1,5 +1,5 @@
 # Mes petits trucs à moi pour bien travailler ;-)
-#zf200916.2005
+#zf200918.0941
 
 <!-- TOC titleSize:2 tabSpaces:2 depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 skip:2 title:1 charForUnorderedList:* -->
 ## Table of Contents
@@ -17,6 +17,8 @@
       * [ATTENTION 1er:](#attention-1er)
       * [ATTENTION 2e:](#attention-2e)
   * [Sur Grafana](#sur-grafana)
+* [Tests de profilling de wp-cli](#tests-de-profilling-de-wp-cli)
+  * [pour les tests en local sur sa machine](#pour-les-tests-en-local-sur-sa-machine)
 * [Idées à creuser et astuces](#idées-à-creuser-et-astuces)
   * [Mitogen et pipelining](#mitogen-et-pipelining)
   * [Manual Ansible Runner (pour ses propres modules, page 22)](#manual-ansible-runner-pour-ses-propres-modules-page-22)
@@ -131,6 +133,31 @@ source /Keybase/team/epfl_wwp_blue/influxdb_secrets.sh
 
 On peut importer le dashboard 928, qui permet déjà de voir une jolie vue
 https://grafana.com/grafana/dashboards/928
+
+
+# Tests de profilling de wp-cli
+Le but étant de savoir combien de fois on lance la commande *wp-cli*, commande en PHP très consommateur en ressources, et surtout le temps passé avec.
+
+L'idée est d'installer ma sonde de mesure directement dans le code python du module Ansible qui lance cette commande.
+
+## pour les tests en local sur sa machine
+Sur sa machine il faut faire la procédure d'initialisation de l'environnement décrite sous:
+
+[A faire au début du travail](#a-faire-au-début-du-travail)
+
+Puis dans sa console:
+```
+./wpsible --check -t themes -l test_migration_wp__labs__aqua -e '{ "wp_destructive": { "test_migration_wp__labs__aqua": ["config"] }}'
+```
+
+
+
+
+
+
+
+
+
 
 
 
