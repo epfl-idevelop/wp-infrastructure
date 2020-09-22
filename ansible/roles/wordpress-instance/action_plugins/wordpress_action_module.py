@@ -101,7 +101,7 @@ class WordPressActionModule(ActionBase):
         """
         
         #zzz200922.0914
-        print("toto091433")
+        print("toto091433 _run_wp_cli_action")
         #zzz
         
         # wp_cli_command: "wp --path={{ wp_dir }}"
@@ -116,11 +116,18 @@ class WordPressActionModule(ActionBase):
     def _get_wp_json (self, suffix, skip_loading_wp=False):
 
         #zzz200922.1021
-        print("toto102116.1")
+        print("toto102116.1 _get_wp_json")
         #zzz
+        
+        t1 = datetime.now()
+        result = self._run_wp_cli_action(suffix, update_result=False, also_in_check_mode=True, skip_loading_wp=skip_loading_wp)
+        t2 = datetime.now()
+        duration = t2 - t1
+        duration_in_s = duration.total_seconds()
+        print("duration: " + str(duration_in_s))
 
         #zzz200922
-        ztimestamp = "log start by zuzu, " + "_get_wp_json" + " at " + str(datetime.now(timezone(timedelta(hours=ztz)))) + "\n"
+        ztimestamp = "log duration by zuzu, " + "_get_wp_json" + " at " + str(datetime.now(timezone(timedelta(hours=ztz)))) + ", duration: " + str(duration_in_s) + "\n"
         s = socket.socket()    
         try:
             # print("connexion 1")
@@ -131,8 +138,6 @@ class WordPressActionModule(ActionBase):
             pass
         #zzz    
 
-        result = self._run_wp_cli_action(suffix, update_result=False, also_in_check_mode=True, skip_loading_wp=skip_loading_wp)
-        
         #zzz200922.1021
         print("toto102116.2")
         #zzz
@@ -379,7 +384,7 @@ class WordPressPluginOrThemeActionModule(WordPressActionModule):
         if 'installed' in to_do:
 
             #zzz200922.1022
-            print("toto102200.1")
+            print("toto102200.1 _ensure_file_state")
             #zzz
 
             self._update_result(self._run_wp_cli_action('plugin install {}'.format(self._task.args.get('from'))))
@@ -451,7 +456,7 @@ class WordPressPluginOrThemeActionModule(WordPressActionModule):
         """
 
         #zzz200922.1022
-        print("toto102228.1")
+        print("toto102228.1 _do_activate_element")
 
         #return self._run_wp_cli_action('{} activate {}'.format(self._get_type(), self._get_name()))
         result = self._run_wp_cli_action('{} activate {}'.format(self._get_type(), self._get_name()))
@@ -505,11 +510,19 @@ class WordPressPluginOrThemeActionModule(WordPressActionModule):
         wp_command = 'plugin' if self._get_type() == 'mu-plugin' else self._get_type()
 
         #zzz200922.1022
-        print("toto102254.1")
+        print("toto102254.1 _get_activation_state")
         #zzz
 
+        t1 = datetime.now()
+        result = self._run_wp_cli_action('{} list --format=csv'.format(wp_command), also_in_check_mode=True, update_result=False)
+        t2 = datetime.now()
+
+        duration = t2 - t1
+        duration_in_s = duration.total_seconds()
+        print("duration: " + str(duration_in_s))
+
         #zzz200922
-        ztimestamp = "log start by zuzu, " + "_get_activation_state" + " at " + str(datetime.now(timezone(timedelta(hours=ztz)))) + "\n"
+        ztimestamp = "log duration by zuzu, " + "_get_activation_state" + " at " + str(datetime.now(timezone(timedelta(hours=ztz)))) + ", duration: " + str(duration_in_s) + "\n"
         s = socket.socket()    
         try:
             # print("connexion 1")
@@ -519,13 +532,6 @@ class WordPressPluginOrThemeActionModule(WordPressActionModule):
         except socket.error as e:
             pass
         #zzz    
-        t1 = datetime.now()
-        result = self._run_wp_cli_action('{} list --format=csv'.format(wp_command), also_in_check_mode=True, update_result=False)
-        t2 = datetime.now()
-        duration = t2 - t1
-        duration_in_s = duration.total_seconds()
-        print("duration: " + str(duration_in_s))
-
 
 
         #zzz200922.1022
