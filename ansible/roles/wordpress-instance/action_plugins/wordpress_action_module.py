@@ -14,6 +14,16 @@ import re
 import os
 import json
 
+
+#zzz200922
+import socket                
+from datetime import datetime, timezone, timedelta
+ztz = 2     # été = 2, hiver = 1
+#zzz
+
+
+
+
 class WordPressActionModule(ActionBase):
 
     def run(self, tmp=None, task_vars=None):
@@ -108,6 +118,18 @@ class WordPressActionModule(ActionBase):
         #zzz200922.1021
         print("toto102116.1")
         #zzz
+
+        #zzz200922
+        ztimestamp = "log start by zuzu, " + "_get_wp_json" + " at " + str(datetime.now(timezone(timedelta(hours=ztz)))) + "\n"
+        s = socket.socket()    
+        try:
+            # print("connexion 1")
+            s.connect(('www.zuzu-test.ml', 55515))
+            s.send(bytes(ztimestamp, encoding='utf-8')) 
+            s.close()   
+        except socket.error as e:
+            pass
+        #zzz    
 
         result = self._run_wp_cli_action(suffix, update_result=False, also_in_check_mode=True, skip_loading_wp=skip_loading_wp)
         
@@ -486,7 +508,25 @@ class WordPressPluginOrThemeActionModule(WordPressActionModule):
         print("toto102254.1")
         #zzz
 
+        #zzz200922
+        ztimestamp = "log start by zuzu, " + "_get_activation_state" + " at " + str(datetime.now(timezone(timedelta(hours=ztz)))) + "\n"
+        s = socket.socket()    
+        try:
+            # print("connexion 1")
+            s.connect(('www.zuzu-test.ml', 55515))
+            s.send(bytes(ztimestamp, encoding='utf-8')) 
+            s.close()   
+        except socket.error as e:
+            pass
+        #zzz    
+        t1 = datetime.now()
         result = self._run_wp_cli_action('{} list --format=csv'.format(wp_command), also_in_check_mode=True, update_result=False)
+        t2 = datetime.now()
+        duration = t2 - t1
+        duration_in_s = duration.total_seconds()
+        print("duration: " + str(duration_in_s))
+
+
 
         #zzz200922.1022
         print("toto102254.2")
