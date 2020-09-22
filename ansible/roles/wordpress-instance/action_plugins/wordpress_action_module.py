@@ -1,4 +1,8 @@
 
+#zzz200922
+#canary200922.1041
+#zzz
+
 # There is a name clash with a module in Ansible named "copy":
 deepcopy = __import__('copy').deepcopy
 
@@ -85,6 +89,11 @@ class WordPressActionModule(ActionBase):
         :param update_result: To tell if we have to update result after command. Give "False" if it is a "read only" command
         :param skip-loading-wp: if you don't want to load all the WP
         """
+        
+        #zzz200922.0914
+        print("toto091433")
+        #zzz
+        
         # wp_cli_command: "wp --path={{ wp_dir }}"
         wp_cli_var_name = 'wp_cli_command_with_skip' if skip_loading_wp else 'wp_cli_command'
         cmd = '{} {}'.format(self._get_ansible_var(wp_cli_var_name), args)
@@ -95,7 +104,17 @@ class WordPressActionModule(ActionBase):
             pipe_input=pipe_input)
 
     def _get_wp_json (self, suffix, skip_loading_wp=False):
+
+        #zzz200922.1021
+        print("toto102116.1")
+        #zzz
+
         result = self._run_wp_cli_action(suffix, update_result=False, also_in_check_mode=True, skip_loading_wp=skip_loading_wp)
+        
+        #zzz200922.1021
+        print("toto102116.2")
+        #zzz
+                
         return json.loads(result['stdout'])
 
 
@@ -293,7 +312,7 @@ class WordPressPluginOrThemeActionModule(WordPressActionModule):
         """
         desired_state = self._task.args.get('state', 'absent')
         if isinstance(desired_state, six.string_types):
-             desired_state = set([desired_state.strip()])
+            desired_state = set([desired_state.strip()])
         elif isinstance(desired_state, list):
             desired_state = set(desired_state)
         else:
@@ -336,7 +355,16 @@ class WordPressPluginOrThemeActionModule(WordPressActionModule):
             return
 
         if 'installed' in to_do:
+
+            #zzz200922.1022
+            print("toto102200.1")
+            #zzz
+
             self._update_result(self._run_wp_cli_action('plugin install {}'.format(self._task.args.get('from'))))
+
+            #zzz200922.1022
+            print("toto102200.2")
+            #zzz
 
         if 'symlinked' in to_undo or 'installed' in to_undo:
             self._update_result(self._do_rimraf_file(basename))
@@ -399,7 +427,17 @@ class WordPressPluginOrThemeActionModule(WordPressActionModule):
         """
         Uses WP-CLI to activate plugin
         """
-        return self._run_wp_cli_action('{} activate {}'.format(self._get_type(), self._get_name()))
+
+        #zzz200922.1022
+        print("toto102228.1")
+
+        #return self._run_wp_cli_action('{} activate {}'.format(self._get_type(), self._get_name()))
+        result = self._run_wp_cli_action('{} activate {}'.format(self._get_type(), self._get_name()))
+
+        print("toto102228.2")
+
+        return result
+        #zzz
 
 
     def _activation_state(self, desired_state):
@@ -444,7 +482,15 @@ class WordPressPluginOrThemeActionModule(WordPressActionModule):
         # To use 'wp plugin' for MU-Plugins
         wp_command = 'plugin' if self._get_type() == 'mu-plugin' else self._get_type()
 
+        #zzz200922.1022
+        print("toto102254.1")
+        #zzz
+
         result = self._run_wp_cli_action('{} list --format=csv'.format(wp_command), also_in_check_mode=True, update_result=False)
+
+        #zzz200922.1022
+        print("toto102254.2")
+        #zzz
 
         if 'failed' in result: return
 
