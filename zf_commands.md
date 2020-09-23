@@ -1,5 +1,5 @@
 # Mes petits trucs à moi pour bien travailler ;-)
-#zf200918.0941
+#zf200923.1544
 
 <!-- TOC titleSize:2 tabSpaces:2 depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 skip:2 title:1 charForUnorderedList:* -->
 ## Table of Contents
@@ -21,6 +21,7 @@
   * [pour les tests en local sur sa machine](#pour-les-tests-en-local-sur-sa-machine)
 * [Idées à creuser et astuces](#idées-à-creuser-et-astuces)
   * [Mitogen et pipelining](#mitogen-et-pipelining)
+  * [OPcache, cache PHP](#opcache-cache-php)
   * [Manual Ansible Runner (pour ses propres modules, page 22)](#manual-ansible-runner-pour-ses-propres-modules-page-22)
   * [Installer ses propres plugins](#installer-ses-propres-plugins)
   * [ansible.cfg](#ansiblecfg)
@@ -148,6 +149,7 @@ Sur sa machine il faut faire la procédure d'initialisation de l'environnement d
 Puis dans sa console:
 ```
 ./wpsible --check -t themes -l test_migration_wp__labs__aqua -e '{ "wp_destructive": { "test_migration_wp__labs__aqua": ["config"] }}'
+./wpsible --check -t plugins -l test_migration_wp__labs__aqua -e '{ "wp_destructive": { "test_migration_wp__labs__aqua": ["config"] }}'
 ```
 
 
@@ -164,6 +166,10 @@ Puis dans sa console:
 # Idées à creuser et astuces
 ## Mitogen et pipelining
 https://www.toptechskills.com/ansible-tutorials-courses/speed-up-ansible-playbooks-pipelining-mitogen/
+
+
+## OPcache, cache PHP
+https://www.ekino.com/articles/php-comment-configurer-utiliser-et-surveiller-opcache
 
 
 ## Manual Ansible Runner (pour ses propres modules, page 22)

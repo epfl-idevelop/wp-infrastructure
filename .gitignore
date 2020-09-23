@@ -14,3 +14,4 @@ ansible/archives/*
 ansible_log*.txt
 toto*
 k8s-backup/
+.idea/*
