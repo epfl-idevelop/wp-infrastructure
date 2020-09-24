@@ -5,7 +5,7 @@
 # Build an Ansible inventory from wp-veritas and/or the on-NFS state
 #
 # Example invocation:
-#    env WWP_INVENTORY_SOURCES=wpveritas,nfs WWP_NAMESPACES=wwp-test,wwp wordpress-instances.py
+#    env WWP_INVENTORY_SOURCES=wpveritas,nfs WWP_NAMESPACES=wwp-test,wwp,minishift wordpress-instances.py
 
 import os
 import subprocess
@@ -286,6 +286,13 @@ class K8sNamespace:
                 " | head -1 | cut -f1 -d' '" % self.namespace,
                 shell=True, encoding='utf-8').rstrip('\n')
 
+class MinishiftSite(_Site):
+    group_prefix = 'mini'
+
+    @classmethod
+    def copy(cls, site):
+        pass  # XXX
+
 
 class Environment:
     @classmethod
@@ -330,5 +337,8 @@ if __name__ == '__main__':
     for cls in inventory_classes:
         if cls.k8s_namespace in Environment.required_inventory_namespaces():
             sites.extend(cls.all())
+
+    if 'minishift' in inventory_kinds:
+        sites.extend(MinishiftSite.copies(sites))
 
     sys.stdout.write(Inventory(sites).to_json())
