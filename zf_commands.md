@@ -1,5 +1,5 @@
 # Mes petits trucs à moi pour bien travailler ;-)
-#zf200923.1544
+#zf200925.1631
 
 <!-- TOC titleSize:2 tabSpaces:2 depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 skip:2 title:1 charForUnorderedList:* -->
 ## Table of Contents
@@ -9,6 +9,7 @@
   * [Sur sa machine](#sur-sa-machine)
   * [Sur sa machine dans une console](#sur-sa-machine-dans-une-console)
     * [A faire au début du travail](#a-faire-au-début-du-travail)
+    * [ATTENTION, si on a des erreurs de Ansible-Suitcase il faut le régénérer !](#attention-si-on-a-des-erreurs-de-ansible-suitcase-il-faut-le-régénérer-)
     * [Synchronisation de la branche master avec la branche de travail](#synchronisation-de-la-branche-master-avec-la-branche-de-travail)
     * [Accélération des tests du code Ansible](#accélération-des-tests-du-code-ansible)
     * [En travail lancer la petite fusée d'un template dans le GUI de AWX](#en-travail-lancer-la-petite-fusée-dun-template-dans-le-gui-de-awx)
@@ -70,11 +71,20 @@ oc projects
 ```
 
 
+### ATTENTION, si on a des erreurs de Ansible-Suitcase il faut le régénérer !
+Simplement en effaçant le fichier:
+```
+ansible/ansible-deps-cache/.versions
+```
+
+
+
 ### Synchronisation de la branche master avec la branche de travail
 Après un certain temps, la branche de travail se *désynchronise* avec la branche master et on peut avoir des effets de bord avec *wp-veritas* par exemple.
 On peut très facilement resynchroniser la branche de travail avec la master ainsi:
 ```
 git pull https://github.com/epfl-si/wp-ops master
+git pull --rebase https://github.com/epfl-si/wp-ops master
 ```
 
 
