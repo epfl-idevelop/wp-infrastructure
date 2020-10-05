@@ -6,16 +6,13 @@
 ## (and ditto in the "release" branch as well).
 ## Please be sure to propagate your changes there as well.
 
-- include_vars: wp-destructive.yml   # For wp_can
-- assert:
-    that: wp_can.configure or ansible_check_mode
-
 - include_vars: "{{ item }}"
   tags: always
   with_items:
     - plugin-vars.yml
-    - "{{ 'plugin-secrets-' + openshift_namespace + '.yml' }}"
     - accred-vars.yml
+    - ../../../vars/env-secrets.yml
+    - "../../../vars/secrets-{{ openshift_namespace }}.yml"
 
 ##################### Plugins to clean ###########################
 
@@ -444,6 +441,12 @@
     name: epfl-restauration
     state: "{{ plugins_for_restauration_category }}"
     from: https://github.com/epfl-si/wp-plugin-epfl-restauration
+
+- name: Subscribe2 plugin
+  wordpress_plugin:
+    name: Subscribe2
+    state: "{{ plugins_for_subscribe2_category }}"
+    from: wordpress.org/plugins
 
 - name: EPFL-Library-Plugins plugin
   wordpress_plugin:
