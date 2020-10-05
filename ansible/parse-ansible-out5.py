@@ -11,7 +11,7 @@ import sys
 import os
 import datetime
 
-version = "parse-ansible-out5.py  zf201005.1407 "
+version = "parse-ansible-out5.py  zf201005.1459 "
 
 """
 Version avec le parsing des logs wp-cli (zf201005.1408)
@@ -95,7 +95,7 @@ zloop_profiling = 10000000
 zverbose_unix_time = False
 zverbose_dico = True
 zverbose_parsing = True
-zverbose_duration = True
+zverbose_duration = False
 zverbose_curl = False
 zverbose_grafana = False
 zverbose_profiling = False
@@ -194,9 +194,12 @@ def zprint_db_log():
                 print("ztask_duration: " + str(db_logs[i][j]["ztask_duration"]))
             except:
                 pass
-                # print("************************************************************************oups y'a pas de ztask_line_end")
 
-            
+            try:
+                print("zwp_duration: " + str(db_logs[i][j]["zwp_duration"]))
+            except:
+                pass
+        
         
 
 def signal_handler(signal, frame):
@@ -250,7 +253,7 @@ if (__name__ == "__main__"):
             if zverbose_parsing: print(str(i) + " ztask_site_name: [" + ztask_site_name + "]")
 
             # récupération du task_pod
-            zstr_find1 = 'PATH: /tmp/awx_'
+            zstr_find1 = 'PATH: /'
             p1 = zline.find(zstr_find1)
             zstr_find2 = '_'            
             p2 = zline.find(zstr_find2, p1 + len(zstr_find1))
@@ -258,7 +261,7 @@ if (__name__ == "__main__"):
             if zverbose_parsing: print(str(i) + " ztask_pod: [" + ztask_pod + "]")
 
             # récupération du task_path
-            zstr_find1 = 'project/ansible/'
+            zstr_find1 = '/ansible/'
             p1 = zline.find(zstr_find1)
             zstr_find2 = ', TASK: '            
             p2 = zline.find(zstr_find2, p1)
@@ -268,8 +271,22 @@ if (__name__ == "__main__"):
             # récupération du task_name
             zstr_find1 = ' : '
             p1 = zline.find(zstr_find1)
-            zstr_find2 = ' at 2020'            
-            p2 = zline.find(zstr_find2, p1)
+            
+            
+            
+            if zline.find(', action: ', p1) > 0:
+                zstr_find2 = ', action: '            
+                p2 = zline.find(zstr_find2, p1)
+            else:
+                zstr_find2 = ' at 2020'            
+                p2 = zline.find(zstr_find2, p1)
+            
+            
+            
+            
+            
+            
+            
             ztask_name = zline[p1 + len(zstr_find1):p2]
             if zverbose_parsing: print(str(i) + " ztask_name: [" + ztask_name + "]")
             
@@ -278,7 +295,11 @@ if (__name__ == "__main__"):
             p1 = zline.find(zstr_find1)
             # zstr_find2 = ''            
             # p2 = zline.find(zstr_find2, p1)
-            p2 = -1
+            if zline.find(', duration:', p1) > 0:
+                zstr_find2 = ', duration:'            
+                p2 = zline.find(zstr_find2, p1)
+            else:
+                p2 = -1
             ztask_time = zline[p1 + len(zstr_find1):p2]
             if zverbose_parsing: print(str(i) + " ztask_time: [" + ztask_time + "]")
             
@@ -408,6 +429,108 @@ if (__name__ == "__main__"):
                 db_logs[ztask_id][ztask_site_id]["ztask_line_end"] = i
 
                 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            # est-ce une wp_duration ?
+            if zline.find('log duration') != -1:                
+                if zverbose_parsing: print("c'est une wp_duration")
+                
+                # récupération de la wp_duration
+                zstr_find1 = ', duration: '
+                p1 = zline.find(zstr_find1)
+                p2 = -1
+                zwp_duration = zline[p1 + len(zstr_find1):p2]
+                if zverbose_parsing: print(str(i) + " zwp_duration: [" + zwp_duration + "]")
+                
+                
+                # on cherche où se trouve la tâche dans le dictionnaire
+                ztask_id = 0
+                if zverbose_parsing: print("on cherche où se trouve la tâche dans le dictionnaire 114844")                
+                if zverbose_parsing: print("ztask_id_len 114225: " + str(len(db_logs)))
+                for j in range(1, len(db_logs) + 1):
+                    if zverbose_parsing: print("j 115336: " + str(j))
+                    # if db_logs[j]["ztask_path"] == ztask_path and db_logs[j]["ztask_name"] == ztask_name:
+                    if db_logs[j]["ztask_name"] == ztask_name:
+                        ztask_id = j
+                        if zverbose_parsing: print("ztask_id 093236:" + str(ztask_id))
+                        break         
+                
+                if zverbose_parsing: print("ztask_id 114634: " + str(ztask_id))
+                
+                # avons-nous trouvé la tâche dans le dictionnaire ?
+                if ztask_id == 0:
+                    print("oups, y'a pas de tâche ici 133759")
+                    print("et on doit s'arrêter !")
+                    exit()
+                
+                # chercher l'index du site dans le dictionnaire
+                ztask_site_id = 0
+                for j in range(1, (len(db_logs[ztask_id]) - 2) + 1):
+                    if zverbose_parsing: print("j 093501: " + str(j))
+                    if zverbose_parsing: print("ztask_site_name 1 093547: " + str(db_logs[ztask_id][j]["ztask_site_name"]))
+                    if zverbose_parsing: print("ztask_site_name 2 093547: " + str(ztask_site_name))
+                    if db_logs[ztask_id][j]["ztask_site_name"] == ztask_site_name:
+                        ztask_site_id = j
+                        if zverbose_parsing: print("ztask_site_id 1133:" + str(ztask_site_id))
+                        break
+                
+                # est-ce qu'il y a un site ?
+                if ztask_site_id == 0:
+                    if zverbose_parsing: print("oups, y'a pas de site ici 133935: " + str(i))
+                    # break
+                    # raw_input('Enter your input:')
+                    # print("on s'arrête pour savoir pourquoi il n'y a pas de site ?")
+                    # # print(db_logs)
+                    # # zprint_db_log()
+                    # print("boum on s'est arrêté ! 142745")
+                    # exit()
+                
+                    # on calcul l'index du site dans le dictionnaire
+                    ztask_site_id = (len(db_logs[ztask_id]) - 2) + 1
+                    if zverbose_parsing: print("ztask_site_id 1346:" + str(ztask_site_id))
+                
+                    # on crée un nouveau site
+                    db_logs[ztask_id][ztask_site_id] = {}
+                    db_logs[ztask_id][ztask_site_id]["ztask_site_name"] = ztask_site_name
+                    db_logs[ztask_id][ztask_site_id]["ztask_pod"] = ztask_pod                
+                
+                # # on écrit le task_time_end
+                # db_logs[ztask_id][ztask_site_id]["ztask_time_end"] = ztask_time
+                # db_logs[ztask_id][ztask_site_id]["ztask_line_end"] = i
+                
+                # on écrit la wp_duration
+                db_logs[ztask_id][ztask_site_id]["zwp_duration"] = zwp_duration
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             
             
 
