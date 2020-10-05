@@ -12,6 +12,7 @@ ansible-deps-cache
 awx_logs*.txt
 ansible/archives/*
 ansible_log*.txt
+local_log*.txt
 toto*
 k8s-backup/
 .idea/*
