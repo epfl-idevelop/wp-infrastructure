@@ -11,7 +11,7 @@ import sys
 import os
 import datetime
 
-version = "parse-ansible-out5.py  zf201005.1459 "
+version = "parse-ansible-out5.py  zf201005.1602 "
 
 """
 Version avec le parsing des logs wp-cli (zf201005.1408)
@@ -87,15 +87,15 @@ curl -i -XPOST "$dbflux_srv_host:$dbflux_srv_port/query?u=$dbflux_u_admin&p=$dbf
 """
 
 
-# True False
 zloop_parse = 40000000
 zloop_curl = 10000000
 zloop_profiling = 10000000
 
+# True False
 zverbose_unix_time = False
+zverbose_parsing = False
+zverbose_duration = True
 zverbose_dico = True
-zverbose_parsing = True
-zverbose_duration = False
 zverbose_curl = False
 zverbose_grafana = False
 zverbose_profiling = False
@@ -197,6 +197,11 @@ def zprint_db_log():
 
             try:
                 print("zwp_duration: " + str(db_logs[i][j]["zwp_duration"]))
+            except:
+                pass
+        
+            try:
+                print("zratio_duration_wp_task: " + str(db_logs[i][j]["zratio_duration_wp_task"]))
             except:
                 pass
         
@@ -543,11 +548,8 @@ if (__name__ == "__main__"):
     zfile.close()
 
     if zverbose_parsing: print("\n\non a terminé de parser les logs 161447\n\n")
-    #print(db_logs)
-    if zverbose_dico: zprint_db_log()
-    # quit()
     
-    
+        
     # on calcul les durations pour chaque sites
     for i in range(1, len(db_logs)+1): 
         if zverbose_duration: print("i: " + str(i))
@@ -566,8 +568,23 @@ if (__name__ == "__main__"):
                     ztask_unix_time_2 = zget_unix_time(ztask_time_obj_2).total_seconds()
                     if zverbose_duration: print("ztask_unix_time_2: " + str(ztask_unix_time_2))
                     ztask_duration = ztask_unix_time_2 - ztask_unix_time_1
-                    if zverbose_duration: print("Durée: " + str(ztask_duration))
+                    if zverbose_duration: print("ztask_duration: " + str(ztask_duration))
                     db_logs[i][j]["ztask_duration"] = ztask_duration
+                    
+                    
+                    try:
+                        zwp_duration = db_logs[i][j]["zwp_duration"]
+                        if zverbose_duration: print("zwp_duration: " + str(zwp_duration))
+                        zratio_duration_wp_task = float(zwp_duration) / float(ztask_duration)
+                        if zverbose_duration: print("zratio_duration_wp_task: " + str(zratio_duration_wp_task))
+                        db_logs[i][j]["zratio_duration_wp_task"] = zratio_duration_wp_task
+                    except:
+                        if zverbose_duration: print("oups, il n'y a pas de zwp_duration ici 160124")
+                    
+                    
+                    
+                    
+                    
                     if zverbose_duration: print(".................................................. 110232")                        
                     if zverbose_duration: print("Task number: " + str(i))
                     if zverbose_duration: print("ztask_name: " + str(i) + ", " + db_logs[i]["ztask_name"])
@@ -578,6 +595,15 @@ if (__name__ == "__main__"):
                     if zverbose_duration: print("ztask_time_end: " + db_logs[i][j]["ztask_time_end"])
                     if zverbose_duration: print("ztask_line_end: " + str(db_logs[i][j]["ztask_line_end"]))
                     if zverbose_duration: print("ztask_duration: " + str(db_logs[i][j]["ztask_duration"]))
+
+
+                    try:
+                        if zverbose_duration: print("zwp_duration: " + str(db_logs[i][j]["zwp_duration"]))
+                        if zverbose_duration: print("zratio_duration_wp_task: " + str(db_logs[i][j]["zratio_duration_wp_task"]))
+                    except:
+                        if zverbose_duration: print("oups, y'a pas de ratio ici 160535")
+
+
                     if zverbose_duration: print("..................................................")                    
                 except:
                     if zverbose_duration: print("oups, c'est pas bon ici 121330")
@@ -586,9 +612,8 @@ if (__name__ == "__main__"):
 
 
     if zverbose_duration: print("\n\non a terminé de calculer les durations 141249\n\n")
-    #print(db_logs)
+
     if zverbose_dico: zprint_db_log()
-    # quit()
 
             
             
