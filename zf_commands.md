@@ -1,5 +1,5 @@
 # Mes petits trucs à moi pour bien travailler ;-)
-#zf201005.1122
+#zf201005.1642
 
 <!-- TOC titleSize:2 tabSpaces:2 depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 skip:2 title:1 charForUnorderedList:* -->
 ## Table of Contents
@@ -158,8 +158,8 @@ Sur sa machine il faut faire la procédure d'initialisation de l'environnement d
 
 Puis dans sa console:
 ```
-./wpsible --check -t themes -l test_migration_wp__labs__aqua -e '{ "wp_destructive": { "test_migration_wp__labs__aqua": ["config"] }}'
-./wpsible --check -t plugins -l test_migration_wp__labs__aqua -e '{ "wp_destructive": { "test_migration_wp__labs__aqua": ["config"] }}'
+./wpsible --check -t themes -l test_migration_wp__labs__aqua
+./wpsible --check -t plugins -l test_migration_wp__labs__aqua
 ```
 
 
