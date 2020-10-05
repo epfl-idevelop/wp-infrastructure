@@ -1,5 +1,5 @@
 # Mes petits trucs à moi pour bien travailler ;-)
-#zf200925.1631
+#zf200925.1638
 
 <!-- TOC titleSize:2 tabSpaces:2 depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 skip:2 title:1 charForUnorderedList:* -->
 ## Table of Contents
@@ -84,7 +84,11 @@ Après un certain temps, la branche de travail se *désynchronise* avec la branc
 On peut très facilement resynchroniser la branche de travail avec la master ainsi:
 ```
 git pull https://github.com/epfl-si/wp-ops master
-git pull --rebase https://github.com/epfl-si/wp-ops master
+```
+
+c'est meilleure cette façons à cause des git push -f de certaines personnes
+```
+git pull --rebase --autostash https://github.com/epfl-si/wp-ops master
 ```
 
 
