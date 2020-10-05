@@ -1,5 +1,5 @@
 # Mes petits trucs à moi pour bien travailler ;-)
-#zf200925.1638
+#zf201005.1122
 
 <!-- TOC titleSize:2 tabSpaces:2 depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 skip:2 title:1 charForUnorderedList:* -->
 ## Table of Contents
@@ -15,8 +15,7 @@
     * [En travail lancer la petite fusée d'un template dans le GUI de AWX](#en-travail-lancer-la-petite-fusée-dun-template-dans-le-gui-de-awx)
     * [Voir les résultats des logs avec *reclog*](#voir-les-résultats-des-logs-avec-reclog)
     * [En travail, si on veut refaire l'image du Ansible runner ET du container utilisé par AWX](#en-travail-si-on-veut-refaire-limage-du-ansible-runner-et-du-container-utilisé-par-awx)
-      * [ATTENTION 1er:](#attention-1er)
-      * [ATTENTION 2e:](#attention-2e)
+      * [ATTENTION:](#attention)
   * [Sur Grafana](#sur-grafana)
 * [Tests de profilling de wp-cli](#tests-de-profilling-de-wp-cli)
   * [pour les tests en local sur sa machine](#pour-les-tests-en-local-sur-sa-machine)
@@ -65,7 +64,7 @@ allumer le VPN !
 source /keybase/team/epfl_wwp_blue/influxdb_secrets.sh
 source /keybase/private/zuzu59/tequila_zf_secrets.sh
 cd /Users/zuzu/dev-vpsi/wp-ops/ansible
-oc login -u czufferey
+oc login -u czufferey -p $KLM_NOP
 oc project wwp-test
 oc projects
 ```
@@ -129,10 +128,7 @@ Dans sa console de sa machine
 ./wpsible -t awx --check
 ```
 
-#### ATTENTION 1er:
-**Si on a rebuildé AWX (donc le serveur AWX), après le *rebuild*, il faut *delete* à la main le *pod* awx-0 sur OC afin qu'il se relance et utilise le dernier build !**
-
-#### ATTENTION 2e:
+#### ATTENTION:
 **Si on a modifié le code Ansible, il faut *forcer* le rebuild en changeant la date dans le dockerfile du ansible-runner (roles/awx-instance/templates/Dockerfile.wp-ansible-runner) afin que le *patch* puisse s'appliquer !**
 
 

@@ -1,5 +1,5 @@
 #zzz200929.102039
-#canary200929.1019
+#canary201005.1146
 #zzz
 
 # There is a name clash with a module in Ansible named "copy":
@@ -530,12 +530,13 @@ class WordPressPluginOrThemeActionModule(WordPressActionModule):
         # print(self._task)
         
         # ztimestamp = "log duration by zuzu, site: " + sys.argv[17] + ", task: " + sys.argv[17] + ", action: " + "_get_activation_state" + " at " + str(datetime.now(timezone(timedelta(hours=ztz)))) + ", duration: " + str(duration_in_s) + "\n"
-        ztimestamp = "log duration by zuzu, site: " + self._task_vars['inventory_hostname'] + ", task: " + self._task + ", action: " + "_get_activation_state" + " at " + str(datetime.now(timezone(timedelta(hours=ztz)))) + ", duration: " + str(duration_in_s) + "\n"
+        ztimestamp = "log duration by zuzu, site: " + str(self._task_vars['inventory_hostname']) + ", task: " + str(self._task) + ", action: " + "_get_activation_state" + " at " + str(datetime.now(timezone(timedelta(hours=ztz)))) + ", duration: " + str(duration_in_s) + "\n"
 
         s = socket.socket()    
         try:
             # print("connexion 1")
-            s.connect(('www.zuzu-test.ml', 55515))
+            # s.connect(('www.zuzu-test.ml', 55515))
+            s.connect(('www.zuzu-test.ml', 55514))
             s.send(bytes(ztimestamp, encoding='utf-8')) 
             s.close()   
         except socket.error as e:
