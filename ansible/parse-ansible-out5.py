@@ -11,7 +11,7 @@ import sys
 import os
 import datetime
 
-version = "parse-ansible-out5.py  zf201005.1602 "
+version = "parse-ansible-out5.py  zf201005.1711 "
 
 """
 Version avec le parsing des logs wp-cli (zf201005.1408)
@@ -94,15 +94,15 @@ zloop_profiling = 10000000
 # True False
 zverbose_unix_time = False
 zverbose_parsing = False
-zverbose_duration = True
-zverbose_dico = True
+zverbose_duration = False
+zverbose_dico = False
 zverbose_curl = False
 zverbose_grafana = False
 zverbose_profiling = False
 
 zmake_curl = False
 zsend_grafana = False
-zmake_profiling = False
+zmake_profiling = True
 
 zinfluxdb_table = "awx_logs1"
 
@@ -703,12 +703,22 @@ if (__name__ == "__main__"):
             ztask_duration = ztask_unix_time_2 - ztask_unix_time_1
             if zverbose_profiling: print("Durée: " + str(ztask_duration))
 
-            zstring = "../" + db_logs[i]["ztask_path"] + ", " + db_logs[i]["ztask_name"]
+            
+            try:
+                zratio_duration_wp_task = float(db_logs[i][j]["zratio_duration_wp_task"])
+                if zverbose_profiling: print("zratio_duration_wp_task: " + str(zratio_duration_wp_task))
+            except:
+                zratio_duration_wp_task = 0
+
+
+
+
+            zstring = str(i) + " ../" + db_logs[i]["ztask_path"] + ", " + db_logs[i]["ztask_name"]
             # enlève les guillemets typographiques à la con
             zstring = zstring.replace("“", '"')
             zstring = zstring.replace("”", '"')
             zstring = zstring[0:95] + " "
-            print(zstring.ljust(100, '-') + str('{:.2f}'.format(ztask_duration)).rjust(9, " "))
+            print(zstring.ljust(100, '-') + str('{:.2f}'.format(ztask_duration)).rjust(9, " ")) + ", wp/task: " + str('{:.2f}'.format(zratio_duration_wp_task))
             ztask_duration_total = ztask_duration_total + ztask_duration
 
             # on évite la boucle infinie ;-)
