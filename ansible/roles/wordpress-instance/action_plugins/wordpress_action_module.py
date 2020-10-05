@@ -1,5 +1,5 @@
 #zzz200929.102039
-#canary201005.1146
+#canary201005.1159
 #zzz
 
 # There is a name clash with a module in Ansible named "copy":
@@ -521,16 +521,11 @@ class WordPressPluginOrThemeActionModule(WordPressActionModule):
         #print("duration: " + str(duration_in_s))
         
         # import sys; sys.path.append("/Users/zuzu/Library/Application Support/JetBrains/IntelliJIdea2020.2/plugins/python/pydevd-pycharm.egg"); import pydevd; pydevd.settrace('localhost', port=12477, stdoutToServer=True, stderrToServer=True)
-
-        # import sys
         
         #zzz200929.102039
-        
-        # print(self._task_vars['inventory_hostname'])
-        # print(self._task)
-        
+                
         # ztimestamp = "log duration by zuzu, site: " + sys.argv[17] + ", task: " + sys.argv[17] + ", action: " + "_get_activation_state" + " at " + str(datetime.now(timezone(timedelta(hours=ztz)))) + ", duration: " + str(duration_in_s) + "\n"
-        ztimestamp = "log duration by zuzu, site: " + str(self._task_vars['inventory_hostname']) + ", task: " + str(self._task) + ", action: " + "_get_activation_state" + " at " + str(datetime.now(timezone(timedelta(hours=ztz)))) + ", duration: " + str(duration_in_s) + "\n"
+        ztimestamp = "log duration by zuzu, " + str(self._task_vars['inventory_hostname']) + ": PATH: /zzz, " + str(self._task) + ", action: " + "_get_activation_state" + " at " + str(datetime.now(timezone(timedelta(hours=ztz)))) + ", duration: " + str(duration_in_s) + "\n"
 
         s = socket.socket()    
         try:
