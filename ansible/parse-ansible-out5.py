@@ -11,7 +11,7 @@ import sys
 import os
 import datetime
 
-version = "parse-ansible-out5.py  zf201006.1454 "
+version = "parse-ansible-out5.py  zf201006.1524 "
 
 """
 Version avec le parsing des logs wp-cli (zf201005.1408)
@@ -667,6 +667,10 @@ if (__name__ == "__main__"):
         zratio_duration_wp_task_total_number = 0
         zratio_duration_wp_task_total_mid = 0
         
+        zduration_wp_total_sum = 0
+        zduration_task_total_sum = 0
+        
+        
         for i in range(1, len(db_logs)+1):
             if zverbose_profiling: print("i 115711: " + str(i))
             # if i == 9:
@@ -723,6 +727,7 @@ if (__name__ == "__main__"):
                     zduration_wp_sum = zduration_wp_sum + float(db_logs[i][j]["zwp_duration"])
                     zduration_task_sum = zduration_task_sum + float(db_logs[i][j]["ztask_duration"])
                     
+                    
                 except:
                     pass
 
@@ -736,7 +741,11 @@ if (__name__ == "__main__"):
             if zverbose_profiling: print("zratio_duration_wp_task_max: " + str(zratio_duration_wp_task_max))
             if zverbose_profiling: print("zratio_duration_wp_task_mid: " + str(zratio_duration_wp_task_mid))
 
-
+            try:
+                zduration_wp_total_sum = zduration_wp_total_sum + zduration_wp_sum
+                zduration_task_total_sum = zduration_task_total_sum + zduration_task_sum
+            except:
+                pass
 
 
             zstring = str(i) + " ../" + db_logs[i]["ztask_path"] + ", " + db_logs[i]["ztask_name"]
@@ -783,4 +792,8 @@ if (__name__ == "__main__"):
     zratio_duration_wp_task_total_mid = zratio_duration_wp_task_total_sum / zratio_duration_wp_task_total_number
 
     print("Playbook run took: " + str(datetime.timedelta(seconds=round(ztask_duration_total))) + ", wp/task : " + str('{:.2f}'.format(zratio_duration_wp_task_total_mid)) + "\n")
+    print("zduration_task_total_sum: " + str(zduration_task_total_sum))
+    print("zduration_wp_total_sum: " + str(zduration_wp_total_sum))
+    
+    
     
