@@ -11,7 +11,7 @@ import sys
 import os
 import datetime
 
-version = "parse-ansible-out5.py  zf201006.0944 "
+version = "parse-ansible-out5.py  zf201006.1052 "
 
 """
 Version avec le parsing des logs wp-cli (zf201005.1408)
@@ -79,7 +79,7 @@ zloop_profiling = 10000000
 zverbose_unix_time = False
 zverbose_parsing = False
 zverbose_duration = False
-zverbose_dico = True
+zverbose_dico = False
 zverbose_curl = False
 zverbose_grafana = False
 zverbose_profiling = False
@@ -652,11 +652,18 @@ if (__name__ == "__main__"):
             if i > zloop_curl:
                 break
                 
+                
+                
     # on calcul le résumé du profiling    
     if zmake_profiling:
         print(sys.argv[1]) + " start at " + db_logs[1][1]["ztask_time_start"][0:-6]
         print("".ljust(100, '*'))
         ztask_duration_total = 0
+        
+        zratio_duration_wp_task_total_sum = 0
+        zratio_duration_wp_task_total_number = 0
+        zratio_duration_wp_task_total_mid = 0
+        
         for i in range(1, len(db_logs)+1):
             if zverbose_profiling: print("i 115711: " + str(i))
             # if i == 9:
@@ -685,14 +692,40 @@ if (__name__ == "__main__"):
             if zverbose_profiling: print("ztask_unix_time_2: " + str(ztask_unix_time_2))
 
             ztask_duration = ztask_unix_time_2 - ztask_unix_time_1
-            if zverbose_profiling: print("Durée: " + str(ztask_duration))
+            if zverbose_profiling: print("ztask_duration: " + str(ztask_duration))
 
+
+            if zverbose_profiling: print("Calcul des stats du ratio...")
+
+
+            zratio_duration_wp_task_min = 1.1
+            zratio_duration_wp_task_max = 0
+            zratio_duration_wp_task_sum = 0
+            zratio_duration_wp_task_number = 0
+            zratio_duration_wp_task_mid = 0
             
-            try:
-                zratio_duration_wp_task = float(db_logs[i][j]["zratio_duration_wp_task"])
-                if zverbose_profiling: print("zratio_duration_wp_task: " + str(zratio_duration_wp_task))
-            except:
-                zratio_duration_wp_task = 0
+            for j in range(1, (len(db_logs[i]) - 2) + 1):
+                if zverbose_profiling: print("ztask_site_name: " + str(j) + ", " + db_logs[i][j]["ztask_site_name"])
+            
+                try:
+                    zratio_duration_wp_task = float(db_logs[i][j]["zratio_duration_wp_task"])
+                    if zverbose_profiling: print("zratio_duration_wp_task: " + str(zratio_duration_wp_task))
+                    if zratio_duration_wp_task < zratio_duration_wp_task_min: zratio_duration_wp_task_min = zratio_duration_wp_task
+                    if zratio_duration_wp_task > zratio_duration_wp_task_max: zratio_duration_wp_task_max = zratio_duration_wp_task
+                    zratio_duration_wp_task_sum = zratio_duration_wp_task_sum + zratio_duration_wp_task
+                    zratio_duration_wp_task_number = zratio_duration_wp_task_number + 1
+                except:
+                    pass
+
+            if zratio_duration_wp_task_number > 0:
+                zratio_duration_wp_task_mid = zratio_duration_wp_task_sum / zratio_duration_wp_task_number
+                zratio_duration_wp_task_total_sum = zratio_duration_wp_task_total_sum + zratio_duration_wp_task_mid
+                zratio_duration_wp_task_total_number = zratio_duration_wp_task_total_number + 1
+            
+            if zratio_duration_wp_task_min > 1: zratio_duration_wp_task_min = 0
+            if zverbose_profiling: print("zratio_duration_wp_task_min: " + str(zratio_duration_wp_task_min))
+            if zverbose_profiling: print("zratio_duration_wp_task_max: " + str(zratio_duration_wp_task_max))
+            if zverbose_profiling: print("zratio_duration_wp_task_mid: " + str(zratio_duration_wp_task_mid))
 
 
 
@@ -702,7 +735,14 @@ if (__name__ == "__main__"):
             zstring = zstring.replace("“", '"')
             zstring = zstring.replace("”", '"')
             zstring = zstring[0:95] + " "
-            print(zstring.ljust(100, '-') + str('{:.2f}'.format(ztask_duration)).rjust(9, " ")) + ", wp/task: " + str('{:.2f}'.format(zratio_duration_wp_task))
+            zstring2 = zstring.ljust(100, '-')
+            zstring2 = zstring2 + str('{:.2f}'.format(ztask_duration)).rjust(9, " ")
+            zstring2 = zstring2 + ", wp/task min: " + str('{:.2f}'.format(zratio_duration_wp_task_min))
+            zstring2 = zstring2 + ", wp/task max: " + str('{:.2f}'.format(zratio_duration_wp_task_max))
+            zstring2 = zstring2 + ", wp/task mid: " + str('{:.2f}'.format(zratio_duration_wp_task_mid))
+            
+            # print(zstring.ljust(100, '-') + str('{:.2f}'.format(ztask_duration)).rjust(9, " ")) + ", wp/task: " + str('{:.2f}'.format(zratio_duration_wp_task_mid))
+            print(zstring2)
             ztask_duration_total = ztask_duration_total + ztask_duration
 
             # on évite la boucle infinie ;-)
@@ -727,6 +767,7 @@ if (__name__ == "__main__"):
     
     ztask_duration_total = ztask_unix_time_2 - ztask_unix_time_1
 
-    print("Playbook run took: " + str(datetime.timedelta(seconds=round(ztask_duration_total))) + "\n")
-        
+    zratio_duration_wp_task_total_mid = zratio_duration_wp_task_total_sum / zratio_duration_wp_task_total_number
 
+    print("Playbook run took: " + str(datetime.timedelta(seconds=round(ztask_duration_total))) + ", wp/task : " + str('{:.2f}'.format(zratio_duration_wp_task_total_mid)) + "\n")
+    

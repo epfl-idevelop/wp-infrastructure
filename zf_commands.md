@@ -1,5 +1,5 @@
 # Mes petits trucs à moi pour bien travailler ;-)
-#zf201006.0959
+#zf201006.1027
 
 <!-- TOC titleSize:2 tabSpaces:2 depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 skip:2 title:1 charForUnorderedList:* -->
 ## Table of Contents
@@ -266,7 +266,6 @@ Médiane
 echo 'Médiane'
 cat toto.txt | grep 'zratio_duration_wp_task' | awk '{print $2}' | sort -n | awk '{count[NR] = $1;} END {if (NR % 2) {print count[(NR + 1) / 2];} else {print (count[(NR / 2)] + count[(NR / 2) + 1]) / 2.0;}}' 
 ```
-
 
 95e percentil
 ```
