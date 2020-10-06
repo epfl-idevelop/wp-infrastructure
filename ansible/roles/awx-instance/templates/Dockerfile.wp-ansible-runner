@@ -5,16 +5,45 @@ RUN yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.n
 RUN yum -y install http://rpms.remirepo.net/enterprise/remi-release-8.rpm
 RUN dnf module enable php:remi-7.4 -y
 RUN yum -y install yum-plugin-copr && yum -y copr enable copart/restic
-RUN yum -y install php-cli php-mysql python3 restic
+
+
+
+#zzz201006.172305
+#RUN yum -y install php-cli php-mysql python3 restic
+RUN yum -y install php-cli php-mysql python3 restic php-opcache
+#zzz
+
+
+
+#zzz201006.171427
+RUN mkdir /runner/.opcache;                                                       \
+    chmod 777 /runner/.opcache;                                                   \
+    ( echo 'zend_extension=opcache.so\;';                                         \
+      echo 'opcache.enable=1\;';                                                  \
+      echo 'opcache.memory_consumption=32\;';                                     \
+      echo 'opcache.interned_strings_buffer=32\;';                                 \
+      echo 'opcache.max_accelerated_files=3000\;';                                \
+      echo 'opcache.revalidate_freq=180\;';                                       \
+      echo 'opcache.fast_shutdown=0\;';                                           \
+      echo 'opcache.enable_cli=1\;';                                              \
+      echo 'opcache.revalidate_path=0\;';                                         \
+      echo 'opcache.validate_timestamps=1\;';                                     \
+      echo 'opcache.max_file_size=0\;';                                           \
+      echo 'opcache.file_cache=/runner/.opcache\;';                               \
+      echo 'opcache.file_cache_only=1\;';)                                        \
+    >> /etc/php.ini
+#zzz
+
+
 
 
 #zzz201006.135324
-RUN pip3 install mitogen==0.2.9
-RUN mkdir /etc/ansible;                                                         \
-    ( echo '[defaults]';                                                        \
-      echo 'strategy_plugins = /usr/local/lib/python3.6/site-packages/ansible_mitogen/plugins/strategy'; \
-      echo 'strategy = mitogen_linear')                                         \
-    > /etc/ansible/ansible.cfg
+# RUN pip3 install mitogen==0.2.9
+# RUN mkdir /etc/ansible;                                                         \
+#     ( echo '[defaults]';                                                        \
+#       echo 'strategy_plugins = /usr/local/lib/python3.6/site-packages/ansible_mitogen/plugins/strategy'; \
+#       echo 'strategy = mitogen_linear')                                         \
+#     > /etc/ansible/ansible.cfg
 #zzz
     
     
@@ -48,7 +77,7 @@ RUN set -e -x; yum -y install patch;                                        \
     #zzz200513.1602
     # Permet de devenir root avec la commande sudo
     RUN echo "www-data ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
-    RUN echo "add sudoer canary200515.1030" >> /canary.txt
+    RUN echo "add sudoer canary201006.172533" >> /canary.txt
 
     # #zzz200518.1534
     # # Installation de la sonde Telegraf

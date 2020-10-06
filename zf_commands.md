@@ -1,5 +1,5 @@
 # Mes petits trucs à moi pour bien travailler ;-)
-#zf201006.1027
+#zf201006.1727
 
 <!-- TOC titleSize:2 tabSpaces:2 depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 skip:2 title:1 charForUnorderedList:* -->
 ## Table of Contents
@@ -181,6 +181,8 @@ https://www.toptechskills.com/ansible-tutorials-courses/speed-up-ansible-playboo
 
 ## OPcache, cache PHP
 https://www.ekino.com/articles/php-comment-configurer-utiliser-et-surveiller-opcache
+https://www.ionos.com/community/hosting/php/php-7-opcache-speed-up-websites-noticeably/
+https://www.php.net/manual/fr/opcache.configuration.php
 
 
 ## Manual Ansible Runner (pour ses propres modules, page 22)
