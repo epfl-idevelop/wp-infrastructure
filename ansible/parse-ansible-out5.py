@@ -11,10 +11,13 @@ import sys
 import os
 import datetime
 
-version = "parse-ansible-out5.py  zf201006.1052 "
+version = "parse-ansible-out5.py  zf201006.1454 "
 
 """
 Version avec le parsing des logs wp-cli (zf201005.1408)
+
+TODO: il faut sommer la durée du wp-cli quand il est utilisé plusieurs fois dans la même tâche/site !  zf201006.1129
+
 
 ATTENTION: il ne faut pas oublier, avant de lancer la *petite fusée* d'effacer le fichier de log de reclog !
 rm /Users/zuzu/dev-zf/reclog/file.log
@@ -29,7 +32,7 @@ cp /Users/zuzu/dev-zf/reclog/file.log awx_logs_x_sites_y_forks_z_pods.txt
 Tests de charges avec le modèle 'align' des sites
 cp /Users/zuzu/dev-zf/reclog/file.log awx_logs_align_10_sites_1_forks_1_pods.txt2
 cp /Users/zuzu/dev-zf/reclog/file.log awx_logs_align_10_sites_5_forks_1_pods.txt2
-cp /Users/zuzu/dev-zf/reclog/file.log awx_logs_align_10_sites_5_forks_2_pods.txt2
+cp /Users/zuzu/dev-zf/reclog/file.log awx_logs_align_10_sites_5_forks_1_pods_mitogen.txt2
 cp /Users/zuzu/dev-zf/reclog/file.log awx_logs_align_10_sites_5_forks_2_pods_parll.txt2
 cp /Users/zuzu/dev-zf/reclog/file.log awx_logs_align_10_sites_5_forks_2_pods_cache.txt2
 cp /Users/zuzu/dev-zf/reclog/file.log awx_logs_align_10_sites_10_forks_1_pods.txt2
@@ -41,15 +44,15 @@ cp /Users/zuzu/dev-zf/reclog/file.log awx_logs_align_100_sites_17_forks_3_pods.t
 
 
 ./parse-ansible-out4.py awx_logs_align_10_sites_1_forks_1_pods.txt > toto.txt
-./parse-ansible-out5.py awx_logs_align_10_sites_5_forks_1_pods.txt > toto.txt
-./parse-ansible-out4.py awx_logs_align_10_sites_5_forks_2_pods.txt > toto.txt
+./parse-ansible-out5.py awx_logs_align_10_sites_5_forks_1_pods.txt > toto1.txt
+./parse-ansible-out5.py awx_logs_align_10_sites_5_forks_1_pods_mitogen.txt > toto2.txt
 ./parse-ansible-out4.py awx_logs_align_10_sites_5_forks_2_pods_parll.txt > toto.txt
 ./parse-ansible-out4.py awx_logs_align_10_sites_5_forks_2_pods_cache.txt > toto.txt
 ./parse-ansible-out4.py awx_logs_align_10_sites_10_forks_1_pods.txt > toto.txt
 ./parse-ansible-out4.py awx_logs_align_10_sites_10_forks_1_pods_pipe.txt > toto.txt
 ./parse-ansible-out4.py awx_logs_align_10_sites_10_forks_1_pods_debug4.txt > toto.txt
 ./parse-ansible-out4.py awx_logs_align_10_sites_2_forks_5_pods.txt > toto.txt
-./parse-ansible-out4.py awx_logs_align_100_sites_30_forks_1_pods.txt > toto.txt
+./parse-ansible-out5.py awx_logs_align_100_sites_30_forks_1_pods.txt > toto.txt
 ./parse-ansible-out4.py awx_logs_align_100_sites_17_forks_3_pods.txt > toto.txt
 
 *******************
@@ -703,6 +706,8 @@ if (__name__ == "__main__"):
             zratio_duration_wp_task_sum = 0
             zratio_duration_wp_task_number = 0
             zratio_duration_wp_task_mid = 0
+            zduration_wp_sum = 0
+            zduration_task_sum = 0
             
             for j in range(1, (len(db_logs[i]) - 2) + 1):
                 if zverbose_profiling: print("ztask_site_name: " + str(j) + ", " + db_logs[i][j]["ztask_site_name"])
@@ -714,6 +719,10 @@ if (__name__ == "__main__"):
                     if zratio_duration_wp_task > zratio_duration_wp_task_max: zratio_duration_wp_task_max = zratio_duration_wp_task
                     zratio_duration_wp_task_sum = zratio_duration_wp_task_sum + zratio_duration_wp_task
                     zratio_duration_wp_task_number = zratio_duration_wp_task_number + 1
+                    
+                    zduration_wp_sum = zduration_wp_sum + float(db_logs[i][j]["zwp_duration"])
+                    zduration_task_sum = zduration_task_sum + float(db_logs[i][j]["ztask_duration"])
+                    
                 except:
                     pass
 
@@ -737,8 +746,12 @@ if (__name__ == "__main__"):
             zstring = zstring[0:95] + " "
             zstring2 = zstring.ljust(100, '-')
             zstring2 = zstring2 + str('{:.2f}'.format(ztask_duration)).rjust(9, " ")
-            zstring2 = zstring2 + ", wp/task min: " + str('{:.2f}'.format(zratio_duration_wp_task_min))
-            zstring2 = zstring2 + ", wp/task max: " + str('{:.2f}'.format(zratio_duration_wp_task_max))
+
+            zstring2 = zstring2 + ", task sum: " + str('{:.2f}'.format(zduration_task_sum))
+            zstring2 = zstring2 + ", wp sum: " + str('{:.2f}'.format(zduration_wp_sum))
+            
+            # zstring2 = zstring2 + ", wp/task min: " + str('{:.2f}'.format(zratio_duration_wp_task_min))
+            # zstring2 = zstring2 + ", wp/task max: " + str('{:.2f}'.format(zratio_duration_wp_task_max))
             zstring2 = zstring2 + ", wp/task mid: " + str('{:.2f}'.format(zratio_duration_wp_task_mid))
             
             # print(zstring.ljust(100, '-') + str('{:.2f}'.format(ztask_duration)).rjust(9, " ")) + ", wp/task: " + str('{:.2f}'.format(zratio_duration_wp_task_mid))

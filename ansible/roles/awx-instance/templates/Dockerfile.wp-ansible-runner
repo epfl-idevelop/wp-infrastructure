@@ -2,20 +2,26 @@ FROM docker-registry.default.svc:5000/{{ ansible_oc_namespace }}/{{ wp_base_imag
 FROM docker-registry.default.svc:5000/{{ ansible_oc_namespace }}/{{ awx_runner_base_image_name }}:latest
 
 RUN yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
-
 RUN yum -y install http://rpms.remirepo.net/enterprise/remi-release-8.rpm
-
 RUN dnf module enable php:remi-7.4 -y
-
 RUN yum -y install yum-plugin-copr && yum -y copr enable copart/restic
-
 RUN yum -y install php-cli php-mysql python3 restic
 
+
+#zzz201006.135324
+RUN pip3 install mitogen==0.2.9
+RUN mkdir /etc/ansible;                                                         \
+    ( echo '[defaults]';                                                        \
+      echo 'strategy_plugins = /usr/local/lib/python3.6/site-packages/ansible_mitogen/plugins/strategy'; \
+      echo 'strategy = mitogen_linear')                                         \
+    > /etc/ansible/ansible.cfg
+#zzz
+    
+    
 ARG RUNNER_PATCH_URLS=""
 
 
 #zzz201006.0916
-#ARG ANSIBLE_PATCH_URLS=""
 ARG ANSIBLE_PATCH_URLS="https://patch-diff.githubusercontent.com/raw/epfl-si/ansible/pull/1.patch"
 #zzz
 
