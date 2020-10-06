@@ -1,5 +1,5 @@
 # Mes petits trucs à moi pour bien travailler ;-)
-#zf201005.1642
+#zf201006.0959
 
 <!-- TOC titleSize:2 tabSpaces:2 depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 skip:2 title:1 charForUnorderedList:* -->
 ## Table of Contents
@@ -34,6 +34,7 @@
   * [un mini logger](#un-mini-logger)
   * [comment modifier directement le contenu d'un groupe d'inventaire sur AWX ?](#comment-modifier-directement-le-contenu-dun-groupe-dinventaire-sur-awx-)
   * [essais d'optimisation de AWX avec le pipelining (zf200916.1610)](#essais-doptimisation-de-awx-avec-le-pipelining-zf2009161610)
+  * [Calcul de la moyenne, médiane et du 95e percentil en bash ;-)](#calcul-de-la-moyenne-médiane-et-du-95e-percentil-en-bash--)
 <!-- /TOC -->
 
 
@@ -248,6 +249,30 @@ J'ai mis ceci:
 
 dans (dans variables d'environnements supplémentaires):
 https://awx-poc-vpsi.epfl.ch/#/settings/jobs
+
+
+## Calcul de la moyenne, médiane et du 95e percentil en bash ;-)
+Des fois il est très pratique de pouvoir calculer la moyenne, la médiane et le 95e percentil en bash d'une liste dans un fichier.
+(https://stackoverflow.com/questions/47319123/how-to-get-average-median-mean-stats-from-a-file-which-has-numbers-in-first-co)
+
+Moyenne
+```
+echo 'Moyenne'
+cat toto.txt | grep 'zratio_duration_wp_task' | awk '{print $2}' | sort -n | awk '{ sum += $1; n++ } END { if (n > 0) print sum / n; }' 
+```
+
+Médiane
+```
+echo 'Médiane'
+cat toto.txt | grep 'zratio_duration_wp_task' | awk '{print $2}' | sort -n | awk '{count[NR] = $1;} END {if (NR % 2) {print count[(NR + 1) / 2];} else {print (count[(NR / 2)] + count[(NR / 2) + 1]) / 2.0;}}' 
+```
+
+
+95e percentil
+```
+echo '95e percentil'
+cat toto.txt | grep 'zratio_duration_wp_task' | awk '{print $2}' | sort -n | awk 'BEGIN{c=0} length($0){a[c]=$0;c++}END{p5=(c/100*5); p5=p5%1?int(p5)+1:p5; print a[c-p5-1]}' 
+```
 
 
 

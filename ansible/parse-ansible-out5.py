@@ -11,7 +11,7 @@ import sys
 import os
 import datetime
 
-version = "parse-ansible-out5.py  zf201005.1711 "
+version = "parse-ansible-out5.py  zf201006.0944 "
 
 """
 Version avec le parsing des logs wp-cli (zf201005.1408)
@@ -24,22 +24,6 @@ Le faire avec la petite fusée du template dans l'interface WEB de AWX !
 
 usage:
 cp /Users/zuzu/dev-zf/reclog/file.log awx_logs_x_sites_y_forks_z_pods.txt
-
-cp /Users/zuzu/dev-zf/reclog/file.log awx_logs_10_sites_5_forks_1_pods.txt2
-cp /Users/zuzu/dev-zf/reclog/file.log awx_logs_1033_sites_5_forks_1_pods.txt2
-cp /Users/zuzu/dev-zf/reclog/file.log awx_logs_100_sites_5_forks_1_pods.txt2
-cp /Users/zuzu/dev-zf/reclog/file.log awx_logs_100_sites_30_forks_1_pods.txt2
-cp /Users/zuzu/dev-zf/reclog/file.log awx_logs_100_sites_50_forks_1_pods.txt2
-cp /Users/zuzu/dev-zf/reclog/file.log awx_logs_100_sites_5_forks_10_pods.txt2
-
-./parse-ansible-out4.py awx_logs_10_sites_5_forks_1_pods.txt > toto.txt
-./parse-ansible-out4.py awx_logs_1033_sites_5_forks_1_pods.txt > toto.txt
-
-./parse-ansible-out4.py awx_logs_100_sites_5_forks_1_pods.txt
-./parse-ansible-out4.py awx_logs_100_sites_30_forks_1_pods.txt
-./parse-ansible-out4.py awx_logs_100_sites_50_forks_1_pods.txt
-./parse-ansible-out4.py awx_logs_100_sites_5_forks_10_pods.txt
-
 
 *******************
 Tests de charges avec le modèle 'align' des sites
@@ -57,7 +41,7 @@ cp /Users/zuzu/dev-zf/reclog/file.log awx_logs_align_100_sites_17_forks_3_pods.t
 
 
 ./parse-ansible-out4.py awx_logs_align_10_sites_1_forks_1_pods.txt > toto.txt
-./parse-ansible-out4.py awx_logs_align_10_sites_5_forks_1_pods.txt > toto.txt
+./parse-ansible-out5.py awx_logs_align_10_sites_5_forks_1_pods.txt > toto.txt
 ./parse-ansible-out4.py awx_logs_align_10_sites_5_forks_2_pods.txt > toto.txt
 ./parse-ansible-out4.py awx_logs_align_10_sites_5_forks_2_pods_parll.txt > toto.txt
 ./parse-ansible-out4.py awx_logs_align_10_sites_5_forks_2_pods_cache.txt > toto.txt
@@ -95,7 +79,7 @@ zloop_profiling = 10000000
 zverbose_unix_time = False
 zverbose_parsing = False
 zverbose_duration = False
-zverbose_dico = False
+zverbose_dico = True
 zverbose_curl = False
 zverbose_grafana = False
 zverbose_profiling = False
