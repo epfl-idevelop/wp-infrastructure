@@ -11,7 +11,7 @@ import sys
 import os
 import datetime
 
-version = "parse-ansible-out5.py  zf201006.1524 "
+version = "parse-ansible-out5.py  zf201006.1531 "
 
 """
 Version avec le parsing des logs wp-cli (zf201005.1408)
@@ -792,8 +792,9 @@ if (__name__ == "__main__"):
     zratio_duration_wp_task_total_mid = zratio_duration_wp_task_total_sum / zratio_duration_wp_task_total_number
 
     print("Playbook run took: " + str(datetime.timedelta(seconds=round(ztask_duration_total))) + ", wp/task : " + str('{:.2f}'.format(zratio_duration_wp_task_total_mid)) + "\n")
-    print("zduration_task_total_sum: " + str(zduration_task_total_sum))
-    print("zduration_wp_total_sum: " + str(zduration_wp_total_sum))
+    print("zduration_task_total_sum: " + str('{:.2f}'.format(zduration_task_total_sum)))
+    print("zduration_wp_total_sum: " + str('{:.2f}'.format(zduration_wp_total_sum)))
+    print("zratio_total_sum: " + str('{:.2f}'.format(zduration_wp_total_sum / zduration_task_total_sum)))
     
     
     
