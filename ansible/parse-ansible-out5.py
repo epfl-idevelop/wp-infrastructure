@@ -11,7 +11,7 @@ import sys
 import os
 import datetime
 
-version = "parse-ansible-out5.py  zf201006.1531 "
+version = "parse-ansible-out5.py  zf201006.1946 "
 
 """
 Version avec le parsing des logs wp-cli (zf201005.1408)
@@ -33,6 +33,7 @@ Tests de charges avec le modèle 'align' des sites
 cp /Users/zuzu/dev-zf/reclog/file.log awx_logs_align_10_sites_1_forks_1_pods.txt2
 cp /Users/zuzu/dev-zf/reclog/file.log awx_logs_align_10_sites_5_forks_1_pods.txt2
 cp /Users/zuzu/dev-zf/reclog/file.log awx_logs_align_10_sites_5_forks_1_pods_mitogen.txt2
+cp /Users/zuzu/dev-zf/reclog/file.log awx_logs_align_10_sites_5_forks_1_pods_opcache.txt2
 cp /Users/zuzu/dev-zf/reclog/file.log awx_logs_align_10_sites_5_forks_2_pods_parll.txt2
 cp /Users/zuzu/dev-zf/reclog/file.log awx_logs_align_10_sites_5_forks_2_pods_cache.txt2
 cp /Users/zuzu/dev-zf/reclog/file.log awx_logs_align_10_sites_10_forks_1_pods.txt2
@@ -46,6 +47,7 @@ cp /Users/zuzu/dev-zf/reclog/file.log awx_logs_align_100_sites_17_forks_3_pods.t
 ./parse-ansible-out4.py awx_logs_align_10_sites_1_forks_1_pods.txt > toto.txt
 ./parse-ansible-out5.py awx_logs_align_10_sites_5_forks_1_pods.txt > toto1.txt
 ./parse-ansible-out5.py awx_logs_align_10_sites_5_forks_1_pods_mitogen.txt > toto2.txt
+./parse-ansible-out5.py awx_logs_align_10_sites_5_forks_1_pods_opcache.txt > toto3.txt
 ./parse-ansible-out4.py awx_logs_align_10_sites_5_forks_2_pods_parll.txt > toto.txt
 ./parse-ansible-out4.py awx_logs_align_10_sites_5_forks_2_pods_cache.txt > toto.txt
 ./parse-ansible-out4.py awx_logs_align_10_sites_10_forks_1_pods.txt > toto.txt

@@ -22,6 +22,7 @@
 * [Idées à creuser et astuces](#idées-à-creuser-et-astuces)
   * [Mitogen et pipelining](#mitogen-et-pipelining)
   * [OPcache, cache PHP](#opcache-cache-php)
+  * [Cache NFS](#cache-nfs)
   * [Manual Ansible Runner (pour ses propres modules, page 22)](#manual-ansible-runner-pour-ses-propres-modules-page-22)
   * [Installer ses propres plugins](#installer-ses-propres-plugins)
   * [ansible.cfg](#ansiblecfg)
@@ -183,6 +184,11 @@ https://www.toptechskills.com/ansible-tutorials-courses/speed-up-ansible-playboo
 https://www.ekino.com/articles/php-comment-configurer-utiliser-et-surveiller-opcache
 https://www.ionos.com/community/hosting/php/php-7-opcache-speed-up-websites-noticeably/
 https://www.php.net/manual/fr/opcache.configuration.php
+
+
+## Cache NFS
+https://www.cyberciti.biz/faq/centos-redhat-install-configure-cachefilesd-for-nfs/
+
 
 
 ## Manual Ansible Runner (pour ses propres modules, page 22)
