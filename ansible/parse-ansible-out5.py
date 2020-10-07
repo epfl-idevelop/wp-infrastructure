@@ -11,13 +11,16 @@ import sys
 import os
 import datetime
 
-version = "parse-ansible-out5.py  zf201006.1946 "
+version = "parse-ansible-out5.py  zf201007.1737 "
 
 """
 Version avec le parsing des logs wp-cli (zf201005.1408)
 
-TODO: il faut sommer la durée du wp-cli quand il est utilisé plusieurs fois dans la même tâche/site !  zf201006.1129
+TODO:
 
+- il faut sommer la durée du wp-cli quand il est utilisé plusieurs fois dans la même tâche/site !  zf201006.1129
+
+- pourquoi il y a 860 'wp-media-folder options' dans les logs pour seulement 10x sites ? zf200707.1737
 
 ATTENTION: il ne faut pas oublier, avant de lancer la *petite fusée* d'effacer le fichier de log de reclog !
 rm /Users/zuzu/dev-zf/reclog/file.log

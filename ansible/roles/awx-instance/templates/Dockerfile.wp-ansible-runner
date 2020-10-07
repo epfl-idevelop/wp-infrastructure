@@ -15,7 +15,7 @@ RUN yum -y install php-cli php-mysql python3 restic php-opcache
 
 
 
-#zzz201006.201213
+#zzz201007.164411
 RUN mkdir /runner/.opcache;                                                     \
     chmod 777 /runner/.opcache;                                                 \
     ( echo 'zend_extension=/usr/lib64/php/modules/opcache.so';                  \
@@ -37,7 +37,7 @@ RUN mkdir /runner/.opcache;                                                     
 
 
 
-#zzz201006.135324
+#zzz201007.171006
 RUN pip3 install mitogen==0.2.9
 RUN mkdir /etc/ansible;                                                         \
     ( echo '[defaults]';                                                        \

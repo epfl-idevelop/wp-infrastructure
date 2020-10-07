@@ -1,5 +1,5 @@
 # Mes petits trucs à moi pour bien travailler ;-)
-#zf201006.1727
+#zf201007.1612
 
 <!-- TOC titleSize:2 tabSpaces:2 depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 skip:2 title:1 charForUnorderedList:* -->
 ## Table of Contents
@@ -19,10 +19,12 @@
   * [Sur Grafana](#sur-grafana)
 * [Tests de profilling de wp-cli](#tests-de-profilling-de-wp-cli)
   * [pour les tests en local sur sa machine](#pour-les-tests-en-local-sur-sa-machine)
+* [Comment faire un groupe de test sur l'inventaire sur AWX avec un nombre de sites déterminé](#comment-faire-un-groupe-de-test-sur-linventaire-sur-awx-avec-un-nombre-de-sites-déterminé)
 * [Idées à creuser et astuces](#idées-à-creuser-et-astuces)
   * [Mitogen et pipelining](#mitogen-et-pipelining)
   * [OPcache, cache PHP](#opcache-cache-php)
   * [Cache NFS](#cache-nfs)
+  * [Mount options dans le Runner](#mount-options-dans-le-runner)
   * [Manual Ansible Runner (pour ses propres modules, page 22)](#manual-ansible-runner-pour-ses-propres-modules-page-22)
   * [Installer ses propres plugins](#installer-ses-propres-plugins)
   * [ansible.cfg](#ansiblecfg)
@@ -166,7 +168,32 @@ Puis dans sa console:
 
 
 
+# Comment faire un groupe de test sur l'inventaire sur AWX avec un nombre de sites déterminé
+https://confluence.epfl.ch:8443/display/SIAC/Ansible+et+Ansible+Tower+-+PRJ0011294
+https://github.com/ansible/awx/blob/devel/awx/main/management/commands/inventory_import.py
+```
+source /keybase/private/zuzu59/tequila_zf_secrets.sh
+oc login -u czufferey -p $KLM_NOP
+oc project wwp-test
+oc projects
+oc exec -n wwp-test -it awx-0 awx-manage shell_plus
 
+
+from awx.main.models.inventory import Group as IGroup
+inv = Inventory.objects.get(id=6)
+
+# le '6' c'est l'index qui se trouve dans l'url d'AWX: https://awx-poc-vpsi.epfl.ch/#/inventories/inventory/6?inventory_search=page_size:20;order_by:name
+
+IGroup.objects.get(name="test_zuzu_groupe30").hosts.clear()
+hundred_hosts = [h for h in inv.hosts.all() if h.name.startswith("test_migration_wp__labs__l")][:30]
+hundred_hosts
+
+# faut créer à la mano le groupe "test_zuzu_groupe30" dans l'interface AWX 
+
+IGroup.objects.get(name="test_zuzu_groupe30").hosts.add(*hundred_hosts)
+
+
+```
 
 
 
@@ -187,8 +214,12 @@ https://www.php.net/manual/fr/opcache.configuration.php
 
 
 ## Cache NFS
+https://blog.frehi.be/2019/01/03/fs-cache-for-nfs-clients/
 https://www.cyberciti.biz/faq/centos-redhat-install-configure-cachefilesd-for-nfs/
 
+
+## Mount options dans le Runner
+https://kubernetes.io/docs/concepts/storage/persistent-volumes/#persistent-volumes
 
 
 ## Manual Ansible Runner (pour ses propres modules, page 22)
