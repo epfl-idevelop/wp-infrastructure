@@ -50,6 +50,16 @@
     - ci.services
     - ci.jenkinsfile
 
+- name: "nginx ingress controller"
+  include_tasks: 
+    file: ingress-controller.yml
+    apply:
+      tags:
+        - ingress
+  tags: 
+    - ingress
+    - ingress.service_accounts
+
 - name: "Management container (ssh server, PHP CLI)"
   include_tasks:
     file: mgmt.yml
