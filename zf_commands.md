@@ -1,5 +1,5 @@
 # Mes petits trucs à moi pour bien travailler ;-)
-#zf201019.1052
+#zf201019.1154
 
 <!-- TOC titleSize:2 tabSpaces:2 depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 skip:2 title:1 charForUnorderedList:* -->
 ## Table of Contents
@@ -105,8 +105,9 @@ On peut très facilement resynchroniser la branche de travail avec la master ain
 ```
 
 Cette façons est meilleure  à cause des git push -f de certaines personnes
+ATTENTION, il ne faut pas faire cette façon, car cela écrase TOUTES mes modifications pour le profiling !
 ```
-git pull --rebase --autostash https://github.com/epfl-si/wp-ops master
+#git pull --rebase --autostash https://github.com/epfl-si/wp-ops master
 ```
 
 

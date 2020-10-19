@@ -49,7 +49,7 @@ platform_check () {
     if ! test -f ansible-deps-cache/.versions 2>/dev/null; then
         curl https://raw.githubusercontent.com/epfl-si/ansible.suitcase/master/install.sh | \
             SUITCASE_DIR=$PWD/ansible-deps-cache SUITCASE_ANSIBLE_REQUIREMENTS=requirements.yml \
-                        SUITCASE_PIP_EXTRA=requests bash -x
+                        SUITCASE_PIP_EXTRA="requests bcrypt passlib" bash -x
     fi
     export PATH="$PWD/ansible-deps-cache/bin:$PATH"
     export ANSIBLE_ROLES_PATH="$PWD/ansible-deps-cache/roles"
@@ -112,7 +112,6 @@ set -e
 platform_check
 case "$mode" in
     ansible-playbook)
-        ansible-galaxy install -i -r requirements.yml >/dev/null 2>&1
         ansible-playbook $playbook_flags $(inventories) "${ansible_args[@]}" \
                          -e "wpsible_cwd=$OLDPWD" \
                          .interactive-playbooks/main.yml
