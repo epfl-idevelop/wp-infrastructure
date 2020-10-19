@@ -1,5 +1,5 @@
 # Mes petits trucs à moi pour bien travailler ;-)
-#zf201007.1612
+#zf201019.1052
 
 <!-- TOC titleSize:2 tabSpaces:2 depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 skip:2 title:1 charForUnorderedList:* -->
 ## Table of Contents
@@ -62,6 +62,7 @@ https://pub-os-exopge.epfl.ch/console/project/wwp-test/overview
 
 ## Sur sa machine dans une console
 ### A faire au début du travail
+Pour dev-vpsi
 ```
 allumer le VPN !
 
@@ -71,6 +72,20 @@ cd /Users/zuzu/dev-vpsi/wp-ops/ansible
 oc login -u czufferey -p $KLM_NOP
 oc project wwp-test
 oc projects
+
+```
+
+Pour dev-dojo
+```
+allumer le VPN !
+
+source /keybase/team/epfl_wwp_blue/influxdb_secrets.sh
+source /keybase/private/zuzu59/tequila_zf_secrets.sh
+cd /Users/zuzu/dev-dojo/wp-ops/ansible
+oc login -u czufferey -p $KLM_NOP
+oc project wwp-test
+oc projects
+
 ```
 
 
@@ -86,10 +101,10 @@ ansible/ansible-deps-cache/.versions
 Après un certain temps, la branche de travail se *désynchronise* avec la branche master et on peut avoir des effets de bord avec *wp-veritas* par exemple.
 On peut très facilement resynchroniser la branche de travail avec la master ainsi:
 ```
-git pull https://github.com/epfl-si/wp-ops master
+#git pull https://github.com/epfl-si/wp-ops master
 ```
 
-c'est meilleure cette façons à cause des git push -f de certaines personnes
+Cette façons est meilleure  à cause des git push -f de certaines personnes
 ```
 git pull --rebase --autostash https://github.com/epfl-si/wp-ops master
 ```
@@ -205,6 +220,9 @@ IGroup.objects.get(name="test_zuzu_groupe30").hosts.add(*hundred_hosts)
 # Idées à creuser et astuces
 ## Mitogen et pipelining
 https://www.toptechskills.com/ansible-tutorials-courses/speed-up-ansible-playbooks-pipelining-mitogen/
+https://networkgenomics.com/ansible/
+https://mitogen.networkgenomics.com/ansible_detailed.html
+
 
 
 ## OPcache, cache PHP
