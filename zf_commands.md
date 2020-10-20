@@ -101,7 +101,7 @@ ansible/ansible-deps-cache/.versions
 Après un certain temps, la branche de travail se *désynchronise* avec la branche master et on peut avoir des effets de bord avec *wp-veritas* par exemple.
 On peut très facilement resynchroniser la branche de travail avec la master ainsi:
 ```
-#git pull https://github.com/epfl-si/wp-ops master
+git pull https://github.com/epfl-si/wp-ops master
 ```
 
 Cette façons est meilleure  à cause des git push -f de certaines personnes
