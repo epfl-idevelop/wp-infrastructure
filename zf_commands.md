@@ -1,5 +1,5 @@
 # Mes petits trucs à moi pour bien travailler ;-)
-#zf201019.1154
+#zf201022.0925
 
 <!-- TOC titleSize:2 tabSpaces:2 depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 skip:2 title:1 charForUnorderedList:* -->
 ## Table of Contents
@@ -19,6 +19,7 @@
   * [Sur Grafana](#sur-grafana)
 * [Tests de profilling de wp-cli](#tests-de-profilling-de-wp-cli)
   * [pour les tests en local sur sa machine](#pour-les-tests-en-local-sur-sa-machine)
+* [Comment installer la sonde Telegraf sur tous les Nodes et non plus sur le ansible-runner ?](#comment-installer-la-sonde-telegraf-sur-tous-les-nodes-et-non-plus-sur-le-ansible-runner-)
 * [Comment faire un groupe de test sur l'inventaire sur AWX avec un nombre de sites déterminé](#comment-faire-un-groupe-de-test-sur-linventaire-sur-awx-avec-un-nombre-de-sites-déterminé)
 * [Idées à creuser et astuces](#idées-à-creuser-et-astuces)
   * [Mitogen et pipelining](#mitogen-et-pipelining)
@@ -38,6 +39,7 @@
   * [comment modifier directement le contenu d'un groupe d'inventaire sur AWX ?](#comment-modifier-directement-le-contenu-dun-groupe-dinventaire-sur-awx-)
   * [essais d'optimisation de AWX avec le pipelining (zf200916.1610)](#essais-doptimisation-de-awx-avec-le-pipelining-zf2009161610)
   * [Calcul de la moyenne, médiane et du 95e percentil en bash ;-)](#calcul-de-la-moyenne-médiane-et-du-95e-percentil-en-bash--)
+  * [Comment déchiffrer les secrets dans Ansible](#comment-déchiffrer-les-secrets-dans-ansible)
 <!-- /TOC -->
 
 
@@ -182,6 +184,16 @@ Puis dans sa console:
 ./wpsible --check -t plugins -l test_migration_wp__labs__aqua
 ```
 
+
+# Comment installer la sonde Telegraf sur tous les Nodes et non plus sur le ansible-runner ?
+Sur sa machine il faut faire la procédure d'initialisation de l'environnement décrite sous:
+
+[A faire au début du travail](#a-faire-au-début-du-travail)
+
+Puis dans sa console:
+```
+./wpsible -t awx.profiling
+```
 
 
 # Comment faire un groupe de test sur l'inventaire sur AWX avec un nombre de sites déterminé
@@ -331,6 +343,19 @@ echo '95e percentil'
 cat toto.txt | grep 'zratio_duration_wp_task' | awk '{print $2}' | sort -n | awk 'BEGIN{c=0} length($0){a[c]=$0;c++}END{p5=(c/100*5); p5=p5%1?int(p5)+1:p5; print a[c-p5-1]}' 
 ```
 
+
+## Comment déchiffrer les secrets dans Ansible
+Les secrets sont chiffrés dans:
+```
+ansible/roles/awx-instance/vars/secrets-wwp-test.yml
+```
+Afin de pouvoir les modifier il faut les déchiffrer avec:
+```
+ansible/ansible-deps-cache/bin/eyaml edit \
+--pkcs7-public-key ansible/eyaml/epfl_wp_test.pem \
+--pkcs7-private-key /keybase/team/epfl_wp_test/eyaml-privkey.pem \
+ansible/roles/awx-instance/vars/secrets-wwp-test.yml
+```
 
 
 
