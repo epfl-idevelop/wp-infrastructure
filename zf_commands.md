@@ -1,5 +1,5 @@
 # Mes petits trucs à moi pour bien travailler ;-)
-#zf201022.0925
+#zf201023.1643
 
 <!-- TOC titleSize:2 tabSpaces:2 depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 skip:2 title:1 charForUnorderedList:* -->
 ## Table of Contents
@@ -40,6 +40,11 @@
   * [essais d'optimisation de AWX avec le pipelining (zf200916.1610)](#essais-doptimisation-de-awx-avec-le-pipelining-zf2009161610)
   * [Calcul de la moyenne, médiane et du 95e percentil en bash ;-)](#calcul-de-la-moyenne-médiane-et-du-95e-percentil-en-bash--)
   * [Comment déchiffrer les secrets dans Ansible](#comment-déchiffrer-les-secrets-dans-ansible)
+  * [Comment effacer une vieille série pour un host dans Telegraf/InfluxDB ?](#comment-effacer-une-vieille-série-pour-un-host-dans-telegrafinfluxdb-)
+    * [Version avec le client InfluxDB](#version-avec-le-client-influxdb)
+* [copier les secrets dbflux* dans le clipboard](#copier-les-secrets-dbflux-dans-le-clipboard)
+* [coller les 'sercrets' influxdb précédents !](#coller-les-sercrets-influxdb-précédents-)
+    * [Version avec le curl InfluxDB](#version-avec-le-curl-influxdb)
 <!-- /TOC -->
 
 
@@ -357,7 +362,47 @@ ansible/ansible-deps-cache/bin/eyaml edit \
 ansible/roles/awx-instance/vars/secrets-wwp-test.yml
 ```
 
+## Comment effacer une vieille série pour un host dans Telegraf/InfluxDB ?
 
+https://www.reddit.com/r/influxdb/comments/fgajn5/telegrafinfluxdbgrafana_removing_old_hosts/
+
+### Version avec le client InfluxDB
+source /keybase/team/epfl_wwp_blue/influxdb_secrets.sh
+#copier les secrets dbflux* dans le clipboard
+ssh-add -l
+ssh-add
+ssh-add -l
+sshg czufferey@noc-tst.idev-fsd.ml
+docker exec -it docker-influxdb-grafana_influxdb_1 bash
+
+#coller les 'sercrets' influxdb précédents !
+env |grep flux
+
+influx -database 'telegraf' -username "$dbflux_u_admin" -password "$dbflux_p_admin"
+
+show series where host='awx-job-1001'
+drop series where host='awx-job-1001'
+
+### Version avec le curl InfluxDB
+```
+source /keybase/team/epfl_wwp_blue/influxdb_secrets.sh
+
+export dbflux_db=telegraf
+
+curl -i -XPOST "$dbflux_srv_host:$dbflux_srv_port/query?u=$dbflux_u_admin&p=$dbflux_p_admin&db=$dbflux_db"  --data-urlencode "q=SHOW TAG VALUES WITH KEY=host"
+
+export telegraf_host=awx-job-1234
+
+curl -i -XPOST "$dbflux_srv_host:$dbflux_srv_port/query?u=$dbflux_u_admin&p=$dbflux_p_admin&db=$dbflux_db"  --data-urlencode "q=show series where host='$telegraf_host'"
+
+curl -i -XPOST "$dbflux_srv_host:$dbflux_srv_port/query?u=$dbflux_u_admin&p=$dbflux_p_admin&db=$dbflux_db"  --data-urlencode "q=drop series where host='$telegraf_host'"
+
+curl -i -XPOST "$dbflux_srv_host:$dbflux_srv_port/query?u=$dbflux_u_admin&p=$dbflux_p_admin&db=$dbflux_db"  --data-urlencode "q=show series where host='$telegraf_host'"
+
+
+
+
+```
 
 
 
