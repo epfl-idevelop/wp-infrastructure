@@ -25,7 +25,8 @@ wp_cli_command: "wp --path={{ wp_dir }}"
 wp_cli_command_with_skip: "{{ wp_cli_command }} --skip-packages --skip-themes --skip-plugins"
 
 # The public-facing URL of this instance
-wp_base_url: "https://{{ wp_hostname }}/{{ wp_path }}"
+_wp_base_url: "https://{{ wp_hostname }}/{{ wp_path }}"
+wp_base_url: "{{ _wp_base_url | ensure_trailing_slash }}"
 
 wp_themes_dir:  "{{ wp_dir }}/wp-content/themes"
 wp_plugins_dir: "{{ wp_dir }}/wp-content/plugins"
@@ -48,4 +49,4 @@ eyaml_keys:
   priv: "/keybase/team/epfl_wp_{{ 'prod' if openshift_namespace == 'wwp' else 'test' }}/eyaml-privkey.pem"
   pub: "{{ playbook_dir }}/../eyaml/epfl_wp_{{ 'prod' if openshift_namespace == 'wwp' else 'test' }}.pem"
 
-wpveritas_is_live: "{{ not lookup('wpveritas').get('isDeleted', False) }}"
+site_is_not_deleted_in_wpveritas: "{{ not lookup('wpveritas').get('isDeleted', False) }}"
