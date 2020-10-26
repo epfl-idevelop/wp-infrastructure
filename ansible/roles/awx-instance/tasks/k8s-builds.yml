@@ -1,4 +1,4 @@
-#canary200831.1950
+#canary201026.0936
 
 # Custom runner image with the `wp` command-line tool and a WordPress layout in /wp
 - include_vars: ../../../vars/image-vars.yml
@@ -44,7 +44,7 @@
       RUN id; chmod -R g+w /var/lib/awx/venv/awx/lib/python3.6/site-packages/awx/ || true
       
       #zzz200716.1427
-      RUN echo "chmod -R Python canary200723.1128" >> /canary.txt
+      RUN echo "chmod -R Python canary201026.0936" >> /canary.txt
 
       #zzz200716.1427
       # installation des packages manquants

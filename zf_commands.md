@@ -1,5 +1,5 @@
 # Mes petits trucs à moi pour bien travailler ;-)
-#zf201026.0842
+#zf201026.0936
 
 <!-- TOC titleSize:2 tabSpaces:2 depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 skip:2 title:1 charForUnorderedList:* -->
 ## Table of Contents
@@ -112,7 +112,7 @@ git pull https://github.com/epfl-si/wp-ops master
 ```
 
 Cette façons est meilleure  à cause des git push -f de certaines personnes
-ATTENTION, il ne faut pas faire cette façon, car cela écrase TOUTES mes modifications pour le profiling !
+ATTENTION, IL NE FAUT PAS FAIRE CETTE FAÇON, CAR CELA ÉCRASE TOUTES MES MODIFICATIONS POUR LE PROFILING !
 ```
 #git pull --rebase --autostash https://github.com/epfl-si/wp-ops master
 ```
@@ -196,9 +196,15 @@ Sur sa machine il faut faire la procédure d'initialisation de l'environnement d
 [A faire au début du travail](#a-faire-au-début-du-travail)
 
 Puis dans sa console:
+Seulement pour wwp-test
 ```
 ./wpsible -t awx.profiling
 ```
+Pour wwp, donc la prod
+```
+./wpsible -t awx.profiling --prod
+```
+
 
 
 # Comment faire un groupe de test sur l'inventaire sur AWX avec un nombre de sites déterminé
