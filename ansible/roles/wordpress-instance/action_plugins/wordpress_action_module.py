@@ -1,3 +1,4 @@
+
 from ansible.plugins.action import ActionBase
 from ansible.errors import AnsibleError, AnsibleActionFail
 from ansible.module_utils import six
@@ -6,6 +7,8 @@ from ansible_collections.epfl_si.actions.plugins.module_utils.subactions import 
 import re
 import os
 import json
+
+
 
 class WordPressActionModule(ActionBase):
 
@@ -191,7 +194,7 @@ class WordPressPluginOrThemeActionModule(WordPressActionModule):
         """
         desired_state = self._task.args.get('state', 'absent')
         if isinstance(desired_state, six.string_types):
-             desired_state = set([desired_state.strip()])
+            desired_state = set([desired_state.strip()])
         elif isinstance(desired_state, list):
             desired_state = set(desired_state)
         else:
@@ -235,7 +238,7 @@ class WordPressPluginOrThemeActionModule(WordPressActionModule):
 
         if 'installed' in to_do:
             self._run_wp_cli_change('plugin install {}'.format(self._task.args.get('from')))
-
+            
         if 'symlinked' in to_undo or 'installed' in to_undo:
             self._do_rimraf_file(basename)
 
