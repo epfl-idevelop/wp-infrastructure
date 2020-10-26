@@ -44,7 +44,7 @@
       RUN id; chmod -R g+w /var/lib/awx/venv/awx/lib/python3.6/site-packages/awx/ || true
       
       #zzz200716.1427
-      RUN echo "chmod -R Python canary201026.0936" >> /canary.txt
+      RUN echo "chmod -R Python canary201026.0959" >> /canary.txt
 
       #zzz200716.1427
       # installation des packages manquants
@@ -65,6 +65,8 @@
 
       #zzz200716.1427
       RUN echo "telegraf install canary200723.1630" >> /canary.txt
+      RUN echo "test canary rebuuild canary201026.1136" >> /canary.txt
+
 
       USER 1000
       #zzz200716.1427

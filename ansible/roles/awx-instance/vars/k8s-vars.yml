@@ -1,4 +1,7 @@
+#zzz201026.1126
 awx_version: 10.0.0
+#awx_version: latest
+#zzz
 
 awx_web_hostnames:
   wwp: awx-wwp.epfl.ch
