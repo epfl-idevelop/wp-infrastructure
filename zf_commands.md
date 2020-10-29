@@ -1,5 +1,5 @@
 # Mes petits trucs à moi pour bien travailler ;-)
-#zf201026.0936
+#zf201028.1417
 
 <!-- TOC titleSize:2 tabSpaces:2 depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 skip:2 title:1 charForUnorderedList:* -->
 ## Table of Contents
@@ -21,6 +21,7 @@
   * [pour les tests en local sur sa machine](#pour-les-tests-en-local-sur-sa-machine)
 * [Comment installer la sonde Telegraf sur tous les Nodes et non plus sur le ansible-runner ?](#comment-installer-la-sonde-telegraf-sur-tous-les-nodes-et-non-plus-sur-le-ansible-runner-)
 * [Comment faire un groupe de test sur l'inventaire sur AWX avec un nombre de sites déterminé](#comment-faire-un-groupe-de-test-sur-linventaire-sur-awx-avec-un-nombre-de-sites-déterminé)
+* [Comment sauvegarder la base de donnée de AWX ?](#comment-sauvegarder-la-base-de-donnée-de-awx-)
 * [Idées à creuser et astuces](#idées-à-creuser-et-astuces)
   * [Mitogen et pipelining](#mitogen-et-pipelining)
   * [OPcache, cache PHP](#opcache-cache-php)
@@ -234,6 +235,26 @@ IGroup.objects.get(name="test_zuzu_groupe30").hosts.add(*hundred_hosts)
 
 ```
 
+
+# Comment sauvegarder la base de donnée de AWX ?
+Il suffit simplement de faire depuis ça machine:
+```
+allumer le VPN !
+
+source /keybase/team/epfl_wwp_blue/influxdb_secrets.sh
+source /keybase/private/zuzu59/tequila_zf_secrets.sh
+cd /Users/zuzu/dev-vpsi/wp-ops/ansible
+oc login -u czufferey -p $KLM_NOP
+oc project wwp-test
+oc projects
+
+./wpsible -t awx.dump
+```
+Cela va créer un dossier state/awx où il y aura le dump !
+Le code *ansible* se trouve dans ce fichier:
+```
+ansible/roles/awx-instance/tasks/ops.yml
+```
 
 
 
