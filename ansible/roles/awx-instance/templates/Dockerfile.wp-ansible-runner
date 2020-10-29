@@ -1,3 +1,5 @@
+#canary201028.1536
+
 FROM docker-registry.default.svc:5000/{{ ansible_oc_namespace }}/{{ wp_base_image_name }}:latest
 FROM docker-registry.default.svc:5000/{{ ansible_oc_namespace }}/{{ awx_runner_base_image_name }}:latest
 
@@ -37,6 +39,7 @@ RUN mkdir /runner/.opcache;                                                     
       echo 'opcache.file_cache=/runner/.opcache';                               \
       echo 'opcache.file_cache_only=1';)                                        \
     > /etc/php.d/10-opcache.ini
+RUN echo "opcache install canary201028.1530" >> /canary.txt
 #zzz
 
 
@@ -52,11 +55,11 @@ RUN mkdir /runner/.opcache;                                                     
 #       echo 'strategy_plugins = /usr/local/lib/python3.6/site-packages/ansible_mitogen/plugins/strategy'; \
 #       echo 'strategy = mitogen_host_pinned')                                         \
 #     > /etc/ansible/ansible.cfg
+# RUN echo "mitogen install canary201028.1532" >> /canary.txt
 # #zzz
 
     
 RUN pip3 install awscli
-
 
 ARG RUNNER_PATCH_URLS=""
 
@@ -78,37 +81,32 @@ RUN set -e -x; yum -y install patch;                                        \
     yum -y history undo patch
 
 
-    
 
+#zzz200518.1055
+# installation des packages manquants
+RUN yum -y install htop nano git
 
-    #zzz200518.1055
-    # installation des packages manquants
-    RUN yum -y install htop nano git
+#zzz200513.1602
+# Permet de devenir root avec la commande sudo
+RUN echo "www-data ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+RUN echo "add sudoer canary201006.172533" >> /canary.txt
 
-    #zzz200513.1602
-    # Permet de devenir root avec la commande sudo
-    RUN echo "www-data ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
-    RUN echo "add sudoer canary201006.172533" >> /canary.txt
-
-    # #zzz200518.1534
-    # # Installation de la sonde Telegraf
-    # RUN git clone https://github.com/zuzu59/telegraf.git && \
-    # export dbflux_srv_host={{ lookup('env','dbflux_srv_host') }} && \
-    # export dbflux_srv_port={{ lookup('env','dbflux_srv_port') }} && \
-    # export dbflux_u_user={{ lookup('env','dbflux_u_user') }} && \
-    # export dbflux_p_user={{ lookup('env','dbflux_p_user') }} && \
-    # /runner/telegraf/install_docker_centos.sh
-    # 
-    # #zzz200519.1136
-    # # Lance Telegraf au démarrage du container
-    # RUN sed -i '$ i\/runner/telegraf/start_docker.sh' /usr/bin/entrypoint
-    # 
-    # #zzz200723.1129
-    # RUN echo "telegraf install canary200723.1128" >> /canary.txt
-    #zzz200723.1129
-
-
-
+# #zzz200518.1534
+# # Installation de la sonde Telegraf
+# RUN git clone https://github.com/zuzu59/telegraf.git && \
+# export dbflux_srv_host={{ lookup('env','dbflux_srv_host') }} && \
+# export dbflux_srv_port={{ lookup('env','dbflux_srv_port') }} && \
+# export dbflux_u_user={{ lookup('env','dbflux_u_user') }} && \
+# export dbflux_p_user={{ lookup('env','dbflux_p_user') }} && \
+# /runner/telegraf/install_docker_centos.sh
+# 
+# #zzz200519.1136
+# # Lance Telegraf au démarrage du container
+# RUN sed -i '$ i\/runner/telegraf/start_docker.sh' /usr/bin/entrypoint
+# 
+# #zzz200723.1129
+# RUN echo "telegraf install canary200723.1128" >> /canary.txt
+#zzz200723.1129
 
 
 

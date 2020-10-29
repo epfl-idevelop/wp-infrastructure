@@ -55,8 +55,10 @@
       apiVersion: v1
       kind: Pod
       metadata:
+        #zzz201029.1100, je dois mettre mon labels
         namespace: {{ ansible_oc_namespace }}
       spec:
+        #zzz201029.1100, et là, une affinity
         # Run as this user for historical compatibility reasons; see
         # comments in the inline Dockerfile in k8s-builds.yml
         securityContext:
