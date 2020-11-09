@@ -1,4 +1,4 @@
-#canary201028.1536
+#canary201109.1054
 
 FROM docker-registry.default.svc:5000/{{ ansible_oc_namespace }}/{{ wp_base_image_name }}:latest
 FROM docker-registry.default.svc:5000/{{ ansible_oc_namespace }}/{{ awx_runner_base_image_name }}:latest
@@ -15,9 +15,9 @@ RUN yum -y install yum-plugin-copr && yum -y copr enable copart/restic
 
 
 
-#zzz201006.172305
+#zzz201109.1441
 #RUN yum -y install php-cli php-mysql python3 restic jq mysql
-RUN yum -y install php-cli php-mysql python3 restic jq mysql php-opcache
+RUN yum -y install php-cli php-mysql python3 restic jq mysql php-opcache git
 #zzz
 
 
@@ -45,7 +45,7 @@ RUN echo "opcache install canary201028.1530" >> /canary.txt
 
 
 
-# #zzz201020.1008
+# #zzz201109.1054
 # # mitogen_free
 # # mitogen_host_pinned
 # # mitogen_linear
@@ -53,10 +53,29 @@ RUN echo "opcache install canary201028.1530" >> /canary.txt
 # RUN mkdir /etc/ansible;                                                         \
 #     ( echo '[defaults]';                                                        \
 #       echo 'strategy_plugins = /usr/local/lib/python3.6/site-packages/ansible_mitogen/plugins/strategy'; \
-#       echo 'strategy = mitogen_host_pinned')                                         \
+#       echo 'strategy = mitogen_linear')                                         \
 #     > /etc/ansible/ansible.cfg
-# RUN echo "mitogen install canary201028.1532" >> /canary.txt
+# RUN echo "mitogen install canary201109.1054" >> /canary.txt
 # #zzz
+
+    
+
+# #zzz201109.1436
+# # mitogen_free
+# # mitogen_host_pinned
+# # mitogen_linear
+# RUN git clone https://github.com/dw/mitogen.git
+# RUN mkdir /etc/ansible;                                                         \
+#     ( echo '[defaults]';                                                        \
+# #      echo 'strategy_plugins = /usr/local/lib/python3.6/site-packages/ansible_mitogen/plugins/strategy'; \
+#       echo 'strategy_plugins = /runner/mitogen/ansible_mitogen/plugins/strategy'; \
+#       echo 'strategy = mitogen_linear')                                         \
+#     > /etc/ansible/ansible.cfg
+# RUN echo "mitogen install canary201109.1550" >> /canary.txt
+# #zzz
+
+
+
 
     
 RUN pip3 install awscli
@@ -91,21 +110,21 @@ RUN yum -y install htop nano git
 RUN echo "www-data ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 RUN echo "add sudoer canary201006.172533" >> /canary.txt
 
-# #zzz200518.1534
-# # Installation de la sonde Telegraf
-# RUN git clone https://github.com/zuzu59/telegraf.git && \
-# export dbflux_srv_host={{ lookup('env','dbflux_srv_host') }} && \
-# export dbflux_srv_port={{ lookup('env','dbflux_srv_port') }} && \
-# export dbflux_u_user={{ lookup('env','dbflux_u_user') }} && \
-# export dbflux_p_user={{ lookup('env','dbflux_p_user') }} && \
-# /runner/telegraf/install_docker_centos.sh
-# 
-# #zzz200519.1136
-# # Lance Telegraf au démarrage du container
-# RUN sed -i '$ i\/runner/telegraf/start_docker.sh' /usr/bin/entrypoint
-# 
-# #zzz200723.1129
-# RUN echo "telegraf install canary200723.1128" >> /canary.txt
+#zzz200518.1534
+# Installation de la sonde Telegraf
+RUN git clone https://github.com/zuzu59/telegraf.git && \
+export dbflux_srv_host={{ lookup('env','dbflux_srv_host') }} && \
+export dbflux_srv_port={{ lookup('env','dbflux_srv_port') }} && \
+export dbflux_u_user={{ lookup('env','dbflux_u_user') }} && \
+export dbflux_p_user={{ lookup('env','dbflux_p_user') }} && \
+/runner/telegraf/install_docker_centos.sh
+
+#zzz200519.1136
+# Lance Telegraf au démarrage du container
+RUN sed -i '$ i\/runner/telegraf/start_docker.sh' /usr/bin/entrypoint
+
+#zzz200723.1129
+RUN echo "telegraf install canary201109.1633" >> /canary.txt
 #zzz200723.1129
 
 

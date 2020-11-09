@@ -1,5 +1,5 @@
 # Mes petits trucs à moi pour bien travailler ;-)
-#zf201028.1417
+#zf201109.1625
 
 <!-- TOC titleSize:2 tabSpaces:2 depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 skip:2 title:1 charForUnorderedList:* -->
 ## Table of Contents
@@ -22,6 +22,7 @@
 * [Comment installer la sonde Telegraf sur tous les Nodes et non plus sur le ansible-runner ?](#comment-installer-la-sonde-telegraf-sur-tous-les-nodes-et-non-plus-sur-le-ansible-runner-)
 * [Comment faire un groupe de test sur l'inventaire sur AWX avec un nombre de sites déterminé](#comment-faire-un-groupe-de-test-sur-linventaire-sur-awx-avec-un-nombre-de-sites-déterminé)
 * [Comment sauvegarder la base de donnée de AWX ?](#comment-sauvegarder-la-base-de-donnée-de-awx-)
+* [Comment afficher le json de l'inventaire dans un runner AWX](#comment-afficher-le-json-de-linventaire-dans-un-runner-awx)
 * [Idées à creuser et astuces](#idées-à-creuser-et-astuces)
   * [Mitogen et pipelining](#mitogen-et-pipelining)
   * [OPcache, cache PHP](#opcache-cache-php)
@@ -108,14 +109,14 @@ ansible/ansible-deps-cache/.versions
 ### Synchronisation de la branche master avec la branche de travail
 Après un certain temps, la branche de travail se *désynchronise* avec la branche master et on peut avoir des effets de bord avec *wp-veritas* par exemple.
 On peut très facilement resynchroniser la branche de travail avec la master ainsi:
+ATTENTION, IL NE FAUT PAS FAIRE CETTE FAÇON, CAR GIT RISQUE D'AVOIR DES PROBLEMES DE MERGES AUTOMATIQUES !
 ```
-git pull https://github.com/epfl-si/wp-ops master
+#git Zpull https://github.com/epfl-si/wp-ops master
 ```
 
-Cette façons est meilleure  à cause des git push -f de certaines personnes
-ATTENTION, IL NE FAUT PAS FAIRE CETTE FAÇON, CAR CELA ÉCRASE TOUTES MES MODIFICATIONS POUR LE PROFILING !
+Cette façons est meilleure à cause des git push -f de certaines personnes
 ```
-#git pull --rebase --autostash https://github.com/epfl-si/wp-ops master
+#git pull --rebase --autostash origin master
 ```
 
 
@@ -149,12 +150,19 @@ tail -f ../../../dev-zf/reclog/file.log
 
 
 ### En travail, si on veut refaire l'image du Ansible runner ET du container utilisé par AWX
-Dans sa console de sa machine
+Dans sa console de sa machine faire:
 ```
 ./wpsible -t awx
-# si c'est juste pour faire un check on peut faire ceci:
+```
+Si c'est juste pour faire un check on peut faire ceci:
+```
 ./wpsible -t awx --check
 ```
+Pour seulement faire le *rebuild* du runner:
+```
+./wpsible -t awx.build
+```
+
 
 #### ATTENTION:
 **Si on a modifié le code Ansible, il faut *forcer* le rebuild en changeant la date dans le dockerfile du ansible-runner (roles/awx-instance/templates/Dockerfile.wp-ansible-runner) afin que le *patch* puisse s'appliquer !**
@@ -224,15 +232,13 @@ inv = Inventory.objects.get(id=6)
 
 # le '6' c'est l'index qui se trouve dans l'url d'AWX: https://awx-poc-vpsi.epfl.ch/#/inventories/inventory/6?inventory_search=page_size:20;order_by:name
 
-IGroup.objects.get(name="test_zuzu_groupe30").hosts.clear()
-hundred_hosts = [h for h in inv.hosts.all() if h.name.startswith("test_migration_wp__labs__l")][:30]
+IGroup.objects.get(name="test_zuzu_groupe60").hosts.clear()
+hundred_hosts = [h for h in inv.hosts.all() if h.name.startswith("test_migration_wp__labs__l")][:60]
 hundred_hosts
 
-# faut créer à la mano le groupe "test_zuzu_groupe30" dans l'interface AWX 
+# faut créer à la mano le groupe "test_zuzu_groupe60" dans l'interface AWX 
 
-IGroup.objects.get(name="test_zuzu_groupe30").hosts.add(*hundred_hosts)
-
-
+IGroup.objects.get(name="test_zuzu_groupe60").hosts.add(*hundred_hosts)
 ```
 
 
@@ -256,6 +262,17 @@ Le code *ansible* se trouve dans ce fichier:
 ansible/roles/awx-instance/tasks/ops.yml
 ```
 
+
+
+# Comment afficher le json de l'inventaire dans un runner AWX
+L'inventaire sur les runner AWX se trouvent généralement dans le dossier /tmp
+```
+/tmp/awx_xxx
+```
+On peut afficher de manière *humaine*, quand on se trouve dans le bon dossier, l'inventaire utilisé pour ce job avec la commande suivante:
+```
+./inventory |jq '.' | less
+```
 
 
 
