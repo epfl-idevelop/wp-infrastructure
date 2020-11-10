@@ -107,6 +107,12 @@
               - name: CURRENT_UID
                 value: "{{ awx_unix_credentials.uid }}"   # Value must be a string (not an int),
                                                           # hence the double quotes
+              #zzz2011110.0952
+              - name: K8S_NODE_NAME
+                valueFrom:
+                  fieldRef:
+                    fieldPath: spec.nodeName
+              #zzz                                            
             args:
               - sleep
               - infinity
