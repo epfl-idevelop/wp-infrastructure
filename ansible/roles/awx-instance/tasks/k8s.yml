@@ -1,4 +1,4 @@
-#canary201026.0946
+#canary201110.1125
 # Kubernetes (OpenShift) objects required to run AWX
 
 - include_vars: k8s-vars.yml
@@ -155,6 +155,13 @@
                 valueFrom:
                   fieldRef:
                     fieldPath: status.podIP
+              #zzz2011110.1125
+              - name: K8S_NODE_NAME
+                valueFrom:
+                  fieldRef:
+                    fieldPath: spec.nodeName
+              #zzz                                            
+
           #####################################################
           - name: awx-redis
             image: redis:latest

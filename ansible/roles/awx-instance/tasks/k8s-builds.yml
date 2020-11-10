@@ -1,4 +1,4 @@
-#canary201027.0847
+#canary201110.1054
 
 # Custom runner image with the `wp` command-line tool and a WordPress layout in /wp
 - include_vars: ../../../vars/image-vars.yml
@@ -40,6 +40,39 @@
       namespace: "{{ ansible_oc_namespace }}"
     dockerfile: |
        FROM {{ awx_base_image_full_name }}
+       
+       
+       
+       
+       
+       
+       
+        #zzz201110.1058
+        # installation des packages manquants
+        USER 0
+        RUN yum -y install htop nano git
+        
+        #zzz201110.1048
+        # Installation de la sonde Telegraf
+        RUN git clone https://github.com/zuzu59/telegraf.git && \
+        export dbflux_srv_host={{ lookup('env','dbflux_srv_host') }} && \
+        export dbflux_srv_port={{ lookup('env','dbflux_srv_port') }} && \
+        export dbflux_u_user={{ lookup('env','dbflux_u_user') }} && \
+        export dbflux_p_user={{ lookup('env','dbflux_p_user') }} && \
+        /telegraf/install_docker_centos_awx.sh || true
+        #zzz201110.1048
+        # Lance Telegraf au démarrage du container
+        RUN sed -i '$ i\/telegraf/start_docker.sh' /usr/bin/launch_awx_task.sh
+        #zzz201110.1048
+        RUN echo "telegraf install canary01110.1117" >> /canary.txt
+        USER 1000
+        #zzz
+
+       
+       
+       
+       
+       
 
        USER 0
        RUN yum -y install patch && yum -y clean all
