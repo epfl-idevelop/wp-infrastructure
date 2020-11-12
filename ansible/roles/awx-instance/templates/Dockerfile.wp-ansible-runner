@@ -44,6 +44,19 @@ RUN echo "opcache install canary201028.1530" >> /canary.txt
 
 
 
+#zzz201111.1431
+# https://docs.ansible.com/ansible/2.9/plugins/strategy.html
+# linear
+# free
+# host_pinned
+RUN mkdir /etc/ansible;                                                         \
+    ( echo '[defaults]';                                                        \
+      echo 'strategy=host_pinned')                                         \
+    > /etc/ansible/ansible.cfg
+RUN echo "ansible strategy_plugins canary201112.1004" >> /canary.txt
+#zzz
+
+
 
 # #zzz201109.1054
 # # mitogen_free
@@ -55,7 +68,7 @@ RUN echo "opcache install canary201028.1530" >> /canary.txt
 #       echo 'strategy_plugins = /usr/local/lib/python3.6/site-packages/ansible_mitogen/plugins/strategy'; \
 #       echo 'strategy = mitogen_linear')                                         \
 #     > /etc/ansible/ansible.cfg
-# RUN echo "mitogen install canary201109.1054" >> /canary.txt
+# RUN echo "mitogen install canary201111.1046" >> /canary.txt
 # #zzz
 
     
