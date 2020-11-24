@@ -1,5 +1,5 @@
 # Mes petits trucs à moi pour bien travailler ;-)
-#zf201111.0829
+#zf201123.1124
 
 <!-- TOC titleSize:2 tabSpaces:2 depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 skip:2 title:1 charForUnorderedList:* -->
 ## Table of Contents
@@ -109,15 +109,20 @@ ansible/ansible-deps-cache/.versions
 ### Synchronisation de la branche master avec la branche de travail
 Après un certain temps, la branche de travail se *désynchronise* avec la branche master et on peut avoir des effets de bord avec *wp-veritas* par exemple.
 On peut très facilement resynchroniser la branche de travail avec la master ainsi:
-ATTENTION, IL NE FAUT PAS FAIRE CETTE FAÇON, CAR GIT RISQUE D'AVOIR DES PROBLEMES DE MERGES AUTOMATIQUES !
 ```
-#git Zpull https://github.com/epfl-si/wp-ops master
+git pull --rebase --autostash origin master
 ```
 
-Cette façons est meilleure à cause des git push -f de certaines personnes
+S'il est demandé, il faut corriger les conflit avec Atom puis faire un
 ```
-#git pull --rebase --autostash origin master
+git rebase --continue
 ```
+
+Et enfin quand terminé de rabase faire un:
+```
+git push --force
+```
+
 
 
 ### Accélération des tests du code Ansible

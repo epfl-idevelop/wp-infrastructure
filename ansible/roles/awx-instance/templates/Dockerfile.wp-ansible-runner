@@ -1,4 +1,4 @@
-#canary201123.1117
+#canary2011234.0715
 
 FROM docker-registry.default.svc:5000/{{ ansible_oc_namespace }}/{{ wp_base_image_name }}:latest
 FROM docker-registry.default.svc:5000/{{ ansible_oc_namespace }}/{{ awx_runner_base_image_name }}:latest
@@ -68,7 +68,7 @@ RUN echo "opcache install canary201028.1530" >> /canary.txt
 #       echo 'strategy_plugins = /usr/local/lib/python3.6/site-packages/ansible_mitogen/plugins/strategy'; \
 #       echo 'strategy = mitogen_linear')                                         \
 #     > /etc/ansible/ansible.cfg
-# RUN echo "mitogen install canary201111.1046" >> /canary.txt
+# RUN echo "mitogen 0.2.9 install canary201111.1046" >> /canary.txt
 # #zzz
 
     
@@ -84,17 +84,17 @@ RUN echo "opcache install canary201028.1530" >> /canary.txt
 #       echo 'strategy_plugins = /runner/mitogen/ansible_mitogen/plugins/strategy'; \
 #       echo 'strategy = mitogen_linear')                                         \
 #     > /etc/ansible/ansible.cfg
-# RUN echo "mitogen install canary201109.1550" >> /canary.txt
+# RUN echo "mitogen latest install canary201109.1550" >> /canary.txt
 # #zzz
 
 
-# installation mitogen compatible VPSI    
-RUN pip3 install mitogen==0.2.9
-RUN mkdir /etc/ansible;                                                         \
-( echo '[defaults]';                                                        \
-echo 'strategy_plugins = /usr/local/lib/python3.6/site-packages/ansible_mitogen/plugins/strategy') \
-> /etc/ansible/ansible.cfg
-RUN echo "mitogen install canary201123.1115" >> /canary.txt
+# # installation mitogen compatible VPSI    
+# RUN pip3 install mitogen==0.2.9
+# RUN mkdir /etc/ansible;                                                         \
+# ( echo '[defaults]';                                                        \
+# echo 'strategy_plugins = /usr/local/lib/python3.6/site-packages/ansible_mitogen/plugins/strategy') \
+# > /etc/ansible/ansible.cfg
+# RUN echo "mitogen vpsi install canary201123.1115" >> /canary.txt
 
 
 RUN pip3 install awscli
@@ -124,7 +124,6 @@ RUN echo "www-data ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 RUN echo "add sudoer canary201006.172533" >> /canary.txt
 
 
-
 #zzz200518.1534
 # Installation de la sonde Telegraf
 RUN git clone https://github.com/zuzu59/telegraf.git && \
@@ -143,7 +142,10 @@ RUN echo "telegraf install canary201117.0906" >> /canary.txt
 #zzz200723.1129
 
 
-
+#zzz201124.0718
+# Installation de la sonde nfs-smoke-test
+RUN git clone https://github.com/zuzu59/nfs-smoke-test.git
+RUN echo "nfs-smoke-test install canary201124.0717" >> /canary.txt
 
 
 COPY --from=0 /usr/local/bin/wp /usr/local/bin/
