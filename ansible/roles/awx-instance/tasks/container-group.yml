@@ -67,7 +67,7 @@
         affinity:
           podAntiAffinity: #... Ce pod ne préfère pas...
             # ... être alloué ... (il s'en moque pendant l'exécution)
-            requiredDuringSchedulingIgnoredDuringExecution:
+            preferredDuringSchedulingIgnoredDuringExecution:
               # ... sur le même hostname...
               - topologyKey: kubernetes.io/hostname
                 labelSelector:
@@ -79,8 +79,7 @@
                       operator: In
                       values:
                         # ... ansible-runner
-                        #yyy201124.1134, disabled l'antiafinity en ajoutant un 'z'
-                        - zansible-runner
+                        - ansible-runner
         #zzz
         # Run as this user for historical compatibility reasons; see
         # comments in the inline Dockerfile in k8s-builds.yml
