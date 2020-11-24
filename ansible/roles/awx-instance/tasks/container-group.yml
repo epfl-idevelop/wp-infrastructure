@@ -79,7 +79,8 @@
                       operator: In
                       values:
                         # ... ansible-runner
-                        - ansible-runner
+                        #yyy201124.1134, disabled l'antiafinity en ajoutant un 'z'
+                        - zansible-runner
         #zzz
         # Run as this user for historical compatibility reasons; see
         # comments in the inline Dockerfile in k8s-builds.yml
