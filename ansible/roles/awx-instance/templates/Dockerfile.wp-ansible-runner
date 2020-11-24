@@ -1,4 +1,4 @@
-#canary201124.1003
+#canary201124.1206
 
 FROM docker-registry.default.svc:5000/{{ ansible_oc_namespace }}/{{ wp_base_image_name }}:latest
 FROM docker-registry.default.svc:5000/{{ ansible_oc_namespace }}/{{ awx_runner_base_image_name }}:latest
@@ -114,9 +114,9 @@ RUN set -e -x; yum -y install patch;                                        \
 
 
 
-#zzz200518.1055
+#zzz201124.1206
 # installation des packages manquants
-RUN yum -y install htop nano git
+RUN yum -y install htop nano tree git
 
 #zzz200513.1602
 # Permet de devenir root avec la commande sudo
