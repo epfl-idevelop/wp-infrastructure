@@ -8,13 +8,16 @@
 # In this play, "hosts" are not really hosts; rather, they are
 # WordPress instances. The script ../inventory/wordpress-instances.py
 # creates a list of them on standard output.
+
+#zzz201130.1849
+- debug:
+    msg: "toto-190332: {{ wp_strategy }}"
+#zzz
+
 - name: WordPress instances
   hosts: all_wordpresses
   gather_facts: no   # But see ../roles/wordpress-instance/action_plugins/wordpress_facts.py
   strategy: "{{ wp_strategy | default('linear') }}"
-#zzz201130.1849
-  debug: msg="toto184439 {{ wp_strategy }}"
-#zzz
   roles:
     - role: ../roles/wordpress-instance
 
