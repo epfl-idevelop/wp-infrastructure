@@ -12,8 +12,8 @@
   hosts: all_wordpresses
   gather_facts: no   # But see ../roles/wordpress-instance/action_plugins/wordpress_facts.py
   strategy: "{{ wp_strategy | default('linear') }}"
-#zzz201130.1845
-  debug: msg="toto184439: {{ wp_strategy }}"
+#zzz201130.1849
+  debug: msg="toto184439 {{ wp_strategy }}"
 #zzz
   roles:
     - role: ../roles/wordpress-instance
