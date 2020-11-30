@@ -39,6 +39,11 @@
 # be guarded by a suitable `when:` clause, which ensures that we do
 # nothing if the user already took the matters in their own hands.
 
+#zzz201130.1849
+- debug:
+    msg: "toto-190332: {{ wp_strategy }}"
+#zzz
+
 - name: Backup
   tags:
     - never  # That is, skip unless "-t wp.wipe" or "-t wp.backup" is
