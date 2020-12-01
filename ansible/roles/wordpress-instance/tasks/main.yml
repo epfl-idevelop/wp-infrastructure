@@ -39,9 +39,11 @@
 # be guarded by a suitable `when:` clause, which ensures that we do
 # nothing if the user already took the matters in their own hands.
 
-#zzz201130.1849
+#zzz201201.1123
 - debug:
     msg: "toto-190332: {{ wp_strategy }}"
+    tags:
+      - always
 #zzz
 
 - name: Backup
