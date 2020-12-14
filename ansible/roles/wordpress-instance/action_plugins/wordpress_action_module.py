@@ -1,3 +1,6 @@
+#zzz201214.1152
+#canary201214.1126
+#zzz
 
 from ansible.plugins.action import ActionBase
 from ansible.errors import AnsibleError, AnsibleActionFail
@@ -8,7 +11,15 @@ import re
 import os
 import json
 
+#zzz200922
+import socket                
+from datetime import datetime, timezone, timedelta
+ztz = 2     # été = 2, hiver = 1
+#zzz
 
+#zzz201214.1131
+print("toto201214.1144.1 wordpress_action_module.py")
+#zzz
 
 class WordPressActionModule(ActionBase):
 
@@ -84,6 +95,11 @@ class WordPressActionModule(ActionBase):
 
         :param args: WP-CLI command to execute
         """
+
+        #zzz201214.1131
+        print("toto201214.1131.3 _query_wp_cli")
+        #zzz
+                
         return self._subaction.query("command", dict(_raw_params=self._make_wp_cli_command(args)))
 
     def _run_wp_cli_change (self, args, pipe_input=None):
@@ -95,11 +111,21 @@ class WordPressActionModule(ActionBase):
         :param args: WP-CLI command to execute
         :param skip-loading-wp: if you don't want to load all the WP
         """
+
+        #zzz201214.1131
+        print("toto201214.1131.4 _run_wp_cli_change")
+        #zzz
+                        
         return self._subaction.change("command", dict(_raw_params=self._make_wp_cli_command(args),
                                                       stdin=pipe_input),
                                       update_result=self.result)
 
     def _get_wp_json (self, suffix):
+        
+        #zzz201214.1131
+        print("toto201214.1131.1 _get_wp_json")
+        #zzz
+        
         return json.loads(self._query_wp_cli(suffix)['stdout'])
 
     def _make_wp_cli_command(self, args):
@@ -343,6 +369,10 @@ class WordPressPluginOrThemeActionModule(WordPressActionModule):
         # To use 'wp plugin' for MU-Plugins
         wp_command = 'plugin' if self._get_type() == 'mu-plugin' else self._get_type()
 
+        #zzz201214.1131
+        print("toto201214.1131.2 _get_activation_state")
+        #zzz
+        
         result = self._query_wp_cli('{} list --format=csv'.format(wp_command))
 
         if 'failed' in result: return
