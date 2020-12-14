@@ -1,4 +1,4 @@
-#canary201124.1206
+#canary201214.1654
 
 FROM docker-registry.default.svc:5000/{{ ansible_oc_namespace }}/{{ wp_base_image_name }}:latest
 FROM docker-registry.default.svc:5000/{{ ansible_oc_namespace }}/{{ awx_runner_base_image_name }}:latest
@@ -154,6 +154,23 @@ COPY --from=0 /usr/local/bin/wp /usr/local/bin/
 RUN mkdir /runner/.wp-cli
 COPY --from=0 /var/www/.wp-cli /runner/.wp-cli
 COPY --from=0 /wp /wp
+
+
+
+
+#zzz201214.1537
+# Installation de la sonde wp-cli
+# RUN ( echo '#!/usr/bin/env bash';                                            \
+#       echo 'date >> /srv/zuzu-wp-cli.txt';                          \
+#       echo 'wp-cli-php $@')                                         \
+#     > /usr/local/bin/wp-cli-zf.sh;                                  \
+#     chmod +x /usr/local/bin/wp-cli-zf.sh;                           \
+#     mv /usr/local/bin/wp /usr/local/bin/wp-cli-php;                 \
+#     mv /usr/local/bin/wp-cli-zf.sh /usr/local/bin/wp    
+# RUN echo "sonde wp-cli canary201214.1647" >> /canary.txt
+#zzz
+
+
 
 # We want to run as the credentials we have been using
 # historically in the mgmt image, and are therefore still in use
