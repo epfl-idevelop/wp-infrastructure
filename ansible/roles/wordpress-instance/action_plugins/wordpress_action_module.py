@@ -1,4 +1,4 @@
-#zzz201214.1152
+#zzz201214.1424
 #canary201214.1126
 #zzz
 
@@ -129,6 +129,11 @@ class WordPressActionModule(ActionBase):
         return json.loads(self._query_wp_cli(suffix)['stdout'])
 
     def _make_wp_cli_command(self, args):
+
+        #zzz201214.1131
+        print("toto201214.1131.5 _make_wp_cli_command")
+        #zzz
+
         return '{} {}'.format(
             self._get_ansible_var("wp_cli_command"),
             args)

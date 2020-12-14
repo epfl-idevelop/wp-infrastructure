@@ -1,3 +1,7 @@
+#zzz201214.1429
+#canary201214.1429
+#zzz
+
 from ansible.module_utils import six
 import collections
 import inspect
@@ -6,6 +10,10 @@ import pprint
 import pickle
 import shutil
 import sys
+
+#zzz201214.1429
+print("toto201214.1429.1 cache.py")
+#zzz
 
 class _DecoratorCache(object):
     def __init__(self_, cache):
