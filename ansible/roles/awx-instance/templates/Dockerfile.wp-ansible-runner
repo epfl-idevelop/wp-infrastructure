@@ -158,17 +158,17 @@ COPY --from=0 /wp /wp
 
 
 
-# #zzz201214.1537
-# # Installation de la sonde wp-cli
-# RUN ( echo '#!/usr/bin/env bash';                                   \
-#       echo 'date >> /srv/zuzu-wp-cli.txt';                          \
-#       echo 'exec wp-cli-php $@')                                         \
-#     > /usr/local/bin/wp-cli-zf.sh;                                  \
-#     chmod +x /usr/local/bin/wp-cli-zf.sh;                           \
-#     mv /usr/local/bin/wp /usr/local/bin/wp-cli-php;                 \
-#     mv /usr/local/bin/wp-cli-zf.sh /usr/local/bin/wp    
-# RUN echo "sonde wp-cli canary201215.0752" >> /canary.txt
-# #zzz
+#zzz201214.1537
+# Installation de la sonde wp-cli
+RUN ( echo '#!/usr/bin/env bash';                                   \
+      echo 'date >> /srv/zuzu-wp-cli.txt';                          \
+      echo 'exec wp-cli-php "$@"')                                         \
+    > /usr/local/bin/wp-cli-zf.sh;                                  \
+    chmod +x /usr/local/bin/wp-cli-zf.sh;                           \
+    mv /usr/local/bin/wp /usr/local/bin/wp-cli-php;                 \
+    mv /usr/local/bin/wp-cli-zf.sh /usr/local/bin/wp    
+RUN echo "sonde wp-cli canary201215.1503" >> /canary.txt
+#zzz
 
 
 
