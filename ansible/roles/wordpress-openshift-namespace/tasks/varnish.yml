@@ -32,7 +32,7 @@
             - -n
             - varnishd
             - -s
-            - malloc,256m
+            - file,/var/lib/varnish/varnish_storage.bin,1G
             image: "{{ varnish_image }}"
             imagePullPolicy: IfNotPresent
             name: varnish
